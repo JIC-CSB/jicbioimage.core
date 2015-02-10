@@ -12,5 +12,5 @@ Exploring microscopy data involves several, often iterative, steps:
   - Visualising the image stacks to qualitatively understand the data
   - Transforming the image stacks; to enable
   - Extraction of quantitative data
-  - Writing up a summary of the findings an sending it to collaborators
+  - Writing up a summary of the findings and sending it to collaborators
   - Automate and scale the analysis to a large set of microscope data

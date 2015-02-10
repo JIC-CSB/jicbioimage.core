@@ -17,6 +17,7 @@ ImageJ is painful to use because:
     different buttons actually do to the image
   - It is prone to automatically update its tools during the life-time of a
     project
+  - There is no undo or history
 
 Python is painful to use because:
 

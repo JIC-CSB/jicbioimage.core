@@ -8,7 +8,7 @@ Specifically we will need:
 
   - Data structures that can understand high dimensional microscopy data, e.g.
     z-stacks and time series, and that make it easy to visualise and work with
-    the image data.
+    the image data
 
   - A system that makes it easy to read in microscopy data
 
