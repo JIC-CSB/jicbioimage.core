@@ -11,3 +11,4 @@ Contents
    current_pain_points
    requirements
    basic_usage
+   interactive_visualisation
