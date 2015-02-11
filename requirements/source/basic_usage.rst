@@ -47,6 +47,9 @@ loaded object.
              >>> image_data_manager.load('test1.lif')
              2
 
+.. warning:: Need to work out how to avoid the same file being re-loaded
+             (converted by bfconvert).
+
 We can access the microscopy entries using the
 :attr:`ImageDataManager.entries` attribute.
 
@@ -60,6 +63,7 @@ A :class:`MicroscopyEntry` has several attributes including:
 
 - :attr:`MicroscopyEntry.identifier`
 - :attr:`MicroscopyEntry.name`
+- :attr:`MicroscopyEntry.series`
 - :attr:`MicroscopyEntry.channels`
 - :attr:`MicroscopyEntry.z_slices`
 - :attr:`MicroscopyEntry.time_points`
@@ -96,6 +100,10 @@ time point 5 one could use any of the below.
    <Image MicroscopyEntry(0) Channel(0) ZSlice(3) TimePoint(5)>
    >>> im = first_entry.get_image(channel=0, z_slice=3, TimePoint(5)>
    <Image MicroscopyEntry(0) Channel(0) ZSlice(3) TimePoint(5)>
+
+.. warning:: This may be a crazy idea. But I think it is fine. Basically the
+             instances just contain information on how to identify the relevant
+             tif files in the backend.
 
 This can be achieved because each instance of a :class:`Channel`,
 :class:`ZSlice`, :class:`TimePoint` knows where it came from.
@@ -140,3 +148,6 @@ Alternatively, one could use the code snippet below.
     >>> for z_slice in first_entry.z_slices:
     ...     im = z_slice.get_image(channel=2, time_point=9)
     ...
+
+.. note:: Ultimately a :class:`MicroscopyEntry` is a set of iterators for providing
+          access to underlying 2D images (at least for a directory backend).
