@@ -56,17 +56,17 @@ We can access the microscopy entries using the
 .. code-block:: python
 
     >>> image_data_manager.entries
-    [<MicroscopyEntry 0>, <MicroscopyEntry 1>, <MicroscopyEntry 2>]
+    [<ImageCollection 0>, <ImageCollection 1>, <ImageCollection 2>]
     >>> first_entry = image_data_manager.entries[0]
 
-A :class:`MicroscopyEntry` has several attributes including:
+A :class:`ImageCollection` has several attributes including:
 
-- :attr:`MicroscopyEntry.identifier`
-- :attr:`MicroscopyEntry.name`
-- :attr:`MicroscopyEntry.series`
-- :attr:`MicroscopyEntry.channels`
-- :attr:`MicroscopyEntry.z_slices`
-- :attr:`MicroscopyEntry.time_points`
+- :attr:`ImageCollection.identifier`
+- :attr:`ImageCollection.name`
+- :attr:`ImageCollection.series`
+- :attr:`ImageCollection.channels`
+- :attr:`ImageCollection.z_slices`
+- :attr:`ImageCollection.time_points`
 
 
 .. code-block:: python
@@ -82,7 +82,7 @@ A :class:`MicroscopyEntry` has several attributes including:
     >>> first_entry.time_points
     [<TimePoint 0>, <TimePoint 1>, ..., <TimePoint 10>]
 
-The :class:`MicroscopyEntry`, :class:`Channel`, :class:`ZSlice`,
+The :class:`ImageCollection`, :class:`Channel`, :class:`ZSlice`,
 :class:`TimePoint` all have a :func:`get_image` function which takes arguments
 to specify the ``channel``, ``z_slice`` and ``time_point``.
 
@@ -93,13 +93,13 @@ time point 5 one could use any of the below.
 .. code-block:: python
     
    >>> first_entry.channels[0].z_slices[3].time_points[5].get_image()
-   <Image MicroscopyEntry(0) Channel(0) ZSlice(3) TimePoint(5)>
+   <Image ImageCollection(0) Channel(0) ZSlice(3) TimePoint(5)>
    >>> first_entry.channels[0].z_slices[3].get_image(time_point=5)
-   <Image MicroscopyEntry(0) Channel(0) ZSlice(3) TimePoint(5)>
+   <Image ImageCollection(0) Channel(0) ZSlice(3) TimePoint(5)>
    >>> first_entry.channels[0].get_image(time_point=5, z_slice=3)
-   <Image MicroscopyEntry(0) Channel(0) ZSlice(3) TimePoint(5)>
+   <Image ImageCollection(0) Channel(0) ZSlice(3) TimePoint(5)>
    >>> im = first_entry.get_image(channel=0, z_slice=3, TimePoint(5)>
-   <Image MicroscopyEntry(0) Channel(0) ZSlice(3) TimePoint(5)>
+   <Image ImageCollection(0) Channel(0) ZSlice(3) TimePoint(5)>
 
 .. warning:: This may be a crazy idea. But I think it is fine. Basically the
              instances just contain information on how to identify the relevant
@@ -149,5 +149,5 @@ Alternatively, one could use the code snippet below.
     ...     im = z_slice.get_image(channel=2, time_point=9)
     ...
 
-.. note:: Ultimately a :class:`MicroscopyEntry` is a set of iterators for providing
+.. note:: Ultimately a :class:`ImageCollection` is a set of iterators for providing
           access to underlying 2D images (at least for a directory backend).
