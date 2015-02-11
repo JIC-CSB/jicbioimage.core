@@ -10,3 +10,4 @@ Contents
    introduction
    current_pain_points
    requirements
+   basic_usage
