@@ -12,7 +12,8 @@ Classes
   :class:`Image` and :class:`ImageStack` instances from a microscopy file.
 
 :class:`ImageStack`
-  A list of :class:`Image` instances. 
+  A list of :class:`Image` instances. It would be useful if this class had
+  :func:`ImageStack.append` and :func:`ImageStack.extend` functions.
 
 :class:`Image`
   A class inheriting its behaviour from a ``numpy.array`` or possibly
