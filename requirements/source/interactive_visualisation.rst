@@ -98,6 +98,10 @@ should probably have a helper function along the lines of the below.
     >>> circles = jil.circles(coordinates)
     >>> viewer.add_layer(circles)
 
+.. note:: We may want to support other viewers for example summary information
+          or intensity histograms. Furthermore we may want to be able to create
+          a viewer that simply calls an external visualiser.
+
 MVC
 ---
 
