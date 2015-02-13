@@ -14,3 +14,4 @@ Contents
    interactive_visualisation
    transformations
    derived_data
+   modules_and_classes
