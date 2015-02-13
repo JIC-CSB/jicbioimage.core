@@ -89,6 +89,15 @@ should probably have a helper function along the lines of the below.
     >>> viewer.clear()
     >>> viewer.load(annotated_z_stack)
 
+.. warning:: The above may get too inefficient and cumbersome. Suggest that we
+             functionality to be able to add layers and set their visibility.
+
+.. code-block:: python
+
+    >>> viewer.load(org_im)
+    >>> circles = jil.circles(coordinates)
+    >>> viewer.add_layer(circles)
+
 MVC
 ---
 
