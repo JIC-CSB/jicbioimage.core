@@ -15,3 +15,4 @@ Contents
    transformations
    derived_data
    modules_and_classes
+   random_thoughts
