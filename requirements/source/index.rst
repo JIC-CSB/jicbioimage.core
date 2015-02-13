@@ -12,3 +12,5 @@ Contents
    requirements
    basic_usage
    interactive_visualisation
+   transformations
+   derived_data
