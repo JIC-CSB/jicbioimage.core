@@ -23,7 +23,7 @@ Specifically we will need:
 
   - Basic type checking to help prevent silly mistakes
 
-The library should enable to work-flow outlined below:
+The library should enable the work-flow outlined below:
 
 .. graphviz::
 
@@ -39,9 +39,11 @@ The library should enable to work-flow outlined below:
 
      files -> images [label="Read"];
      images -> files [label="Write"];
-     {images, derived_data} -> {transformer, visualiser} [label="Input"]
+     {images, derived_data} -> transformer [label="Input"]
+     images -> visualiser [label="Input"]
      transformer -> images [label="Transform"];
      images -> derived_data [label="Calculate"];
      
    }
+
 

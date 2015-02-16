@@ -11,30 +11,8 @@ In order to achieve this whilst minimising complexity we propose that
 responsibility of the viewer is simply to display collections of 2D images. And
 the responsibility of annotating images lies with transform helper functions.
 The user is then requested to build up the image(s) that he/she want to
-visualise. Note that this modifies the work-flow slightly.
+visualise.
           
-.. graphviz::
-
-   digraph mental_model {
-     node [fontname=Sans, shape=box, style=filled];
-     edge [fontname=Sans, fontsize=10];
-
-     files [label="File(s)"];
-     images [label="Image(s)"];
-     derived_data [label="Derived data"];
-     visualiser [label="Visualiser"];
-     transformer [label="Transfomer"];
-
-     files -> images [label="Read"];
-     images -> files [label="Write"];
-     {images, derived_data} -> transformer [label="Input"]
-     images -> visualiser [label="Input"]
-     transformer -> images [label="Transform"];
-     images -> derived_data [label="Calculate"];
-     
-   }
-
-
 .. note:: We propose to provide some built in factories that can be used
           to build common views of data using the required transforms.
 
