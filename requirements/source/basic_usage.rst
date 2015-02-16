@@ -3,7 +3,8 @@ Basic usage
 
 To load and work with microscopy data we use an :class:`ImageDataManager`. This has
 the advantage that it can load microscopy files and make them available to the
-user as augmented ``numpy`` arrays.
+user as augmented ``numpy`` arrays. It also enables "caching" so that any file
+format conversion only needs to happen once.
 
 In the simplest instance an :class:`ImageDataManager` makes use of the BioFormats
 ``bfconvert`` tool to convert the microscopy file into a series of tiff files
@@ -33,25 +34,23 @@ loaded object.
 .. code-block:: python
 
     >>> image_data_manager.load('test1.lif')
-    0
     >>> image_data_manager.load('test2.lif')
-    1
 
-.. note:: The same microscopy file can be added several times, and each time it
-          will be given unique idetifiers. For example loading the ``test1.lif``
-          file again will create another entry in the ``ImageDataManager``
-          instance.
+.. warning:: If one tries to load a microscopy file with one already opened the
+             :class:`ImageDataManager` will simply re-load the images stored in
+             the cache so as to minimise the number of file format conversions
+             required. In other words if one a file in a different directory with
+             the same as a file already loaded the latter would not trigger any
+             file format conversion and the data from the first file would be
+             re-loaded. For example the command below would not load the new file
+             it would load the data stored in the cache from ``test1.lif``.
 
-          .. code-block:: python
+             .. code-block:: python
 
-             >>> image_data_manager.load('test1.lif')
-             2
+                >>> image_data_manager.load('./different/dir/test1.lif')
 
-.. warning:: Need to work out how to avoid the same file being re-loaded
-             (converted by bfconvert).
-
-We can access the microscopy entries using the
-:attr:`ImageDataManager.entries` attribute.
+We can access the microscopy entries using the :attr:`ImageDataManager.entries`
+attribute.
 
 .. code-block:: python
 
@@ -62,19 +61,16 @@ We can access the microscopy entries using the
 A :class:`ImageCollection` has several attributes including:
 
 - :attr:`ImageCollection.identifier`
-- :attr:`ImageCollection.name`
-- :attr:`ImageCollection.series`
+- :attr:`ImageCollection.series`  (cannot index across these)
 - :attr:`ImageCollection.channels`
 - :attr:`ImageCollection.z_slices`
-- :attr:`ImageCollection.time_points`
+- :attr:`ImageCollection.time_points` (cannot index across these)
 
 
 .. code-block:: python
 
     >>> first_entry.identifier
-    0
-    >>> first_entry.name
-    'test1.lif1'
+    'test1.lif'
     >>> first_entry.channels
     [<Channel 0>, <Channel 1>, <Channel 2>]
     >>> first_entry.z_slices
@@ -151,3 +147,6 @@ Alternatively, one could use the code snippet below.
 
 .. note:: Ultimately a :class:`ImageCollection` is a set of iterators for providing
           access to underlying 2D images (at least for a directory backend).
+
+.. note:: We should also implement a :func:`get_stack` function for accessing
+          :class:`ZStack` and :class:`Channel`.
