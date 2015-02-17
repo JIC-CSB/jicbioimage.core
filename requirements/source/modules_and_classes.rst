@@ -19,8 +19,9 @@ Modules
 Classes
 -------
 
-:class:`jicimagelib.image.ImageCollectionDataManager` 
-  Contains a list of :class:`ImageCollection` instances.
+:class:`jicimagelib.image.DataManager` 
+  Contains a list of :class:`ImageCollection` instances and methods for
+  accessing the underlying data in convenient ways.
 
 :class:`jicimagelib.image.ImageCollection`
   Contains attributes and functions for accessing and iterating over
@@ -28,7 +29,8 @@ Classes
   from a microscopy file.
 
 :class:`jicimagelib.image.ImageStack`
-  A class inheriting its behaviour from a ``numpy.ndarray``.  Essentially a
+  A class inheriting its behaviour from a ``numpy.ndarray``.  Essentially a 3D
+  array with convenience methods for accessing z-slices as if it were a
   list of :class:`jicimagelib.image.Image` instances. It would be useful if this class
   had :func:`jicimagelib.image.ImageStack.append` and
   :func:`jicimagelib.image.ImageStack.extend` functions.
