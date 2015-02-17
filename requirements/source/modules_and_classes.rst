@@ -29,7 +29,7 @@ Classes
   A subclass of :class:`ImageStack`.
 
 :class:`TimePoint`
-  A subclass of :class:`ImageStack`. **Always of same sample or not.**
+  A subclass of :class:`ImageStack`. **Always of same sample or not?**
 
 :class:`ImageViewer`
   A class for visualising microscopy data. Notably it has the functions
