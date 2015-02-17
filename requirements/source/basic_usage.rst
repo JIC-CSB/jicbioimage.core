@@ -1,43 +1,43 @@
 Basic usage
 ===========
 
-To load and work with microscopy data we use an :class:`ImageDataManager`. This has
+To load and work with microscopy data we use an :class:`ImageCollectionDataManager`. This has
 the advantage that it can load microscopy files and make them available to the
 user as augmented ``numpy`` arrays. It also enables "caching" so that any file
 format conversion only needs to happen once.
 
-In the simplest instance an :class:`ImageDataManager` makes use of the BioFormats
+In the simplest instance an :class:`ImageCollectionDataManager` makes use of the BioFormats
 ``bfconvert`` tool to convert the microscopy file into a series of tiff files
 stored in a directory. Note that this is an implementation detail and the user
 can seamlessly access the augmented ``numpy`` arrays to work with data.
 
 .. code-block:: python
 
-    >>> from jicimagelib import ImageDataManager
-    >>> image_data_manager = ImageDataManager()
+    >>> from jicimagelib import ImageCollectionDataManager
+    >>> data_manager = ImageCollectionDataManager()
 
-By default the :class:`ImageDataManager` simply uses a directory as a backend and
+By default the :class:`ImageCollectionDataManager` simply uses a directory as a backend and
 points to the temporary directory ``/tmp/jicimagelib/``.
 
 
 .. code-block:: python
 
-    >>> image_data_manager.backend_type
+    >>> data_manager.backend_type
     'directory'
-    >>> image_data_manager.backend_location
+    >>> data_manager.backend_location
     '/tmp/jicimagelib/'
    
-To load a microscopy file into the :class:`ImageDataManager` we use the
-:func:`ImageDataManager.load` function, which returns the identifier of the
+To load a microscopy file into the :class:`ImageCollectionDataManager` we use the
+:func:`ImageCollectionDataManager.load` function, which returns the identifier of the
 loaded object.
 
 .. code-block:: python
 
-    >>> image_data_manager.load('test1.lif')
-    >>> image_data_manager.load('test2.lif')
+    >>> data_manager.load('test1.lif')
+    >>> data_manager.load('test2.lif')
 
 .. warning:: If one tries to load a microscopy file with one already opened the
-             :class:`ImageDataManager` will simply re-load the images stored in
+             :class:`ImageCollectionDataManager` will simply re-load the images stored in
              the cache so as to minimise the number of file format conversions
              required. In other words if one a file in a different directory with
              the same as a file already loaded the latter would not trigger any
@@ -47,16 +47,16 @@ loaded object.
 
              .. code-block:: python
 
-                >>> image_data_manager.load('./different/dir/test1.lif')
+                >>> data_manager.load('./different/dir/test1.lif')
 
-We can access the microscopy entries using the :attr:`ImageDataManager.entries`
+We can access the microscopy entries using the :attr:`ImageCollectionDataManager.entries`
 attribute.
 
 .. code-block:: python
 
-    >>> image_data_manager.entries
+    >>> data_manager.entries
     [<ImageCollection 0>, <ImageCollection 1>, <ImageCollection 2>]
-    >>> first_entry = image_data_manager.entries[0]
+    >>> first_entry = data_manager.entries[0]
 
 A :class:`ImageCollection` has several attributes including:
 

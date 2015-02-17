@@ -23,8 +23,8 @@ Let us load a data manager and get an image and a zstack.
 
 .. code-block:: python
 
-    >>> from jicimagelib import DataManager
-    >>> data_manager = jil.DataManager()
+    >>> from jicimagelib import ImageCollectionDataManager
+    >>> data_manager = ImageCollectionDataManager()
     >>> data_manager.load('test.lif')
     >>> im_collection = data_manager[0]
     >>> im = im_collection.get_image(channel=0, z_slice=0)

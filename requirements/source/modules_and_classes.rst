@@ -4,7 +4,7 @@ Modules and classes
 Classes
 -------
 
-:class:`ImageDataManager` 
+:class:`ImageCollectionDataManager` 
   Contains a list of :class:`ImageCollection` instances.
 
 :class:`ImageCollection`
