@@ -39,7 +39,7 @@ Classes
   Base class for creating classes that transform :class:`Image` and
   :class:`ImageStack` instances using a one-to-one mapping.
 
-:class:`ReduceTransform`
+:class:`ReduceStack`
   Base class for creating classes that transform :class:`ImageStack` instances
   to :class:`Image` instances.
   

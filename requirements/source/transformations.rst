@@ -1,36 +1,59 @@
 Transformations
 ===============
 
-In the general case there will be two different types of transformations which
-correspond to the behaviour of Python's built-in ``map`` and ``reduce``
-functions.
+Transformations should only ever be from a single :class:`jicimagelib.Image`
+instance to a single instance of a :class:`jicimagelib.Image` with optional
+arguments. The optional arguments could be a sigma value in the case of a
+Gaussian tranform and another image in the case of the watershed algorithm.
 
-An example of a ``map`` transformation would be a Gaussian blur.
+Converting all :class:`jicimagelib.Image` instances in a
+:class:`jicimagelib.Stack` then simply becomes a map of a tranform.
+
+.. note:: The implication of transformation being only single image to single
+          image in the context of mapping a tranform to a stack. This means
+          that any optional arguments (such as a second input image) would be
+          the same for all slices in the stack.
+
+Converting a :class:`jicimagelib.Stack` to a :class:`jicimage.Image` is
+analogous to Python's built-in :func:`reduce` function.
 
 .. code-block:: python
 
-    >>> from jicimagelib import transformation as tr
-    >>> gaussian_im = tr.gaussian(org_im, sigma=2)
+    >>> from jicimagelib.transform import Gaussian
+    >>> gaussian = Gaussian(sigma=2)
+    >>> gaussian_im = gaussian(org_im)
+
+.. note:: The style of above where the settings are applied to an instance of a
+          of a callable class makes it easy to pass the callable to a mapper.
 
 Note that the history of the transformations is saved in the image.
 
 .. code-block:: python
 
     >>> gaussian_im.history
-    [ ..., '<function jicimagelib.transformation.gaussian sigma=2>']
+    [ ..., '<Gaussian sigma=2>']
 
-Another example of a ``map`` transformation would be a text annotation.
 
-.. code-block:: python
-
-    >>> annotated_im = tr.add_text(org_im, 5, 5, 'Hello')
-
-A ``reduce`` transformation would be something like a z-stack projection.
-
+Now let us apply the gaussian tranform to all the images in a stack.
 
 .. code-block:: python
 
-    >>> z_max_proj_im = tr.project(z_stack, max)
+    >>> from jicimagelib.tranform import StackMap
+    >>> stack_map = StackMap()
+    >>> guassian_stack = stack_map(stack, gaussian)
 
-.. note:: Matthew how did you implement the above? Could it be generalised to
-          any ``reduce`` situation?
+Alternatively, the map function could be built into the :class:`jicimage.Stack`
+class.
+
+.. code-block:: python
+
+    >>> guassian_stack = stack.map(gaussian)
+
+
+Below is an illustration of how a stack can be reduced to an image.
+
+.. code-block:: python
+
+    >>> from jicimagelib.transform import ReduceStack
+    >>> maxium_projection = ReduceStack(max)
+    >>> z_max_proj_im = maxium_projection(z_stack)

@@ -51,10 +51,10 @@ circles this may be achieved along the lines of the below.
 
 .. code-block:: python
 
-    >>> from jicimagelib.transform import ReduceTransform
+    >>> from jicimagelib.transform import ReduceStack
     >>> from jicimagelib.calculation import peak_local_max
     >>> from jicimagelib.render import Renderer
-    >>> maximum_projection = ReduceTransform(max)
+    >>> maximum_projection = ReduceStack(max)
     >>> z_max_proj_im = maximum_projection(zstack)
     >>> local_max_im, local_max_coords = jil.peak_local_max(z_max_proj_im)
     >>> renderer = Renderer()
