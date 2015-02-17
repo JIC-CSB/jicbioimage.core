@@ -20,20 +20,25 @@ Classes
   containing a ``numpy.array`` with the image data.
 
 :class:`Series`
-  A subclass of :class:`ImageStack`.
+  **NOT** a subclass of :class:`ImageStack`.
 
 :class:`Channel`
-  A subclass of :class:`ImageStack`.
+  **NOT** a  subclass of :class:`ImageStack`.
 
-:class:`ZSlice`
+:class:`ZStack`
   A subclass of :class:`ImageStack`.
 
 :class:`TimePoint`
-  A subclass of :class:`ImageStack`.
+  A subclass of :class:`ImageStack`. **Always of same sample or not.**
 
 :class:`ImageViewer`
   A class for visualising microscopy data. Notably it has the functions
-  :func:`ImageViewer.load` and :func:`ImageViewer.add_layer`.
+  :func:`ImageViewer.load` and :func:`ImageViewer.add_image_layer`.
+
+:class:`StackViewer`
+  A class for visualising microscopy data. Notably it has the functions
+  :func:`StackViewer.load`, :func:`StackViewer.add_image_layer` and
+  :func:`StackViewer.add_stack_layer`.
 
 :class:`MapTransform`
   Base class for creating classes that transform :class:`Image` and
