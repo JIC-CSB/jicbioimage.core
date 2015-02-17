@@ -12,104 +12,60 @@ responsibility of the viewer is simply to display collections of 2D images. And
 the responsibility of annotating images lies with transform helper functions.
 The user is then requested to build up the image(s) that he/she want to
 visualise.
+
+However the visualiser will still have both the concepts of loading an
+image/stack as well as the concept of adding annotations layers.
           
 .. note:: We propose to provide some built in factories that can be used
           to build common views of data using the required transforms.
 
-Suppose that we wanted to highlight local minima on an image using circles this
-may be achieved along the lines of the below.
+Let us load a data manager and get an image and a zstack.
 
 .. code-block:: python
 
-    >>> import jicimagelib as jil
+    >>> from jicimagelib import DataManager
     >>> data_manager = jil.DataManager()
     >>> data_manager.load('test.lif')
-    >>> image_collection = data_manager[0]
-    >>> z_max_proj_im = jil.project_using_function(image_collection.z_stack, max)
-    >>> local_maxima = jil.peak_local_max(z_max_proj_im)
-    >>> annotated_im = jil.add_circles(z_max_proj_im, local_maxima.coordinates)
-    >>> jil.view(annotated_im)
+    >>> im_collection = data_manager[0]
+    >>> im = im_collection.get_image(channel=0, z_slice=0)
+    >>> zstack = im_collection.get_zstack(channel=0)
 
-Alternative suggestion for the viewer API.
+Below is an example how one could view an individual image.
 
 .. code-block:: python
 
-    >>> viewer = jil.ImageViewer()
-    >>> viewer.view(annotated_im)
+    >>> from jicimagelib import ImageViewer
+    >>> image_viewer = ImageViewer()
+    >>> image_viewer.load(im)
 
-To toggle between the maximum z-stack projection and the image annotated with
-the image one could use the syntax below to create a viewer with the two images
-of interest.
-
-.. code-block:: python
-
-    >>> viewer = jil.ImageViewer()
-    >>> viewer.view([z_max_proj_im, annotated_im])
-
-Alternative syntax suggestion, which would allow adding more data to the viewer
-ad-hoc, for example the entire z-stack.
+Below is an example how one could view an image stack.
 
 .. code-block:: python
 
-    >>> viewer = jil.ImageViewer()
-    >>> viewer.load([z_max_proj_im, annotated_im])
-    >>> viewer.load(image_collection.z_stack)
+    >>> from jicimagelib import StackViwer
+    >>> stack_viewer = StackViwer()
+    >>> stack_viewer.load(zstack)
 
-Suppose that we wanted to annotate all slices in a z-stack. In this case we
-should probably have a helper function along the lines of the below.
-
-.. code-block:: python
-
-    >>> annotated_z_stack = jil.transform_all(jil.add_circles,
-    ...                                       image_collection.z_stack,
-    ...                                       local_maxima.coordinates)
-    ...
-    >>> viewer.clear()
-    >>> viewer.load(annotated_z_stack)
-
-.. warning:: The above may get too inefficient and cumbersome. Suggest that we
-             functionality to be able to add layers and set their visibility.
+Suppose that we wanted to highlight local maxima in the projected z-stack using
+circles this may be achieved along the lines of the below.
 
 .. code-block:: python
 
-    >>> viewer.load(org_im)
-    >>> circles = jil.circles(coordinates)
-    >>> viewer.add_layer(circles)
+    >>> from jicimagelib.transform import ReduceTransform
+    >>> from jicimagelib.calculation import peak_local_max
+    >>> from jicimagelib.render import Renderer
+    >>> maximum_projection = ReduceTransform(max)
+    >>> z_max_proj_im = maximum_projection(zstack)
+    >>> local_max_im, local_max_coords = jil.peak_local_max(z_max_proj_im)
+    >>> renderer = Renderer()
+    >>> circles_im = renderer.draw_circles(local_max_coords)
+    >>> stack_viewer.load(zstack)
+    >>> stack_viewer.add_image_layer(circles_im)
+
+.. note:: The :class:`jicimagelib.viewer.StackViewer` should also have a
+          :func:`jicimagelib.viewer.StackViewer.add_stack_layer` to be used if
+          the layer should display information that is slice dependent.
 
 .. note:: We may want to support other viewers for example summary information
           or intensity histograms. Furthermore we may want to be able to create
           a viewer that simply calls an external visualiser.
-
-MVC
----
-
-.. warning:: Using the MVC pattern does not seem like a good fit for what we
-             want to do. Instead we are in favor of creating simple viewers and
-             transforms and using factories to build up more complicated
-             composite views.
-
-Should we use a model/view/controller (MVC) architectural pattern?
-
-`<http://en.wikipedia.org/wiki/Model_view_controller>`_
-
-In the GoF "Design Patterns" book the MVC is described in terms of the
-``observer``, ``composite`` and ``strategy`` patterns.
-
-The ``observer`` pattern being the view, for example textual/tabular summary
-information an image or an intensity histogram.
-
-The ``composite`` is a pattern for handing nested views, one could imaging
-wanting to create a view along the lines of the below:
-
-- view
-
-  - original image
-  - meta data
-
-    - summary information
-    - intensity histogram
-
-The controller uses the ``strategy`` pattern as a means to decide how input is
-interpreted by the view. For example if the model was a z-stack then the mouse
-scroll might allow the user to scroll through the images in the z-stack in an
-"image view", but do nothing with a view of summary information about the z-stack.

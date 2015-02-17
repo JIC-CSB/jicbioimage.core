@@ -16,3 +16,4 @@ Contents
    derived_data
    modules_and_classes
    random_thoughts
+   deprecated_ideas
