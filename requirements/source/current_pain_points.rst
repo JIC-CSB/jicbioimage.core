@@ -29,8 +29,8 @@ Python is painful to use because:
   - One often ends up using several imaging libraries (PIL, scipy.ndimage,
     scikit-image, opencv) and these have subtly different representations of
     images
-  - It is easy to inadvertently loose data, for example PIL compresses data to
-    fit into 8-bit images when writing them to file
+  - It is easy to inadvertently loose data, for example scipy.misc.imsave
+    compresses data to fit into 8-bit images when writing them to file
   - The libraries that one make use of are complex and sometimes non-intuitive
     which means that one is constantly re-learning how to parse data using the
     different imaging libraries and how to display images using matplotlib
