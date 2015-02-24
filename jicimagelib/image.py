@@ -2,6 +2,30 @@
 
 import os.path
 from collections import namedtuple
+import numpy as np
+from libtiff import TIFF
+
+class _FileProxyImage(object):
+    """Class for storing path to image and associated meta data."""
+
+    def __init__(self, fpath, s=None, c=None, z=None, t=None):
+        self._fpath = fpath
+        self.series = s
+        self.channel = c
+        self.zslice = z
+        self.timepoint = t
+        self._image = None
+
+    @property
+    def image(self):
+        if self._image is None:
+            tif = TIFF.open(self._fpath, 'r')
+            im = tif.read_image()
+            tif.close()
+            self._image = im
+        return self._image
+        
+        
 
 class _BFConvertDataManager(object):
     """Class for interfacing to bftools/bfconvert."""
@@ -35,9 +59,6 @@ class _BFConvertDataManager(object):
         args = [ int(x[1]) for x in data ]               # e.g. [1, 2, 3, 4]
         return MetaData(*args)
         
-
-        
-
 class DataManager(object):
     """Manage :class:`jicimagelib.image.ImageCollection` instances."""
 
