@@ -29,8 +29,13 @@ class FileBackend(object):
         """Class representing an entry in the backend."""
         def __init__(self, base_dir, fpath):
             fname = os.path.basename(fpath)
-            self.directory = os.path.join(base_dir, fname)
+            self._directory = os.path.join(base_dir, fname)
             os.mkdir(self.directory)
+
+        @property
+        def directory(self):
+            """Return the path to where the entry data is stored."""
+            return self._directory
 
     def __init__(self, base_dir=None):
         self.base_dir = base_dir
