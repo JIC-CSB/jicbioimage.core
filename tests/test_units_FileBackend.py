@@ -60,13 +60,6 @@ class FileBackendTests(unittest.TestCase):
         parent_dir, entry_dir2 = os.path.split(entry2.directory)
         self.assertNotEqual(entry_dir1, entry_dir2)
         
-    def test_entry_content(self):
-        from jicimagelib.image import FileBackend
-        base_dir = os.path.join(TMP_DIR, 'jicimagelib')
-        backend = FileBackend(base_dir=base_dir)
-        entry = backend.new_entry('test.lif')
-        self.assertEqual(len(entry.content), 0)
-
     def test_entry_directory_exists(self):
         from jicimagelib.image import FileBackend
         base_dir = os.path.join(TMP_DIR, 'jicimagelib')

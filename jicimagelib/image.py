@@ -32,10 +32,6 @@ class FileBackend(object):
             self.directory = os.path.join(base_dir, fname)
             os.mkdir(self.directory)
 
-        @property
-        def content(self):
-            return []
-
     def __init__(self, base_dir=None):
         self.base_dir = base_dir
 
