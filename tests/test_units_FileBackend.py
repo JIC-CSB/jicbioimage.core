@@ -21,24 +21,18 @@ class FileBackendTests(unittest.TestCase):
 
     def test_default_instantiaiton(self):
         from jicimagelib.image import FileBackend
-        backend = FileBackend()
-        self.assertEqual(backend.directory, CURRENT_WORKING_DIR)
-
-    def test_instantiation_with_directory_specified(self):
-        from jicimagelib.image import FileBackend
         directory = os.path.join(TMP_DIR, 'jicimagelib')
         self.assertFalse(os.path.isdir(directory))
         backend = FileBackend(directory=directory)
         self.assertEqual(backend.directory, directory)
         self.assertTrue(os.path.isdir(directory))
         
-    def test_modifying_directory_post_instantiation(self):
+    def test_modifying_directory_post_instantiation_raises(self):
         from jicimagelib.image import FileBackend
-        backend = FileBackend()
         directory = os.path.join(TMP_DIR, 'jicimagelib')
-        self.assertFalse(os.path.isdir(directory))
-        backend.directory = directory
-        self.assertTrue(os.path.isdir(directory))
+        backend = FileBackend(directory)
+        with self.assertRaises(AttributeError):
+            backend.directory = 'dummy'
 
     def test_new_entry(self):
         from jicimagelib.image import FileBackend

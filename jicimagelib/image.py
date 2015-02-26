@@ -37,21 +37,16 @@ class FileBackend(object):
             """Return the path to where the entry data is stored."""
             return self._directory
 
-    def __init__(self, directory=None):
-        self.directory = directory
+    def __init__(self, directory):
+        if not os.path.isdir(directory):
+            os.mkdir(directory)
+        self._directory = directory
 
     @property
     def directory(self):
-        if self._directory is None:
-            return os.getcwd()
+        """Return the path to where the data is stored."""
         return self._directory
 
-    @directory.setter
-    def directory(self, directory):
-        if (directory is not None) and (not os.path.isdir(directory)):
-            os.mkdir(directory)
-        self._directory = directory
-           
     def new_entry(self, fpath):
         """Return a new entry; to be populated with images."""
         return FileBackend.Entry(self.directory, fpath)
