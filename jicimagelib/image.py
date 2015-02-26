@@ -6,7 +6,7 @@ import tempfile
 import json
 
 class ImageProxy(object):
-    """Image class."""
+    """Lightweight image class."""
 
     def __init__(self, fpath):
         self.fpath = fpath
@@ -108,7 +108,10 @@ class _BFConvertWrapper(object):
         return os.path.isfile(manifest_fpath)
         
     def __call__(self, input_file):
-        """Run the convertion."""
+        """Run the conversion.
+        
+        Unpacks the microscopy file and creates the manifest file.
+        """
         entry = self.backend.new_entry(input_file)
         cmd = self.run_command(input_file, entry.directory)
         os.system(cmd)
@@ -118,7 +121,7 @@ class _BFConvertWrapper(object):
         return manifest_fpath
 
 class DataManager(list):
-    """Class for managing :class:`ImageCollection` instances."""
+    """Class for managing :class:`jicimagelib.image.ImageCollection` instances."""
 
     def __init__(self, backend):
         self.backend = backend
@@ -127,7 +130,7 @@ class DataManager(list):
     def load(self, fpath):
         """Load a microscopy file."""
         if not self.convert.already_converted(fpath):
-            path_to_manifest = self.convert(fpath) # unpacks and creates manifests
+            path_to_manifest = self.convert(fpath)
             image_collection = ImageCollection()
             image_collection.parse_manifest(path_to_manifest)
             self.append(image_collection)
