@@ -52,7 +52,7 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(len(data_manager), 2)
 
         # There are five z-slices in the new image collection.
-        zseries_collection = data_manager[0]
+        zseries_collection = data_manager[1]
         self.assertEqual(len(zseries_collection), 5)
 
 

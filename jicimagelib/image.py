@@ -3,6 +3,7 @@
 import os
 from collections import namedtuple
 import tempfile
+import json
 
 class ImageProxy(object):
     """Image class."""
@@ -16,6 +17,13 @@ class ImageCollection(list):
     def add_image_proxy(self, image_proxy):
         """Add an :class:`jicimagelib.image.ImageProxy` to the collection."""
         self.append(image_proxy)
+
+    def parse_manifest(self, fpath):
+        """Parse manifest file to build up the collection of images."""
+        with open(fpath, 'r') as fh:
+            for entry in json.load(fh):
+                image_proxy = ImageProxy(entry["filename"])
+                self.add_image_proxy(image_proxy)
 
 
 class FileBackend(object):
@@ -68,8 +76,11 @@ class _BFConvertWrapper(object):
         return ''.join(patterns)
 
     def manifest(self, entry):
+        """Returns manifest as a Python list."""
         entries = []
         for fname in os.listdir(entry.directory):
+            if fname == 'manifest.json':
+                continue
             fpath = os.path.abspath(fname)
             metadata = self.metadata_from_fname(fname)
             entries.append({"filename": fpath,
@@ -99,13 +110,20 @@ class _BFConvertWrapper(object):
 
     def already_converted(self, fpath):
         """Return true if the file already has a manifest file in the backend."""
+        manifest_fpath = os.path.join(self.backend.base_dir,
+                                      os.path.basename(fpath),
+                                      'manifest.json')
+        return os.path.isfile(manifest_fpath)
         
     def __call__(self, input_file):
         """Run the convertion."""
         entry = self.backend.new_entry(input_file)
         cmd = self.run_command(input_file, entry.directory)
         os.system(cmd)
-        print os.listdir(entry.directory)
+        manifest_fpath = os.path.join(entry.directory, 'manifest.json')
+        with open(manifest_fpath, 'w') as fh:
+            json.dump(self.manifest(entry), fh)
+        return manifest_fpath
 
 class DataManager(list):
     """Class for managing :class:`ImageCollection` instances."""
@@ -116,8 +134,8 @@ class DataManager(list):
 
     def load(self, fpath):
         """Load a microscopy file."""
-        image_collection = ImageCollection()
-        image_proxy = ImageProxy(fpath)
-        image_collection.add_image_proxy(image_proxy)
-        self.append(image_collection)
-
+        if not self.convert.already_converted(fpath):
+            path_to_manifest = self.convert(fpath) # unpacks and creates manifests
+            image_collection = ImageCollection()
+            image_collection.parse_manifest(path_to_manifest)
+            self.append(image_collection)

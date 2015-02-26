@@ -35,6 +35,9 @@ class TestDataManager(unittest.TestCase):
         from jicimagelib.image import _BFConvertWrapper
         self.assertTrue(isinstance(data_manager.convert, _BFConvertWrapper))
 
+        # We also need to import an ImageCollection
+        from jicimagelib.image import ImageCollection
+
         # If the input file has not already been converted with do so.
         fpath = os.path.join(DATA_DIR, 'z-series.ome.tif')
         self.assertFalse(data_manager.convert.already_converted(fpath))
@@ -45,8 +48,8 @@ class TestDataManager(unittest.TestCase):
                                                             'manifest.json'))
             image_collection = ImageCollection()
             image_collection.parse_manifest(path_to_manifest)
-            self.assertEqual(len(image_collection), 7)
-            data_manager.add(image_collection)
+            self.assertEqual(len(image_collection), 5)
+            data_manager.append(image_collection)
             self.assertEqual(len(data_manager), 1)
         self.assertTrue(data_manager.convert.already_converted(fpath))
 
