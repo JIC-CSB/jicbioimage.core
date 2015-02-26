@@ -6,7 +6,7 @@ import os.path
 
 HERE = os.path.dirname(__file__)
 
-class _BFConvertWrapperTests(unittest.TestCase):
+class BFConvertWrapperTests(unittest.TestCase):
     
     def test_backend_attribute(self):
         from jicimagelib.image import _BFConvertWrapper
