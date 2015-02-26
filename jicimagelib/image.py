@@ -14,16 +14,12 @@ class ImageProxy(object):
 class ImageCollection(list):
     """Class for storing related images."""
 
-    def add_image_proxy(self, image_proxy):
-        """Add an :class:`jicimagelib.image.ImageProxy` to the collection."""
-        self.append(image_proxy)
-
     def parse_manifest(self, fpath):
         """Parse manifest file to build up the collection of images."""
         with open(fpath, 'r') as fh:
             for entry in json.load(fh):
                 image_proxy = ImageProxy(entry["filename"])
-                self.add_image_proxy(image_proxy)
+                self.append(image_proxy)
 
 
 class FileBackend(object):
