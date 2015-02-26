@@ -37,24 +37,24 @@ class FileBackend(object):
             """Return the path to where the entry data is stored."""
             return self._directory
 
-    def __init__(self, base_dir=None):
-        self.base_dir = base_dir
+    def __init__(self, directory=None):
+        self.directory = directory
 
     @property
-    def base_dir(self):
-        if self._base_dir is None:
+    def directory(self):
+        if self._directory is None:
             return os.getcwd()
-        return self._base_dir
+        return self._directory
 
-    @base_dir.setter
-    def base_dir(self, base_dir):
-        if (base_dir is not None) and (not os.path.isdir(base_dir)):
-            os.mkdir(base_dir)
-        self._base_dir = base_dir
+    @directory.setter
+    def directory(self, directory):
+        if (directory is not None) and (not os.path.isdir(directory)):
+            os.mkdir(directory)
+        self._directory = directory
            
     def new_entry(self, fpath):
         """Return a new entry; to be populated with images."""
-        return FileBackend.Entry(self.base_dir, fpath)
+        return FileBackend.Entry(self.directory, fpath)
 
 
 class _BFConvertWrapper(object):
@@ -107,7 +107,7 @@ class _BFConvertWrapper(object):
 
     def already_converted(self, fpath):
         """Return true if the file already has a manifest file in the backend."""
-        manifest_fpath = os.path.join(self.backend.base_dir,
+        manifest_fpath = os.path.join(self.backend.directory,
                                       os.path.basename(fpath),
                                       'manifest.json')
         return os.path.isfile(manifest_fpath)

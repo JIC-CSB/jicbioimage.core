@@ -26,7 +26,7 @@ class TestDataManager(unittest.TestCase):
         # unpacked image files.
         from jicimagelib.image import FileBackend
         from jicimagelib.image import DataManager
-        backend = FileBackend(base_dir=TMP_DIR)
+        backend = FileBackend(directory=TMP_DIR)
         data_manager = DataManager(backend=backend)
 
         # The :func:`jicimagelib.image.DataManager.conver` function is be
