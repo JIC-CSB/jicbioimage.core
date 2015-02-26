@@ -1,8 +1,8 @@
 """Module for managing and accessing images."""
 
 import os
+import os.path
 from collections import namedtuple
-import tempfile
 import json
 
 #############################################################################
