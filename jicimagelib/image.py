@@ -75,13 +75,13 @@ class _BFConvertWrapper(object):
         return entries
 
     def run_command(self, input_file, output_dir=None):
-        """Return the command for running bfconvert."""
+        """Return the command for running bfconvert as a list."""
         base_name = os.path.basename(input_file)
         name, suffix = base_name.split('.', 1)
         output_file = '{}{}.tif'.format(name, self.split_pattern)
         if output_dir:
             output_file = os.path.join(output_dir, output_file)
-        return 'bfconvert {} {}'.format(input_file, output_file)
+        return ['bfconvert', input_file, output_file]
 
     def metadata_from_fname(self, fname):
         """Return meta data extracted from file name."""
@@ -106,7 +106,7 @@ class _BFConvertWrapper(object):
         """
         entry = self.backend.new_entry(input_file)
         cmd = self.run_command(input_file, entry.directory)
-        p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stderr = p.stderr.read()
         if stderr != '':
             raise(RuntimeError, stderr)

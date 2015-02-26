@@ -32,9 +32,13 @@ class BFConvertWrapperTests(unittest.TestCase):
         from jicimagelib.image import _BFConvertWrapper
         wrapper = _BFConvertWrapper('backend')
         cmd = wrapper.run_command('test.lif')
-        self.assertEqual(cmd, 'bfconvert test.lif test_S%s_C%c_Z%z_T%t.tif')
+        self.assertEqual(cmd, ['bfconvert',
+                               'test.lif',
+                               'test_S%s_C%c_Z%z_T%t.tif'])
         cmd = wrapper.run_command('test.lif', output_dir='/tmp')
-        self.assertEqual(cmd, 'bfconvert test.lif /tmp/test_S%s_C%c_Z%z_T%t.tif')
+        self.assertEqual(cmd, ['bfconvert',
+                               'test.lif',
+                               '/tmp/test_S%s_C%c_Z%z_T%t.tif'])
 
     def test_metadata_from_fname(self):
         """Test the metadata_from_fname function."""
