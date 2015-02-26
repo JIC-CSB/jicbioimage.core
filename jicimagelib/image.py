@@ -5,22 +5,9 @@ from collections import namedtuple
 import tempfile
 import json
 
-class ImageProxy(object):
-    """Lightweight image class."""
-
-    def __init__(self, fpath):
-        self.fpath = fpath
-
-class ImageCollection(list):
-    """Class for storing related images."""
-
-    def parse_manifest(self, fpath):
-        """Parse manifest file to build up the collection of images."""
-        with open(fpath, 'r') as fh:
-            for entry in json.load(fh):
-                image_proxy = ImageProxy(entry["filename"])
-                self.append(image_proxy)
-
+#############################################################################
+# Back ends classes for storing/caching unpacked microscopy images.
+#############################################################################
 
 class FileBackend(object):
     """Class for storing tiff files."""
@@ -51,6 +38,10 @@ class FileBackend(object):
         """Return a new entry; to be populated with images."""
         return FileBackend.Entry(self.directory, fpath)
 
+
+#############################################################################
+# Conversion classes for unpacking microscopy data.
+#############################################################################
 
 class _BFConvertWrapper(object):
     """Class for unpacking microscopy files using bfconvert."""
@@ -119,6 +110,27 @@ class _BFConvertWrapper(object):
         with open(manifest_fpath, 'w') as fh:
             json.dump(self.manifest(entry), fh)
         return manifest_fpath
+
+
+#############################################################################
+# Classes for managing image data.
+#############################################################################
+
+class ImageProxy(object):
+    """Lightweight image class."""
+
+    def __init__(self, fpath):
+        self.fpath = fpath
+
+class ImageCollection(list):
+    """Class for storing related images."""
+
+    def parse_manifest(self, fpath):
+        """Parse manifest file to build up the collection of images."""
+        with open(fpath, 'r') as fh:
+            for entry in json.load(fh):
+                image_proxy = ImageProxy(entry["filename"])
+                self.append(image_proxy)
 
 class DataManager(list):
     """Class for managing :class:`jicimagelib.image.ImageCollection` instances."""
