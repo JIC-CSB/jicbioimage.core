@@ -50,6 +50,7 @@ class DataManagerUserStory(unittest.TestCase):
             data_manager.append(image_collection)
             self.assertEqual(len(data_manager), 1)
         self.assertTrue(data_manager.convert.already_converted(fpath))
+
     def test_data_manager(self):
         # Alice wants to analyse her microscopy data.  To access the raw image
         # data within the microscopy files she uses a DataManager.
@@ -92,6 +93,15 @@ class DataManagerUserStory(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             data_manager.load(os.path.join(DATA_DIR, 'nonsese.ome.tif'))
 
+    def test_error_message_when_bfconvert_not_in_path(self):
+        from jicimagelib.image import DataManager, FileBackend
+        backend = FileBackend(TMP_DIR)
+        data_manager = DataManager(backend)
+        tmp_path = os.environ['PATH']
+        del os.environ['PATH']
+        with self.assertRaises(RuntimeError):
+            data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
+        os.environ['PATH'] = tmp_path
 
 
 if __name__ == '__main__':
