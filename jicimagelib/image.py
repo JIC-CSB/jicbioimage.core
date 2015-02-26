@@ -126,8 +126,12 @@ class _BFConvertWrapper(object):
 class ImageProxy(object):
     """Lightweight image class."""
 
-    def __init__(self, fpath):
+    def __init__(self, fpath, s, c, z, t):
         self.fpath = fpath
+        self.series = s
+        self.channel = c
+        self.zslice = z
+        self.timepoint = t
 
 class ImageCollection(list):
     """Class for storing related images."""
@@ -136,8 +140,19 @@ class ImageCollection(list):
         """Parse manifest file to build up the collection of images."""
         with open(fpath, 'r') as fh:
             for entry in json.load(fh):
-                image_proxy = ImageProxy(entry["filename"])
+                image_proxy = ImageProxy(entry["filename"],
+                                         s=entry["metadata"]["series"],
+                                         c=entry["metadata"]["channel"],
+                                         z=entry["metadata"]["zslice"],
+                                         t=entry["metadata"]["timepoint"])
                 self.append(image_proxy)
+
+    def get_image_proxy(self, s=0, c=0, z=0, t=0):
+        """Return a :class:`jicimagelib.image.ImageProxy` instance."""
+        for image_proxy in self:
+            if (image_proxy.series == s and image_proxy.channel == c and
+                image_proxy.zslice == z and image_proxy.timepoint == t):
+                return image_proxy
 
 class DataManager(list):
     """Class for managing :class:`jicimagelib.image.ImageCollection` instances."""
