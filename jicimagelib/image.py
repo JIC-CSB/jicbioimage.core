@@ -2,6 +2,7 @@
 
 import os
 import os.path
+import subprocess
 from collections import namedtuple
 import json
 
@@ -105,7 +106,10 @@ class _BFConvertWrapper(object):
         """
         entry = self.backend.new_entry(input_file)
         cmd = self.run_command(input_file, entry.directory)
-        os.system(cmd)
+        p = subprocess.Popen(cmd.split(' '), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stderr = p.stderr.read()
+        if stderr != '':
+            raise(RuntimeError, stderr)
         manifest_fpath = os.path.join(entry.directory, 'manifest.json')
         with open(manifest_fpath, 'w') as fh:
             json.dump(self.manifest(entry), fh)

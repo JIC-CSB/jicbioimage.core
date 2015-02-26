@@ -54,6 +54,12 @@ class DataManagerUserStory(unittest.TestCase):
         # There are five z-slices in the new image collection.
         zseries_collection = data_manager[1]
         self.assertEqual(len(zseries_collection), 5)
+ 
+        # File format conversion trouble (for example using non existing input
+        # file) raises RuntimeError.
+        with self.assertRaises(RuntimeError):
+            data_manager.load(os.path.join(DATA_DIR, 'nonsese.ome.tif'))
+
 
 
 if __name__ == '__main__':
