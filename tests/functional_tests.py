@@ -94,6 +94,24 @@ class DataManagerUserStory(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             data_manager.load(os.path.join(DATA_DIR, 'nonsese.ome.tif'))
 
+    def test_data_manager_already_unpacked(self):
+        # The second time the data manager is loaded, it should contain data
+        # without unpacking.
+
+        from jicimagelib.image import DataManager, FileBackend
+
+        backend = FileBackend(TMP_DIR)
+        data_manager = DataManager(backend)
+
+        data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
+        self.assertEqual(len(data_manager), 1)
+
+        backend_reload = FileBackend(TMP_DIR)
+        data_manager_reload = DataManager(backend)
+
+        data_manager_reload.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
+        self.assertEqual(len(data_manager_reload), 1)
+
     def test_error_message_when_bfconvert_not_in_path(self):
         from jicimagelib.image import DataManager, FileBackend
         backend = FileBackend(TMP_DIR)
