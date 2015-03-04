@@ -183,6 +183,10 @@ class ImageCollection(list):
         """Return zstack as a numpy.ndarray."""
         return np.dstack([x.image for x in self.get_zstack_iterator(s=s, c=c, t=t)])
 
+    def get_image(self, s=0, c=0, z=0, t=0):
+        """Return image as a numpy.ndarray."""
+        return self.get_image_proxy(s=s, c=c, z=z, t=t).image
+
 
 class DataManager(list):
     """Class for managing :class:`jicimagelib.image.ImageCollection` instances."""
