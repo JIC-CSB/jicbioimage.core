@@ -12,7 +12,6 @@ class ImageProxyTests(unittest.TestCase):
         self.assertEqual(image_proxy.channel, 1)
         self.assertEqual(image_proxy.zslice, 2)
         self.assertEqual(image_proxy.timepoint, 3)
-        
-        
+
 if __name__ == '__main__':
     unittest.main()

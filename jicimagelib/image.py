@@ -6,6 +6,8 @@ import subprocess
 from collections import namedtuple
 import json
 import re
+import numpy as np
+from libtiff import TIFF
 
 #############################################################################
 # Back ends classes for storing/caching unpacked microscopy images.
@@ -70,7 +72,7 @@ class _BFConvertWrapper(object):
         for fname in self._sorted_nicely(os.listdir(entry.directory)):
             if fname == 'manifest.json':
                 continue
-            fpath = os.path.abspath(fname)
+            fpath = os.path.abspath(os.path.join(entry.directory, fname))
             metadata = self.metadata_from_fname(fname)
             entries.append({"filename": fpath,
                             "metadata": {"series": metadata.s,
@@ -138,6 +140,14 @@ class ImageProxy(object):
         self.zslice = z
         self.timepoint = t
 
+    @property
+    def image(self):
+        """Return image as numpy.ndarray."""
+        tif = TIFF.open(self.fpath, 'r')
+        ar = tif.read_image()
+        tif.close()
+        return ar
+
 class ImageCollection(list):
     """Class for storing related images."""
 
@@ -168,6 +178,11 @@ class ImageCollection(list):
                 and image_proxy.channel == c
                 and image_proxy.timepoint == t):
                 yield image_proxy
+
+    def get_zstack_array(self, s=0, c=0, t=0):
+        """Return zstack as a numpy.ndarray."""
+        return np.dstack([x.image for x in self.get_zstack_iterator(s=s, c=c, t=t)])
+
 
 class DataManager(list):
     """Class for managing :class:`jicimagelib.image.ImageCollection` instances."""

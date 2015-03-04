@@ -40,5 +40,10 @@ class ImageCollectionTests(unittest.TestCase):
         self.assertTrue(isinstance(image_collection.get_zstack_iterator(),
                                    collections.Iterable))
         
+    def test_get_zstack_array(self):
+        from jicimagelib.image import ImageCollection
+        image_collection = ImageCollection()
+        self.assertTrue(callable(image_collection.get_zstack_array))
+        
 if __name__ == '__main__':
     unittest.main()

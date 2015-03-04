@@ -25,5 +25,9 @@ class NoseTestCommand(TestCommand):
 
 setup(name='jicimagelib',
       version=jicimagelib.__version__,
-      cmdclass={'test': NoseTestCommand}
+      cmdclass={'test': NoseTestCommand},
+      install_requires=[
+        'numpy',
+        'libtiff',
+      ]
 )

@@ -4,6 +4,7 @@ import unittest
 import os
 import os.path
 import shutil
+import numpy as np
 
 HERE = os.path.dirname(__file__)
 DATA_DIR = os.path.join(HERE, 'data')
@@ -103,6 +104,18 @@ class DataManagerUserStory(unittest.TestCase):
             data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
         os.environ['PATH'] = tmp_path
 
+    def test_image_proxy(self):
+        from jicimagelib.image import DataManager, FileBackend
+        backend = FileBackend(TMP_DIR)
+        data_manager = DataManager(backend)
+        data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
+        image_collection = data_manager[0]
+        image_proxy = image_collection.get_image_proxy()
+        self.assertTrue(os.path.isfile(image_proxy.fpath),
+                        'no such file: {}'.format(image_proxy.fpath))
+        self.assertTrue(isinstance(image_proxy.image, np.ndarray))
+        self.assertEqual(image_proxy.image.shape, (167, 439))
+
     def test_image_collection(self):
         from jicimagelib.image import DataManager, FileBackend
         backend = FileBackend(TMP_DIR)
@@ -140,13 +153,12 @@ class DataManagerUserStory(unittest.TestCase):
             self.assertEqual(image_proxy.timepoint, 3)
 
         zstack_array = image_collection.get_zstack_array(s=0, c=1, t=3)
-        import numpy as np
         self.assertTrue(isinstance(zstack_array, np.ndarray))
-        self.assertEqual(zstack_array.shape, (50, 250, 5))
+        self.assertEqual(zstack_array.shape, (167, 439, 5))
 
         image = image_collection.get_image(s=0, c=1, z=2, t=3)
-        self.assertTrue(isinstance(zstack_array, np.ndarray))
-        self.assertEqual(zstack_array.shape, (50, 250))
+        self.assertTrue(isinstance(image, np.ndarray))
+        self.assertEqual(image.shape, (167, 439))
 
 if __name__ == '__main__':
     unittest.main()
