@@ -195,6 +195,13 @@ class DataManager(list):
         """Load a microscopy file."""
         if not self.convert.already_converted(fpath):
             path_to_manifest = self.convert(fpath)
-            image_collection = ImageCollection()
-            image_collection.parse_manifest(path_to_manifest)
-            self.append(image_collection)
+        else:
+            path_to_manifest = os.path.join(self.backend.directory,
+                                            os.path.basename(fpath),
+                                            'manifest.json')
+
+        image_collection = ImageCollection()
+        image_collection.parse_manifest(path_to_manifest)
+        self.append(image_collection)
+
+            
