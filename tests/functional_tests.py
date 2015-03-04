@@ -123,12 +123,16 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(image_proxy.zslice, 2)
         self.assertEqual(image_proxy.timepoint, 3)
 
+        self.assertEqual(5,
+            len([i for i in image_collection.get_zstack_iterator()]))
         for i, image_proxy in enumerate(image_collection.get_zstack_iterator()):
             self.assertEqual(image_proxy.series, 0)
             self.assertEqual(image_proxy.channel, 0)
             self.assertEqual(image_proxy.zslice, i)
             self.assertEqual(image_proxy.timepoint, 0)
 
+        self.assertEqual(5,
+            len([i for i in image_collection.get_zstack_iterator(s=0, c=1, t=3)]))
         for i, image_proxy in enumerate(image_collection.get_zstack_iterator(s=0, c=1, t=3)):
             self.assertEqual(image_proxy.series, 0)
             self.assertEqual(image_proxy.channel, 1)

@@ -5,6 +5,7 @@ import os.path
 import subprocess
 from collections import namedtuple
 import json
+import re
 
 #############################################################################
 # Back ends classes for storing/caching unpacked microscopy images.
@@ -39,8 +40,6 @@ class FileBackend(object):
         """Return a new entry; to be populated with images."""
         return FileBackend.Entry(self.directory, fpath)
 
-
-#############################################################################
 # Conversion classes for unpacking microscopy data.
 #############################################################################
 
@@ -59,10 +58,16 @@ class _BFConvertWrapper(object):
             patterns.append('_{}%{}'.format(p.capitalize(), p))
         return ''.join(patterns)
 
+    def _sorted_nicely(self, l):
+        """Sort the given iterable in the way that humans expect."""
+        convert = lambda text: int(text) if text.isdigit() else text
+        alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
+        return sorted(l, key = alphanum_key)
+
     def manifest(self, entry):
         """Returns manifest as a Python list."""
         entries = []
-        for fname in os.listdir(entry.directory):
+        for fname in self._sorted_nicely(os.listdir(entry.directory)):
             if fname == 'manifest.json':
                 continue
             fpath = os.path.abspath(fname)
@@ -150,9 +155,19 @@ class ImageCollection(list):
     def get_image_proxy(self, s=0, c=0, z=0, t=0):
         """Return a :class:`jicimagelib.image.ImageProxy` instance."""
         for image_proxy in self:
-            if (image_proxy.series == s and image_proxy.channel == c and
-                image_proxy.zslice == z and image_proxy.timepoint == t):
+            if (image_proxy.series == s
+                and image_proxy.channel == c
+                and image_proxy.zslice == z
+                and image_proxy.timepoint == t):
                 return image_proxy
+
+    def get_zstack_iterator(self, s=0, c=0, t=0):
+        """Return an iterator of the zstack."""
+        for image_proxy in self:
+            if (image_proxy.series == s
+                and image_proxy.channel == c
+                and image_proxy.timepoint == t):
+                yield image_proxy
 
 class DataManager(list):
     """Class for managing :class:`jicimagelib.image.ImageCollection` instances."""

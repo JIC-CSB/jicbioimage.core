@@ -26,5 +26,19 @@ class ImageCollectionTests(unittest.TestCase):
         image_proxy = image_collection.get_image_proxy(s=1, c=1, z=1, t=1)
         self.assertEqual(image_proxy.fpath, 'test1.tif')
 
+    def test_get_zstack_iterator(self):
+        from jicimagelib.image import ImageCollection
+        image_collection = ImageCollection()
+        self.assertTrue(callable(image_collection.get_zstack_iterator))
+        
+    def test_get_zstack_iterator_is_iterable(self):
+        import collections
+        from jicimagelib.image import ImageCollection
+        image_collection = ImageCollection()
+        self.assertTrue(isinstance(image_collection.get_zstack_iterator(),
+                                   collections.Iterable))
+        self.assertTrue(isinstance(image_collection.get_zstack_iterator(),
+                                   collections.Iterable))
+        
 if __name__ == '__main__':
     unittest.main()
