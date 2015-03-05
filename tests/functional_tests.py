@@ -128,7 +128,7 @@ class DataManagerUserStory(unittest.TestCase):
         data_manager = DataManager(backend)
         data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
         image_collection = data_manager[0]
-        image_proxy = image_collection.get_image_proxy()
+        image_proxy = image_collection.image_proxy()
         self.assertTrue(os.path.isfile(image_proxy.fpath),
                         'no such file: {}'.format(image_proxy.fpath))
         self.assertTrue(isinstance(image_proxy.image, np.ndarray))
@@ -142,39 +142,39 @@ class DataManagerUserStory(unittest.TestCase):
         image_collection = data_manager[0]
         self.assertEqual(len(image_collection), 7*5*3) # 7t, 5z, 3c
 
-        image_proxy = image_collection.get_image_proxy()
+        image_proxy = image_collection.image_proxy()
         self.assertEqual(image_proxy.series, 0)
         self.assertEqual(image_proxy.channel, 0)
         self.assertEqual(image_proxy.zslice, 0)
         self.assertEqual(image_proxy.timepoint, 0)
 
-        image_proxy = image_collection.get_image_proxy(s=0, c=1, z=2, t=3)
+        image_proxy = image_collection.image_proxy(s=0, c=1, z=2, t=3)
         self.assertEqual(image_proxy.series, 0)
         self.assertEqual(image_proxy.channel, 1)
         self.assertEqual(image_proxy.zslice, 2)
         self.assertEqual(image_proxy.timepoint, 3)
 
         self.assertEqual(5,
-            len([i for i in image_collection.get_zstack_iterator()]))
-        for i, image_proxy in enumerate(image_collection.get_zstack_iterator()):
+            len([i for i in image_collection.zstack_proxy_iterator()]))
+        for i, image_proxy in enumerate(image_collection.zstack_proxy_iterator()):
             self.assertEqual(image_proxy.series, 0)
             self.assertEqual(image_proxy.channel, 0)
             self.assertEqual(image_proxy.zslice, i)
             self.assertEqual(image_proxy.timepoint, 0)
 
         self.assertEqual(5,
-            len([i for i in image_collection.get_zstack_iterator(s=0, c=1, t=3)]))
-        for i, image_proxy in enumerate(image_collection.get_zstack_iterator(s=0, c=1, t=3)):
+            len([i for i in image_collection.zstack_proxy_iterator(s=0, c=1, t=3)]))
+        for i, image_proxy in enumerate(image_collection.zstack_proxy_iterator(s=0, c=1, t=3)):
             self.assertEqual(image_proxy.series, 0)
             self.assertEqual(image_proxy.channel, 1)
             self.assertEqual(image_proxy.zslice, i)
             self.assertEqual(image_proxy.timepoint, 3)
 
-        zstack_array = image_collection.get_zstack_array(s=0, c=1, t=3)
+        zstack_array = image_collection.zstack_array(s=0, c=1, t=3)
         self.assertTrue(isinstance(zstack_array, np.ndarray))
         self.assertEqual(zstack_array.shape, (167, 439, 5))
 
-        image = image_collection.get_image(s=0, c=1, z=2, t=3)
+        image = image_collection.image(s=0, c=1, z=2, t=3)
         self.assertTrue(isinstance(image, np.ndarray))
         self.assertEqual(image.shape, (167, 439))
 

@@ -162,7 +162,7 @@ class ImageCollection(list):
                                          t=entry["metadata"]["timepoint"])
                 self.append(image_proxy)
 
-    def get_image_proxy(self, s=0, c=0, z=0, t=0):
+    def image_proxy(self, s=0, c=0, z=0, t=0):
         """Return a :class:`jicimagelib.image.ImageProxy` instance."""
         for image_proxy in self:
             if (image_proxy.series == s
@@ -171,21 +171,21 @@ class ImageCollection(list):
                 and image_proxy.timepoint == t):
                 return image_proxy
 
-    def get_zstack_iterator(self, s=0, c=0, t=0):
-        """Return an iterator of the zstack."""
+    def zstack_proxy_iterator(self, s=0, c=0, t=0):
+        """Return iterator of the :class:`jicimagelib.image.ImageProxy` instances in the zstack."""
         for image_proxy in self:
             if (image_proxy.series == s
                 and image_proxy.channel == c
                 and image_proxy.timepoint == t):
                 yield image_proxy
 
-    def get_zstack_array(self, s=0, c=0, t=0):
+    def zstack_array(self, s=0, c=0, t=0):
         """Return zstack as a numpy.ndarray."""
-        return np.dstack([x.image for x in self.get_zstack_iterator(s=s, c=c, t=t)])
+        return np.dstack([x.image for x in self.zstack_proxy_iterator(s=s, c=c, t=t)])
 
-    def get_image(self, s=0, c=0, z=0, t=0):
+    def image(self, s=0, c=0, z=0, t=0):
         """Return image as a numpy.ndarray."""
-        return self.get_image_proxy(s=s, c=c, z=z, t=t).image
+        return self.image_proxy(s=s, c=c, z=z, t=t).image
 
 
 class DataManager(list):
