@@ -96,7 +96,7 @@ class _BFConvertWrapper(object):
         base_name = os.path.basename(fname)              # e.g. 'test_S1_C2_Z3_T4.tif'
         name, suffix = base_name.split('.')              # e.g. 'test_S1_C2_Z3_T4', 'tif'
         data = name.split('_')[-len(self.split_order):]  # e.g. ['S1', 'C2', 'Z3', 'T4']
-        args = [ int(x[1]) for x in data ]               # e.g. [1, 2, 3, 4]
+        args = [ int(x[1:]) for x in data ]               # e.g. [1, 2, 3, 4]
         return MetaData(*args)
 
     def already_converted(self, fpath):
