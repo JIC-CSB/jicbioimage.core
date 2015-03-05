@@ -16,6 +16,9 @@ Modules
 :mod:`jicimagelib.calculate`
   Contain all classes used to derive data from images.
 
+:mod:`jicimagelib.render`
+  Contain all classes used to create draw annotations.
+
 Classes
 -------
 

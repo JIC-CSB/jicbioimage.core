@@ -12,11 +12,22 @@ minima.
 
 .. code-block:: python
 
-    >>> from jicimagelib.calculate import LocalMinima, ROIProperty
-    >>> from jicimagelib.transform import Watershed, Draw
+    >>> from jicimagelib.calculate import LocalMinima
+    >>> from jicimagelib.transform import Watershed
     >>> local_minima = LocalMinima(org_im)
     >>> segmented_im = Watershed(org_im, local_minima)
-    >>> method_im = Draw.add_circles(segmented_im, local_minima)
+
+To visualise what is going on one may use something along the below:
+
+.. code-block:: python
+
+    >>> from jicimagelib.viewer import ImageViwer
+    >>> from jicimagelib.render import Renderer
+    >>> viewer = ImageViwer()
+    >>> renderer = Renderer()
+    >>> circles = renderer.draw_circles(local_minima)
+    >>> viewer.load(segmented_im)
+    >>> viewer.add_image_layer(circles)
 
 .. note:: In the above local_minima is probably an instance of a class that
           contains both an image and coordinates of the local minima.
@@ -26,6 +37,7 @@ regions of interest.
 
 .. code-block:: python
 
+    >>> from jicimagelib.calculate import ROIProperty
     >>> rois_sum_intensities = ROIProperty(roi=segmented_im, input=org_im, func=sum)
 
 Or the number of coordinates in each region of interest.
