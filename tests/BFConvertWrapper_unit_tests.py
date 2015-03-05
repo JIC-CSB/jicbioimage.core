@@ -51,13 +51,14 @@ class BFConvertWrapperTests(unittest.TestCase):
         self.assertEqual(meta_data.z, 3)
         self.assertEqual(meta_data.t, 4)
 
+        meta_data = wrapper.metadata_from_fname('test_S83_C4_Z5_T6.tif')
+        self.assertEqual(meta_data.s, 83)
+        
         wrapper.split_order = ['z', 'c']
         meta_data = wrapper.metadata_from_fname('test_Z3_C4.tif')
         self.assertEqual(meta_data.c, 4)
         self.assertEqual(meta_data.z, 3)
 
-        meta_data = wrapper.metadata_from_fname('test_S83_C4_Z5_T6.tif')
-        self.assertEqual(meta_data.s, 83)
 
     def test_manifest(self):
         from jicimagelib.image import _BFConvertWrapper
