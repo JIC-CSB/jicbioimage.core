@@ -23,6 +23,8 @@ Specifically we will need:
 
   - Basic type checking to help prevent silly mistakes
 
+  - A system tracks history and settings of how images were manipulated
+
 The library should enable the work-flow outlined below:
 
 .. graphviz::
