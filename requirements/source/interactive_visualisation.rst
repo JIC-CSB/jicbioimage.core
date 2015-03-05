@@ -23,18 +23,19 @@ Let us load a data manager and get an image and a zstack.
 
 .. code-block:: python
 
-    >>> from jicimagelib import ImageCollectionDataManager
-    >>> data_manager = ImageCollectionDataManager()
+    >>> from jicimagelib.image import DataManager, Stack
+    >>> data_manager = DataManager()
     >>> data_manager.load('test.lif')
     >>> im_collection = data_manager[0]
-    >>> im = im_collection.get_image(channel=0, z_slice=0)
-    >>> zstack = im_collection.get_zstack(channel=0)
+    >>> im = im_collection.get_image(s=0, c=0, z=0, t=0)
+    >>> zstack_iterator = im_collection.get_zstack_iterator(s=0, c=0, t=0) 
+    >>> zstack = Stack.from_iterator(zstack_iterator)
 
 Below is an example how one could view an individual image.
 
 .. code-block:: python
 
-    >>> from jicimagelib import ImageViewer
+    >>> from jicimagelib.viewer import ImageViewer
     >>> image_viewer = ImageViewer()
     >>> image_viewer.load(im)
 
@@ -42,7 +43,7 @@ Below is an example how one could view an image stack.
 
 .. code-block:: python
 
-    >>> from jicimagelib import StackViwer
+    >>> from jicimagelib.viewer import StackViwer
     >>> stack_viewer = StackViwer()
     >>> stack_viewer.load(zstack)
 
