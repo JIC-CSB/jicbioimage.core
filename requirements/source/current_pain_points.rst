@@ -1,10 +1,10 @@
 Current pain points
 ===================
 
-Currently we tend to visualise and do simple transformations of images in
+Currently we tend to visualise and do simple transformations of images using
 ImageJ. We then tend to try to create a more automated and reproducible
-work-flow using Python. This is painful in that the analysis needs to
-be done twice using two different methods.
+work-flow using Python. This is painful in that the analysis needs to be done
+twice using two different methods.
 
 Furthermore both ImageJ and Python have pain points in themselves.
 
@@ -34,3 +34,6 @@ Python is painful to use because:
   - The libraries that one make use of are complex and sometimes non-intuitive
     which means that one is constantly re-learning how to parse data using the
     different imaging libraries and how to display images using matplotlib
+  - Some libraries return inconsistent data types (bool vs 0,1)
+  - Some libraries break API in between versions in terms of return types (e.g.
+    int16 to float) 
