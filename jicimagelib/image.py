@@ -217,10 +217,11 @@ class ImageProxy(object):
     @property
     def image(self):
         """Return image as numpy.ndarray."""
-        tif = TIFF.open(self.fpath, 'r')
-        ar = tif.read_image()
-        tif.close()
-        return ar
+        return Image.from_file(self.fpath)
+#       tif = TIFF.open(self.fpath, 'r')
+#       ar = tif.read_image()
+#       tif.close()
+#       return ar
 
 class ImageCollection(list):
     """Class for storing related images."""
