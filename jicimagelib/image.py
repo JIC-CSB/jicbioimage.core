@@ -8,6 +8,7 @@ import json
 import re
 import numpy as np
 from libtiff import TIFF
+import PIL.Image
 
 #############################################################################
 # Back ends classes for storing/caching unpacked microscopy images.
@@ -42,6 +43,8 @@ class FileBackend(object):
         """Return a new entry; to be populated with images."""
         return FileBackend.Entry(self.directory, fpath)
 
+
+#############################################################################
 # Conversion classes for unpacking microscopy data.
 #############################################################################
 
@@ -129,6 +132,77 @@ class _BFConvertWrapper(object):
 #############################################################################
 # Classes for managing image data.
 #############################################################################
+
+class Image(np.ndarray):
+    """Image class."""
+
+    @classmethod
+    def from_array(cls, array, name=None):
+        """Return :class:`jicimagelib.image.Image` instance from an array."""
+        image = array.view(cls)
+        event = 'Created image from array'
+        if name:
+            event = '{} as {}'.format(event, name)
+        image.history.append(event)
+        return image
+        
+    @classmethod
+    def from_file(cls, fpath, name=None, format=None):
+        """Return :class:`jicimagelib.image.Image` instance from an array."""
+        ar = None
+
+        # Get file format from file name if necessary and standardise to lower
+        # case.
+        if format is None:
+            format = fpath.split('.')[-1]
+        format = format.lower()
+
+        # Read in the image as a numpy.ndarray.
+        if format == "tiff" or format == "tif":
+            tif = TIFF.open(fpath, 'r')
+            ar = tif.read_image()
+            tif.close()
+        elif format == "png":
+            pil_image = PIL.Image.open(fpath)
+            ar = np.array(pil_image)
+        else:
+            raise RuntimeError('Unknown image file format: {}'.format(format))
+
+        # Create a :class:`jicimagelib.image.Image` instance.
+        image = Image.from_array(ar, name)
+
+        # Reset history, as image is created from file not array.
+        image.history = []
+        event = 'Created image from {}'.format(fpath)
+        if name:
+            event = '{} as {}'.format(event, name)
+        image.history.append(event)
+
+        return image
+
+
+        
+
+    def __new__(subtype, shape, dtype=np.uint8, buffer=None, offset=0,
+                 strides=None, order=None, name=None):
+        obj = np.ndarray.__new__(subtype, shape, dtype, buffer, offset,
+                                 strides, order)
+        obj.name = name
+        obj.history = []
+        return obj
+
+    def __init__(self, shape, dtype=np.uint8, buffer=None, offset=0,
+                 strides=None, order=None, name=None):
+        event = 'Instantiated image from shape {}'.format(shape)
+        if name:
+            event = '{} as {}'.format(event, name)
+        self.history.append(event)
+        
+    def __array_finalize__(self, obj):
+        if obj is None:
+            return
+        self.name = getattr(obj, 'name', None)
+        self.history = getattr(obj, 'history', [])
 
 class ImageProxy(object):
     """Lightweight image class."""

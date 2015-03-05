@@ -29,5 +29,6 @@ setup(name='jicimagelib',
       install_requires=[
         'numpy',
         'libtiff',
+        'pillow',
       ]
 )

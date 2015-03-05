@@ -227,7 +227,7 @@ class ImageUserStory(unittest.TestCase):
         self.assertEqual(image.history[0],
                          'Created image from {}'.format(path_to_tiff))
 
-        # Tiff is the default file format.
+        # File format from file name.
         image = Image.from_file(path_to_tiff, name='Test1')
         self.assertEqual(image.history[0],
                          'Created image from {} as Test1'.format(path_to_tiff))
@@ -238,8 +238,19 @@ class ImageUserStory(unittest.TestCase):
         # This is particularly important when reading in images in rgb format.
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
         image = Image.from_file(fpath, format="png")
-        self.assertEqaul(image.shape, (50, 50, 3))
+        self.assertEqual(image.shape, (50, 50, 3))
         
+        
+    def test_unknown_file_format_raises_runtime_error(self):
+        from jicimagelib.image import Image
+        with self.assertRaises(RuntimeError):
+            im = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'),
+                                 format='unknown')
+        
+    def test_can_deal_with_upper_case_file_format(self):
+        from jicimagelib.image import Image
+        im = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'),
+                             format='PNG')
 
 
 
