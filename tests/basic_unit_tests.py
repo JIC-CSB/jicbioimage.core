@@ -21,6 +21,10 @@ class TestBasics(unittest.TestCase):
         # This throws an error if the module cannot be imported.
         import jicimagelib.io
 
+    def test_import_transform_module(self):
+        # This throws an error if the module cannot be imported.
+        import jicimagelib.transform
+
     def test_import_DataManager_class(self):
         # This throws an error if the class cannot be imported.
         from jicimagelib.image import DataManager

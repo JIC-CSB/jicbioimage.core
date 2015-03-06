@@ -1,5 +1,7 @@
 """Module for reading and writing images."""
 
+import os.path
+
 class AutoName(object):
     """Class for generating output file names automatically."""
     count = 0
@@ -15,5 +17,8 @@ class AutoName(object):
             fpath = os.path.join(cls.directory, fpath)
         return fpath
             
+class AutoWrite(object):
+    """Class for writing images automatically."""
+    on = True
 
-
+    

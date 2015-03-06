@@ -255,10 +255,14 @@ class ImageUserStory(unittest.TestCase):
 class TransformationUserStory(unittest.TestCase):
 
     def setUp(self):
+        from jicimagelib.io import AutoName
+        AutoName.count = 0
         if not os.path.isdir(TMP_DIR):
             os.mkdir(TMP_DIR)
 
     def tearDown(self):
+        from jicimagelib.io import AutoName
+        AutoName.count = 0
         shutil.rmtree(TMP_DIR)
 
 
@@ -274,20 +278,10 @@ class TransformationUserStory(unittest.TestCase):
         # object. The AutoName object could also store the output directory
         # as a class variable.
 
-        # One could also have class named AutoWrite with a class variable
-        # ``on``, which is True by default.
-
-
-        # AutoSave
-        from jicimagelib.io import AutoWrite
-        self.assertTrue(AutoWrite.on)
-
-        AutoName.directory = TMP_DIR
-        self.assertEqual(AutoName.name(my_func),
-                         os.path.join(TMP_DIR, '2_no_transform.png'))
-
-
+        from jicimagelib.image import Image
         from jicimagelib.transform import transformation
+        from jicimagelib.io import AutoName
+        AutoName.directory = TMP_DIR
 
         @transformation
         def identity(image):
@@ -295,10 +289,11 @@ class TransformationUserStory(unittest.TestCase):
 
         image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
         image = identity(image)
-        self.assertEqual(repr(image.history[-1]), 'Applied identity transform')
-        created_fpath = os.path.join(AutoName.directory, '3_identity.png')
-        self.assertTrue(os.path.isfile(created_fpath))
-
+        self.assertEqual(image.history[-1], 'Applied identity transform')
+        created_fpath = os.path.join(TMP_DIR, '1_identity.png')
+        print(os.listdir(TMP_DIR))
+        self.assertTrue(os.path.isfile(created_fpath),
+            'No such file: {}'.format(created_fpath))
 
 
 if __name__ == '__main__':
