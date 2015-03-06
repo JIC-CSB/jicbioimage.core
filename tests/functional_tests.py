@@ -252,7 +252,52 @@ class ImageUserStory(unittest.TestCase):
         im = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'),
                              format='PNG')
 
+class TransformationUserStory(unittest.TestCase):
 
+    def setUp(self):
+        if not os.path.isdir(TMP_DIR):
+            os.mkdir(TMP_DIR)
+
+    def tearDown(self):
+        shutil.rmtree(TMP_DIR)
+
+
+    def test_creating_transformations_from_scratch(self):
+        
+        # What if the default names of images was just the order in which they
+        # were created?
+        # Or perhaps the order + the function name, e.g.
+        # 1_gaussian.png
+        # 2_sobel.png
+        # 3_gaussian.png
+        # The order could be tracked in a class variable in an AutoName
+        # object. The AutoName object could also store the output directory
+        # as a class variable.
+
+        # One could also have class named AutoWrite with a class variable
+        # ``on``, which is True by default.
+
+
+        # AutoSave
+        from jicimagelib.io import AutoWrite
+        self.assertTrue(AutoWrite.on)
+
+        AutoName.directory = TMP_DIR
+        self.assertEqual(AutoName.name(my_func),
+                         os.path.join(TMP_DIR, '2_no_transform.png'))
+
+
+        from jicimagelib.transform import transformation
+
+        @transformation
+        def identity(image):
+            return image
+
+        image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
+        image = identity(image)
+        self.assertEqual(repr(image.history[-1]), 'Applied identity transform')
+        created_fpath = os.path.join(AutoName.directory, '3_identity.png')
+        self.assertTrue(os.path.isfile(created_fpath))
 
 
 
