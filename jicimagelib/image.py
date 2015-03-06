@@ -15,32 +15,51 @@ import PIL.Image
 #############################################################################
 
 class FileBackend(object):
-    """Class for storing tiff files."""
+    """Class for storing image files."""
 
     class Entry(object):
-        """Class representing an entry in the backend."""
+        """Class representing a backend entry."""
         def __init__(self, base_dir, fpath):
+            """Initialise a new entry; to be populated with images.
+
+            The base name of the fpath argument is used to create a
+            subdirectory in the backend directory specific for the microscopy
+            file to be loaded.
+
+            :param base_dir: backend directory
+            :param fpath: path to the microscopy image of interest
+            """
             fname = os.path.basename(fpath)
             self._directory = os.path.join(base_dir, fname)
             os.mkdir(self.directory)
 
         @property
         def directory(self):
-            """Return the path to where the entry data is stored."""
+            """Where the images are stored."""
             return self._directory
 
     def __init__(self, directory):
+        """Initialise a backend.
+
+        Creates the backend directory if it does not already exist.
+
+        :param directory: location of the backend
+        """
         if not os.path.isdir(directory):
             os.mkdir(directory)
         self._directory = directory
 
     @property
     def directory(self):
-        """Return the path to where the data is stored."""
+        """Where the entries are stored."""
         return self._directory
 
     def new_entry(self, fpath):
-        """Return a new entry; to be populated with images."""
+        """Return a new entry; to be populated with images.
+
+        :param fpath: path to microscopy image
+        :returns: :class:`jiciimagelib.image.FileBackend.Entry` instance
+        """
         return FileBackend.Entry(self.directory, fpath)
 
 
@@ -57,20 +76,28 @@ class _BFConvertWrapper(object):
 
     @property
     def split_pattern(self):
-        """Return pattern used to split the input file."""
+        """Pattern used to split the input file."""
         patterns = []
         for p in self.split_order:
             patterns.append('_{}%{}'.format(p.capitalize(), p))
         return ''.join(patterns)
 
     def _sorted_nicely(self, l):
-        """Sort the given iterable in the way that humans expect."""
+        """Return list sorted in the way that humans expect.
+        
+        :param l: iterable to be sorted
+        :returns: sorted list
+        """
         convert = lambda text: int(text) if text.isdigit() else text
         alphanum_key = lambda key: [ convert(c) for c in re.split('([0-9]+)', key) ]
         return sorted(l, key = alphanum_key)
 
     def manifest(self, entry):
-        """Returns manifest as a Python list."""
+        """Returns manifest as a list.
+        
+        :param entry: :class:`jicimagelib.image.FileBackend.Entry`
+        :returns: list
+        """
         entries = []
         for fname in self._sorted_nicely(os.listdir(entry.directory)):
             if fname == 'manifest.json':
@@ -85,7 +112,12 @@ class _BFConvertWrapper(object):
         return entries
 
     def run_command(self, input_file, output_dir=None):
-        """Return the command for running bfconvert as a list."""
+        """Return the command for running bfconvert as a list.
+        
+        :param input_file: path to microscopy image to be converted
+        :param ouput_dir: directory to write output tiff files to
+        :returns: list
+        """
         base_name = os.path.basename(input_file)
         name, suffix = base_name.split('.', 1)
         output_file = '{}{}.tif'.format(name, self.split_pattern)
@@ -94,7 +126,11 @@ class _BFConvertWrapper(object):
         return ['bfconvert', input_file, output_file]
 
     def metadata_from_fname(self, fname):
-        """Return meta data extracted from file name."""
+        """Return meta data extracted from file name.
+        
+        :param fname: metadata file name
+        :returns: dynamically created :class:`collections.namedtuple`
+        """
         MetaData = namedtuple('MetaData', self.split_order)
         base_name = os.path.basename(fname)              # e.g. 'test_S1_C2_Z3_T4.tif'
         name, suffix = base_name.split('.')              # e.g. 'test_S1_C2_Z3_T4', 'tif'
@@ -103,7 +139,11 @@ class _BFConvertWrapper(object):
         return MetaData(*args)
 
     def already_converted(self, fpath):
-        """Return true if the file already has a manifest file in the backend."""
+        """Return true if the file already has a manifest file in the backend.
+        
+        :param fpath: potential path to the manifest file
+        :returns: bool
+        """
         manifest_fpath = os.path.join(self.backend.directory,
                                       os.path.basename(fpath),
                                       'manifest.json')
@@ -113,6 +153,9 @@ class _BFConvertWrapper(object):
         """Run the conversion.
         
         Unpacks the microscopy file and creates the manifest file.
+
+        :param input_file: path to the microscopy file
+        :returns: path to manifest file
         """
         entry = self.backend.new_entry(input_file)
         cmd = self.run_command(input_file, entry.directory)
@@ -138,7 +181,12 @@ class Image(np.ndarray):
 
     @classmethod
     def from_array(cls, array, name=None):
-        """Return :class:`jicimagelib.image.Image` instance from an array."""
+        """Return :class:`jicimagelib.image.Image` instance from an array.
+        
+        :param array: :class:`numpy.ndarray`
+        :param name: name of the image
+        :returns: :class:`jicimagelib.image.Image`
+        """
         image = array.view(cls)
         event = 'Created image from array'
         if name:
@@ -148,7 +196,13 @@ class Image(np.ndarray):
         
     @classmethod
     def from_file(cls, fpath, name=None, format=None):
-        """Return :class:`jicimagelib.image.Image` instance from an array."""
+        """Return :class:`jicimagelib.image.Image` instance from a file.
+        
+        :param fpath: path to the image file
+        :param name: name of the image
+        :param format: file format of the image file
+        :returns: :class:`jicimagelib.image.Image`
+        """
         ar = None
 
         # Get file format from file name if necessary and standardise to lower
@@ -216,14 +270,17 @@ class ImageProxy(object):
 
     @property
     def image(self):
-        """Return image as numpy.ndarray."""
+        """Underlying :class:`jicimagelib.image.Image` instance."""
         return Image.from_file(self.fpath)
 
 class ImageCollection(list):
     """Class for storing related images."""
 
     def parse_manifest(self, fpath):
-        """Parse manifest file to build up the collection of images."""
+        """Parse manifest file to build up the collection of images.
+        
+        :param fpath: path to the manifest file
+        """
         with open(fpath, 'r') as fh:
             for entry in json.load(fh):
                 image_proxy = ImageProxy(entry["filename"],
@@ -234,7 +291,14 @@ class ImageCollection(list):
                 self.append(image_proxy)
 
     def image_proxy(self, s=0, c=0, z=0, t=0):
-        """Return a :class:`jicimagelib.image.ImageProxy` instance."""
+        """Return a :class:`jicimagelib.image.ImageProxy` instance.
+        
+        :param s: series
+        :param c: channel
+        :param z: zslice
+        :param t: timepoint
+        :returns: :class:`jicimagelib.image.ImageProxy`
+        """
         for image_proxy in self:
             if (image_proxy.series == s
                 and image_proxy.channel == c
@@ -243,7 +307,13 @@ class ImageCollection(list):
                 return image_proxy
 
     def zstack_proxy_iterator(self, s=0, c=0, t=0):
-        """Return iterator of the :class:`jicimagelib.image.ImageProxy` instances in the zstack."""
+        """Return iterator of :class:`jicimagelib.image.ImageProxy` instances in the zstack.
+        
+        :param s: series
+        :param c: channel
+        :param t: timepoint
+        :returns: zstack :class:`jicimagelib.image.ImageProxy` iterator
+        """
         for image_proxy in self:
             if (image_proxy.series == s
                 and image_proxy.channel == c
@@ -251,11 +321,24 @@ class ImageCollection(list):
                 yield image_proxy
 
     def zstack_array(self, s=0, c=0, t=0):
-        """Return zstack as a numpy.ndarray."""
+        """Return zstack as a :class:`numpy.ndarray`.
+        
+        :param s: series
+        :param c: channel
+        :param t: timepoint
+        :returns: zstack as a :class:`numpy.ndarray`
+        """
         return np.dstack([x.image for x in self.zstack_proxy_iterator(s=s, c=c, t=t)])
 
     def image(self, s=0, c=0, z=0, t=0):
-        """Return image as a numpy.ndarray."""
+        """Return image as a :class:`jicimagelib.image.Image`.
+        
+        :param s: series
+        :param c: channel
+        :param z: zslice
+        :param t: timepoint
+        :returns: :class:`jicimagelib.image.Image`
+        """
         return self.image_proxy(s=s, c=c, z=z, t=t).image
 
 
@@ -267,7 +350,10 @@ class DataManager(list):
         self.convert = _BFConvertWrapper(self.backend)
 
     def load(self, fpath):
-        """Load a microscopy file."""
+        """Load a microscopy file.
+        
+        :param fpath: path to microscopy file
+        """
         if not self.convert.already_converted(fpath):
             path_to_manifest = self.convert(fpath)
         else:
