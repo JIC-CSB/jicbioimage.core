@@ -252,6 +252,12 @@ class ImageUserStory(unittest.TestCase):
         im = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'),
                              format='PNG')
 
+    def test_16bit_tiff_file(self):
+        from jicimagelib.image import Image
+        im = Image.from_file(os.path.join(DATA_DIR, 'white-16bit.tiff'))
+        self.assertEqual(im.dtype, np.uint16)
+        self.assertEqual(np.max(im), np.iinfo(np.uint16).max)
+
 class TransformationUserStory(unittest.TestCase):
 
     def setUp(self):
