@@ -7,8 +7,7 @@ from collections import namedtuple
 import json
 import re
 import numpy as np
-from libtiff import TIFF
-import PIL.Image
+from skimage.io import imread, use_plugin
 
 #############################################################################
 # Back ends classes for storing/caching unpacked microscopy images.
@@ -163,9 +162,9 @@ class _BFConvertWrapper(object):
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             stderr = p.stderr.read()
         except OSError:
-            raise(RuntimeError, 'bfconvert tool not found in PATH')
-        if stderr != '':
-            raise(RuntimeError, stderr)
+            raise(RuntimeError('bfconvert tool not found in PATH'))
+        if len(stderr) > 0:
+            raise(RuntimeError(stderr))
         manifest_fpath = os.path.join(entry.directory, 'manifest.json')
         with open(manifest_fpath, 'w') as fh:
             json.dump(self.manifest(entry), fh)
@@ -203,6 +202,8 @@ class Image(np.ndarray):
         :param format: file format of the image file
         :returns: :class:`jicimagelib.image.Image`
         """
+        use_plugin('freeimage')
+
         ar = None
 
         # Get file format from file name if necessary and standardise to lower
@@ -213,12 +214,14 @@ class Image(np.ndarray):
 
         # Read in the image as a numpy.ndarray.
         if format == "tiff" or format == "tif":
-            tif = TIFF.open(fpath, 'r')
-            ar = tif.read_image()
-            tif.close()
+            ar = imread(fpath)
+#           tif = TIFF.open(fpath, 'r')
+#           ar = tif.read_image()
+#           tif.close()
         elif format == "png":
-            pil_image = PIL.Image.open(fpath)
-            ar = np.array(pil_image)
+            ar = imread(fpath)
+#           pil_image = PIL.Image.open(fpath)
+#           ar = np.array(pil_image)
         else:
             raise RuntimeError('Unknown image file format: {}'.format(format))
 

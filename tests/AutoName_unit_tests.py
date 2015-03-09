@@ -29,7 +29,7 @@ class AutoNameTests(unittest.TestCase):
         def no_transform(image):
             return image
         self.assertEqual(AutoName.name(no_transform), '1_no_transform.png')
-	AutoName.directory = '/tmp'
+        AutoName.directory = '/tmp'
         self.assertEqual(AutoName.name(no_transform), '/tmp/2_no_transform.png')
 
 if __name__ == '__main__':

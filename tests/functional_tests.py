@@ -5,6 +5,7 @@ import os
 import os.path
 import shutil
 import numpy as np
+from skimage.io import imread, use_plugin
 
 HERE = os.path.dirname(__file__)
 DATA_DIR = os.path.join(HERE, 'data')
@@ -193,10 +194,12 @@ class ImageUserStory(unittest.TestCase):
 
         # Preamble: let us define the path to a TIFF file and create a numpy
         # array from it.
-        from libtiff import TIFF
+#       from libtiff import TIFF
+#       tif = TIFF.open(path_to_tiff, 'r')
+#       ar = tif.read_image()
         path_to_tiff = os.path.join(DATA_DIR, 'single-channel.ome.tif')
-        tif = TIFF.open(path_to_tiff, 'r')
-        ar = tif.read_image()
+        use_plugin('freeimage')
+        ar = imread(path_to_tiff)
 
         # An image is just a subclass of a numpy.ndarray, so we can instantiate
         # it as such.

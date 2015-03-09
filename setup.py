@@ -28,7 +28,7 @@ setup(name='jicimagelib',
       cmdclass={'test': NoseTestCommand},
       install_requires=[
         'numpy',
-        'libtiff',
-        'pillow',
+        'scipy',
+        'scikit-image',
       ]
 )
