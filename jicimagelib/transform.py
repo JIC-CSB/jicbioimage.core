@@ -13,6 +13,3 @@ def transformation(func):
             pil_im.save(fpath)
         return image
     return func_as_transformation
-    
-    return func
-
