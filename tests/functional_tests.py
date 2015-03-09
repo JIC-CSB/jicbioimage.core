@@ -244,17 +244,6 @@ class ImageUserStory(unittest.TestCase):
         self.assertEqual(image.shape, (50, 50, 3))
         
         
-    def test_unknown_file_format_raises_runtime_error(self):
-        from jicimagelib.image import Image
-        with self.assertRaises(RuntimeError):
-            im = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'),
-                                 format='unknown')
-        
-    def test_can_deal_with_upper_case_file_format(self):
-        from jicimagelib.image import Image
-        im = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'),
-                             format='PNG')
-
     def test_16bit_tiff_file(self):
         from jicimagelib.image import Image
         im = Image.from_file(os.path.join(DATA_DIR, 'white-16bit.tiff'))

@@ -203,27 +203,7 @@ class Image(np.ndarray):
         :returns: :class:`jicimagelib.image.Image`
         """
         use_plugin('freeimage')
-
-        ar = None
-
-        # Get file format from file name if necessary and standardise to lower
-        # case.
-        if format is None:
-            format = fpath.split('.')[-1]
-        format = format.lower()
-
-        # Read in the image as a numpy.ndarray.
-        if format == "tiff" or format == "tif":
-            ar = imread(fpath)
-#           tif = TIFF.open(fpath, 'r')
-#           ar = tif.read_image()
-#           tif.close()
-        elif format == "png":
-            ar = imread(fpath)
-#           pil_image = PIL.Image.open(fpath)
-#           ar = np.array(pil_image)
-        else:
-            raise RuntimeError('Unknown image file format: {}'.format(format))
+        ar = imread(fpath)
 
         # Create a :class:`jicimagelib.image.Image` instance.
         image = Image.from_array(ar, name)
