@@ -20,6 +20,7 @@ class DataManagerUserStory(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(TMP_DIR)
 
+
     def test_manual_addition_of_ImageCollection_to_DataManager(self):
         # We start off by creating a :class:`jicimagelib.image.DataManager`.
         # This takes a backend argument. The backend provides a means to store
@@ -178,6 +179,6 @@ class DataManagerUserStory(unittest.TestCase):
         image = image_collection.image(s=0, c=1, z=2, t=3)
         self.assertTrue(isinstance(image, np.ndarray))
         self.assertEqual(image.shape, (167, 439))
-
+         
 if __name__ == '__main__':
     unittest.main()
