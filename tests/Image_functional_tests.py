@@ -58,7 +58,7 @@ class ImageUserStory(unittest.TestCase):
                          'Created image from array as Test1')
 
         # It is also possible to create an image from a file.
-        image = Image.from_file(path_to_tiff, format='tiff')
+        image = Image.from_file(path_to_tiff)
         self.assertEqual(image.history[0],
                          'Created image from {}'.format(path_to_tiff))
 
@@ -72,7 +72,7 @@ class ImageUserStory(unittest.TestCase):
 
         # This is particularly important when reading in images in rgb format.
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
-        image = Image.from_file(fpath, format="png")
+        image = Image.from_file(fpath)
         self.assertEqual(image.shape, (50, 50, 3))
         
         
@@ -85,13 +85,13 @@ class ImageUserStory(unittest.TestCase):
     def test_repr_png_return_type(self):
         from jicimagelib.image import Image
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
-        image = Image.from_file(fpath, format="png")
+        image = Image.from_file(fpath)
         self.assertEqual(type(image._repr_png_()), bytes)
         
     def test_png_type(self):
         from jicimagelib.image import Image
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
-        image = Image.from_file(fpath, format="png")
+        image = Image.from_file(fpath)
         self.assertEqual(type(image.png), bytes)
         
 if __name__ == '__main__':

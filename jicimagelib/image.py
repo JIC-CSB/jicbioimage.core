@@ -196,7 +196,7 @@ class Image(np.ndarray):
         return image
         
     @classmethod
-    def from_file(cls, fpath, name=None, format=None):
+    def from_file(cls, fpath, name=None):
         """Return :class:`jicimagelib.image.Image` instance from a file.
         
         :param fpath: path to the image file
