@@ -240,11 +240,9 @@ class Image(np.ndarray):
         self.name = getattr(obj, 'name', None)
         self.history = getattr(obj, 'history', [])
 
-    def _repr_png_(self):
-        """Return image as png string.
-
-        Used by IPython qtconsole/notebook to display images.
-        """
+    @property
+    def png(self):
+        """Return png string of image."""
         use_plugin('freeimage')
         tmp_file = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
         fpath = tmp_file.name
@@ -253,6 +251,13 @@ class Image(np.ndarray):
         contents = open(fpath, 'rb').read()
         os.unlink(fpath)
         return contents
+
+    def _repr_png_(self):
+        """Return image as png string.
+
+        Used by IPython qtconsole/notebook to display images.
+        """
+        return self.png
 
 class ImageProxy(object):
     """Lightweight image class."""

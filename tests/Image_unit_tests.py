@@ -41,5 +41,10 @@ class ImageTests(unittest.TestCase):
         image = Image((50, 50))
         self.assertTrue(callable(image._repr_png_))
         
+    def test_png_attr(self):
+        from jicimagelib.image import Image
+        image = Image((50, 50))
+        self.assertTrue(hasattr(image, 'png'))
+        
 if __name__ == '__main__':
     unittest.main()
