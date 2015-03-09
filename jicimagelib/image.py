@@ -10,6 +10,20 @@ import tempfile
 import numpy as np
 from skimage.io import imread, imsave, use_plugin
 
+class TemporaryFilePath(object):
+    """Temporary file path context manager."""
+    def __init__(self, suffix):
+        self.suffix = suffix
+
+    def __enter__(self):
+        tmp_file = tempfile.NamedTemporaryFile(suffix=self.suffix, delete=False)
+        self.fpath = tmp_file.name
+        tmp_file.close()
+        return self
+
+    def __exit__(self, type, value, tb):
+        os.unlink(self.fpath)
+        
 
 #############################################################################
 # Back ends classes for storing/caching unpacked microscopy images.
@@ -244,13 +258,11 @@ class Image(np.ndarray):
     def png(self):
         """Return png string of image."""
         use_plugin('freeimage')
-        tmp_file = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
-        fpath = tmp_file.name
-        tmp_file.close()
-        imsave(fpath, self)
-        contents = open(fpath, 'rb').read()
-        os.unlink(fpath)
-        return contents
+        with TemporaryFilePath(suffix='.png') as tmp:
+            imsave(tmp.fpath, self)
+            with open(tmp.fpath, 'rb') as fh:
+                return fh.read()
+
 
     def _repr_png_(self):
         """Return image as png string.
