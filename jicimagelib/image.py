@@ -274,6 +274,13 @@ class ImageProxy(object):
         """Underlying :class:`jicimagelib.image.Image` instance."""
         return Image.from_file(self.fpath)
 
+    def _repr_png_(self):
+        """Return image as png string.
+
+        Used by IPython qtconsole/notebook to display images.
+        """
+        return self.image.png
+
 class ImageCollection(list):
     """Class for storing related images."""
 
