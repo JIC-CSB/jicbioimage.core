@@ -6,8 +6,10 @@ import subprocess
 from collections import namedtuple
 import json
 import re
+import tempfile
 import numpy as np
-from skimage.io import imread, use_plugin
+from skimage.io import imread, imsave, use_plugin
+
 
 #############################################################################
 # Back ends classes for storing/caching unpacked microscopy images.
@@ -217,9 +219,6 @@ class Image(np.ndarray):
 
         return image
 
-
-        
-
     def __new__(subtype, shape, dtype=np.uint8, buffer=None, offset=0,
                  strides=None, order=None, name=None):
         obj = np.ndarray.__new__(subtype, shape, dtype, buffer, offset,
@@ -240,6 +239,20 @@ class Image(np.ndarray):
             return
         self.name = getattr(obj, 'name', None)
         self.history = getattr(obj, 'history', [])
+
+    def _repr_png_(self):
+        """Return image as png string.
+
+        Used by IPython qtconsole/notebook to display images.
+        """
+        use_plugin('freeimage')
+        tmp_file = tempfile.NamedTemporaryFile(suffix='.png', delete=False)
+        fpath = tmp_file.name
+        tmp_file.close()
+        imsave(fpath, self)
+        contents = open(fpath, 'rb').read()
+        os.unlink(fpath)
+        return contents
 
 class ImageProxy(object):
     """Lightweight image class."""

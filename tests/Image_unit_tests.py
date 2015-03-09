@@ -36,5 +36,10 @@ class ImageTests(unittest.TestCase):
         image = Image((50, 50), name='test')
         self.assertEqual(image.name, 'test')
     
+    def test_repr_png_callable(self):
+        from jicimagelib.image import Image
+        image = Image((50, 50))
+        self.assertTrue(callable(image._repr_png_))
+        
 if __name__ == '__main__':
     unittest.main()
