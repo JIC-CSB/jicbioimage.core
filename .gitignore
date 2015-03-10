@@ -2,6 +2,7 @@
 .coverage
 jicimagelib.egg-info
 
+docs/build/*
 requirements/build/*
 
 *.pyc
