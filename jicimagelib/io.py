@@ -1,6 +1,22 @@
 """Module for reading and writing images."""
 
+import os
 import os.path
+import tempfile
+
+class TemporaryFilePath(object):
+    """Temporary file path context manager."""
+    def __init__(self, suffix):
+        self.suffix = suffix
+
+    def __enter__(self):
+        tmp_file = tempfile.NamedTemporaryFile(suffix=self.suffix, delete=False)
+        self.fpath = tmp_file.name
+        tmp_file.close()
+        return self
+
+    def __exit__(self, type, value, tb):
+        os.unlink(self.fpath)
 
 class AutoName(object):
     """Class for generating output file names automatically."""

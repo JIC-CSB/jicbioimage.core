@@ -6,24 +6,10 @@ import subprocess
 from collections import namedtuple
 import json
 import re
-import tempfile
 import numpy as np
 from skimage.io import imread, imsave, use_plugin
 
-class TemporaryFilePath(object):
-    """Temporary file path context manager."""
-    def __init__(self, suffix):
-        self.suffix = suffix
-
-    def __enter__(self):
-        tmp_file = tempfile.NamedTemporaryFile(suffix=self.suffix, delete=False)
-        self.fpath = tmp_file.name
-        tmp_file.close()
-        return self
-
-    def __exit__(self, type, value, tb):
-        os.unlink(self.fpath)
-        
+from jicimagelib.io import TemporaryFilePath
 
 #############################################################################
 # Back ends classes for storing/caching unpacked microscopy images.
