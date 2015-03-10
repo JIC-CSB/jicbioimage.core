@@ -20,7 +20,7 @@ class FileBackendTests(unittest.TestCase):
             shutil.rmtree(TMP_DIR)
 
     def test_default_instantiaiton(self):
-        from jicimagelib.image import FileBackend
+        from jicimagelib.io import FileBackend
         directory = os.path.join(TMP_DIR, 'jicimagelib')
         self.assertFalse(os.path.isdir(directory))
         backend = FileBackend(directory=directory)
@@ -28,14 +28,14 @@ class FileBackendTests(unittest.TestCase):
         self.assertTrue(os.path.isdir(directory))
         
     def test_modifying_directory_post_instantiation_raises(self):
-        from jicimagelib.image import FileBackend
+        from jicimagelib.io import FileBackend
         directory = os.path.join(TMP_DIR, 'jicimagelib')
         backend = FileBackend(directory)
         with self.assertRaises(AttributeError):
             backend.directory = 'dummy'
 
     def test_new_entry(self):
-        from jicimagelib.image import FileBackend
+        from jicimagelib.io import FileBackend
         directory = os.path.join(TMP_DIR, 'jicimagelib')
         backend = FileBackend(directory=directory)
         entry = backend.new_entry('test.lif')
@@ -45,7 +45,7 @@ class FileBackendTests(unittest.TestCase):
         self.assertEqual(entry_dir, 'test.lif')
         
     def test_new_entry_gives_unique_directories(self):
-        from jicimagelib.image import FileBackend
+        from jicimagelib.io import FileBackend
         directory = os.path.join(TMP_DIR, 'jicimagelib')
         backend = FileBackend(directory=directory)
         entry1 = backend.new_entry('file1.lif')
@@ -55,7 +55,7 @@ class FileBackendTests(unittest.TestCase):
         self.assertNotEqual(entry_dir1, entry_dir2)
         
     def test_entry_directory_exists(self):
-        from jicimagelib.image import FileBackend
+        from jicimagelib.io import FileBackend
         directory = os.path.join(TMP_DIR, 'jicimagelib')
         backend = FileBackend(directory=directory)
         entry = backend.new_entry('test.lif')

@@ -25,7 +25,7 @@ class DataManagerUserStory(unittest.TestCase):
         # We start off by creating a :class:`jicimagelib.image.DataManager`.
         # This takes a backend argument. The backend provides a means to store
         # unpacked image files.
-        from jicimagelib.image import FileBackend
+        from jicimagelib.io import FileBackend
         from jicimagelib.image import DataManager
         backend = FileBackend(directory=TMP_DIR)
         data_manager = DataManager(backend=backend)
@@ -57,7 +57,8 @@ class DataManagerUserStory(unittest.TestCase):
     def test_data_manager(self):
         # Alice wants to analyse her microscopy data.  To access the raw image
         # data within the microscopy files she uses a DataManager.
-        from jicimagelib.image import DataManager, FileBackend
+        from jicimagelib.image import DataManager
+        from jicimagelib.io import FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
 
@@ -100,7 +101,8 @@ class DataManagerUserStory(unittest.TestCase):
         # The second time the data manager is loaded, it should contain data
         # without unpacking.
 
-        from jicimagelib.image import DataManager, FileBackend
+        from jicimagelib.image import DataManager
+        from jicimagelib.io import FileBackend
 
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
@@ -115,7 +117,8 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(len(data_manager_reload), 1)
 
     def test_error_message_when_bfconvert_not_in_path(self):
-        from jicimagelib.image import DataManager, FileBackend
+        from jicimagelib.image import DataManager
+        from jicimagelib.io import FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
         tmp_path = os.environ['PATH']
@@ -125,7 +128,8 @@ class DataManagerUserStory(unittest.TestCase):
         os.environ['PATH'] = tmp_path
 
     def test_image_proxy(self):
-        from jicimagelib.image import DataManager, FileBackend
+        from jicimagelib.image import DataManager
+        from jicimagelib.io import FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
         data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
@@ -137,7 +141,8 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(image_proxy.image.shape, (167, 439))
 
     def test_image_collection(self):
-        from jicimagelib.image import DataManager, FileBackend
+        from jicimagelib.image import DataManager
+        from jicimagelib.io import FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
         data_manager.load(os.path.join(DATA_DIR, 'multi-channel-4D-series.ome.tif'))

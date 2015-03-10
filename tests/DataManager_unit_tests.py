@@ -23,7 +23,8 @@ class DataManagerTests(unittest.TestCase):
         self.assertTrue(callable(data_manager.load))
         
     def test_backend(self):
-        from jicimagelib.image import DataManager, FileBackend
+        from jicimagelib.image import DataManager
+        from jicimagelib.io import FileBackend
         backend = FileBackend(os.path.join(TMP_DIR, 'dummy'))
         data_manager = DataManager(backend)
         self.assertTrue(isinstance(data_manager.backend, FileBackend))
