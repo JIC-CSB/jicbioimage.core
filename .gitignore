@@ -1,2 +1,9 @@
-*.pyc
+.DS_Store
+.coverage
 jicimagelib.egg-info
+
+requirements/build/*
+
+*.pyc
+*.swp
+
