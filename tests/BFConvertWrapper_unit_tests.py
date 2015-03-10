@@ -9,19 +9,19 @@ HERE = os.path.dirname(__file__)
 class BFConvertWrapperTests(unittest.TestCase):
     
     def test_backend_attribute(self):
-        from jicimagelib.image import _BFConvertWrapper
+        from jicimagelib.io import _BFConvertWrapper
         wrapper = _BFConvertWrapper('backend')
         self.assertEqual(wrapper.backend, 'backend')
 
     def test_split_order(self):
         """Test the split_order attribute."""
-        from jicimagelib.image import _BFConvertWrapper
+        from jicimagelib.io import _BFConvertWrapper
         wrapper = _BFConvertWrapper('backend')
         self.assertEqual(wrapper.split_order, ['s', 'c', 'z', 't'])
 
     def test_split_pattern(self):
         """Test the split_pattern property."""
-        from jicimagelib.image import _BFConvertWrapper
+        from jicimagelib.io import _BFConvertWrapper
         wrapper = _BFConvertWrapper('backend')
         self.assertEqual(wrapper.split_pattern, '_S%s_C%c_Z%z_T%t')
         wrapper.split_order = ['z', 'c']
@@ -29,7 +29,7 @@ class BFConvertWrapperTests(unittest.TestCase):
 
     def test_run_command(self):
         """Test the run_command function."""
-        from jicimagelib.image import _BFConvertWrapper
+        from jicimagelib.io import _BFConvertWrapper
         wrapper = _BFConvertWrapper('backend')
         cmd = wrapper.run_command('test.lif')
         self.assertEqual(cmd, ['bfconvert',
@@ -42,7 +42,7 @@ class BFConvertWrapperTests(unittest.TestCase):
 
     def test_metadata_from_fname(self):
         """Test the metadata_from_fname function."""
-        from jicimagelib.image import _BFConvertWrapper
+        from jicimagelib.io import _BFConvertWrapper
         wrapper = _BFConvertWrapper('backend')
 
         meta_data = wrapper.metadata_from_fname('test_S1_C2_Z3_T4.tif')
@@ -61,7 +61,7 @@ class BFConvertWrapperTests(unittest.TestCase):
 
 
     def test_manifest(self):
-        from jicimagelib.image import _BFConvertWrapper
+        from jicimagelib.io import _BFConvertWrapper
         wrapper = _BFConvertWrapper('backend')
         with patch('os.listdir', return_value=[]):
             entry = Mock()
