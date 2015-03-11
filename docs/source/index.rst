@@ -13,6 +13,7 @@ Contents:
 
    installation_notes
    quickstart
+   api
 
 
 
