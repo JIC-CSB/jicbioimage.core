@@ -127,6 +127,14 @@ class ProxyImage(object):
             return True
         return False
 
+    def in_zstack(self, s, c, t):
+        """Return True is I am in the zstack."""
+        if (self.series == s
+            and self.channel == c
+            and self.timepoint == t):
+            return True
+        return False
+
 class ImageCollection(list):
     """Class for storing related images."""
 
