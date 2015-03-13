@@ -65,48 +65,49 @@ The data manager is essentially a list containing
     >>> image_collection = data_manager[0]
 
 And a :class:`jicimagelib.image.ImageCollection` is essentially just a list of
-:class:`jicimagelib.image.ProxyImage` instances.
+:class:`jicimagelib.image.MicroscopyImage` instances.
 
 .. code-block:: python
 
     >>> len(image_collection)
     105
     >>> image_collection  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-    [<jicimagelib.image.ProxyImage object at ...>,
-     <jicimagelib.image.ProxyImage object at ...>,
+    [<jicimagelib.image.MicroscopyImage object at ...>,
+     <jicimagelib.image.MicroscopyImage object at ...>,
       ...,
-     <jicimagelib.image.ProxyImage object at ...>]
+     <jicimagelib.image.MicroscopyImage object at ...>]
 
-The :class:`jicimagelib.image.ProxyImage` contains meta data about the image.
+The :class:`jicimagelib.image.MicroscopyImage` contains meta data about the
+microscopy image.
 
 .. code-block:: python
 
-    >>> proxy_image = image_collection[0]
-    >>> proxy_image.series
+    >>> microscopy_image = image_collection[0]
+    >>> microscopy_image.series
     0
-    >>> proxy_image.channel
+    >>> microscopy_image.channel
     0
-    >>> proxy_image.zslice
+    >>> microscopy_image.zslice
     0
-    >>> proxy_image.timepoint
+    >>> microscopy_image.timepoint
     0
 
 One can use this meta data to access a specific
-:class:`jicimagelib.image.ProxyImage` using the
+:class:`jicimagelib.image.MicroscopyImage` using the
 :func:`jicimagelib.image.ImageCollection.proxy_image` function.
 
 .. code-block:: python
 
     >>> image_collection.proxy_image(s=0, c=1, z=2, t=3)  # doctest: +ELLIPSIS
-    <jicimagelib.image.ProxyImage object at ...>
+    <jicimagelib.image.MicroscopyImage object at ...>
 
 
 One can access the raw 2D :class:`jicimagelib.image.Image` instance
-from the :attr:`jicimage.image.ProxyImage.image` attribute.
+from the :attr:`jicimage.image.MicroscopyImage.image` attribute.
 
 .. code-block:: python
 
-    >>> proxy_image.image  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+    >>> microscopy_image.image  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
     Image([[ 0,  0,  0, ...,  0,  0,  0],
            [ 1,  1,  1, ...,  1,  1,  1],
            [ 2,  2,  2, ...,  2,  2,  2],
@@ -120,7 +121,7 @@ from the :attr:`jicimage.image.ProxyImage.image` attribute.
 
 It is also possible to access the raw 2D :class:`jicimagelib.image.Image`
 instance from the :class:`jicimagelib.image.ImageCollection` directly,
-side-stepping the :class:`jicimagelib.image.ProxyImage`, using the
+side-stepping the :class:`jicimagelib.image.MicroscopyImage`, using the
 :func:`jicimagelib.image.ImageCollection.image` funciton.
 
 .. code-block:: python
