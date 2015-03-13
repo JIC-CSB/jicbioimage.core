@@ -9,22 +9,22 @@ class ImageCollectionTests(unittest.TestCase):
         image_collection = ImageCollection()
         self.assertEqual(len(image_collection), 0)
         
-    def test_has_image_proxy(self):
+    def test_has_proxy_image(self):
         from jicimagelib.image import ImageCollection
         image_collection = ImageCollection()
-        self.assertTrue(callable(image_collection.image_proxy))
+        self.assertTrue(callable(image_collection.proxy_image))
 
-    def test_image_proxy(self):
+    def test_proxy_image(self):
         from jicimagelib.image import ImageCollection, ProxyImage
         image_collection = ImageCollection()
         image_collection.append(ProxyImage('test0.tif', s=0, c=0, z=0, t=0))
         image_collection.append(ProxyImage('test1.tif', s=1, c=1, z=1, t=1))
 
-        image_proxy = image_collection.image_proxy()
-        self.assertEqual(image_proxy.fpath, 'test0.tif')
+        proxy_image = image_collection.proxy_image()
+        self.assertEqual(proxy_image.fpath, 'test0.tif')
 
-        image_proxy = image_collection.image_proxy(s=1, c=1, z=1, t=1)
-        self.assertEqual(image_proxy.fpath, 'test1.tif')
+        proxy_image = image_collection.proxy_image(s=1, c=1, z=1, t=1)
+        self.assertEqual(proxy_image.fpath, 'test1.tif')
 
     def test_zstack_proxy_iterator(self):
         from jicimagelib.image import ImageCollection

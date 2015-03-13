@@ -93,11 +93,11 @@ The :class:`jicimagelib.image.ProxyImage` contains meta data about the image.
 
 One can use this meta data to access a specific
 :class:`jicimagelib.image.ProxyImage` using the
-:func:`jicimagelib.image.ImageCollection.image_proxy` function.
+:func:`jicimagelib.image.ImageCollection.proxy_image` function.
 
 .. code-block:: python
 
-    >>> image_collection.image_proxy(s=0, c=1, z=2, t=3)  # doctest: +ELLIPSIS
+    >>> image_collection.proxy_image(s=0, c=1, z=2, t=3)  # doctest: +ELLIPSIS
     <jicimagelib.image.ProxyImage object at ...>
 
 

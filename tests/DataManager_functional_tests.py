@@ -127,18 +127,18 @@ class DataManagerUserStory(unittest.TestCase):
             data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
         os.environ['PATH'] = tmp_path
 
-    def test_image_proxy(self):
+    def test_proxy_image(self):
         from jicimagelib.image import DataManager
         from jicimagelib.io import FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
         data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
         image_collection = data_manager[0]
-        image_proxy = image_collection.image_proxy()
-        self.assertTrue(os.path.isfile(image_proxy.fpath),
-                        'no such file: {}'.format(image_proxy.fpath))
-        self.assertTrue(isinstance(image_proxy.image, np.ndarray))
-        self.assertEqual(image_proxy.image.shape, (167, 439))
+        proxy_image = image_collection.proxy_image()
+        self.assertTrue(os.path.isfile(proxy_image.fpath),
+                        'no such file: {}'.format(proxy_image.fpath))
+        self.assertTrue(isinstance(proxy_image.image, np.ndarray))
+        self.assertEqual(proxy_image.image.shape, (167, 439))
 
     def test_image_collection(self):
         from jicimagelib.image import DataManager
@@ -149,33 +149,33 @@ class DataManagerUserStory(unittest.TestCase):
         image_collection = data_manager[0]
         self.assertEqual(len(image_collection), 7*5*3) # 7t, 5z, 3c
 
-        image_proxy = image_collection.image_proxy()
-        self.assertEqual(image_proxy.series, 0)
-        self.assertEqual(image_proxy.channel, 0)
-        self.assertEqual(image_proxy.zslice, 0)
-        self.assertEqual(image_proxy.timepoint, 0)
+        proxy_image = image_collection.proxy_image()
+        self.assertEqual(proxy_image.series, 0)
+        self.assertEqual(proxy_image.channel, 0)
+        self.assertEqual(proxy_image.zslice, 0)
+        self.assertEqual(proxy_image.timepoint, 0)
 
-        image_proxy = image_collection.image_proxy(s=0, c=1, z=2, t=3)
-        self.assertEqual(image_proxy.series, 0)
-        self.assertEqual(image_proxy.channel, 1)
-        self.assertEqual(image_proxy.zslice, 2)
-        self.assertEqual(image_proxy.timepoint, 3)
+        proxy_image = image_collection.proxy_image(s=0, c=1, z=2, t=3)
+        self.assertEqual(proxy_image.series, 0)
+        self.assertEqual(proxy_image.channel, 1)
+        self.assertEqual(proxy_image.zslice, 2)
+        self.assertEqual(proxy_image.timepoint, 3)
 
         self.assertEqual(5,
             len([i for i in image_collection.zstack_proxy_iterator()]))
-        for i, image_proxy in enumerate(image_collection.zstack_proxy_iterator()):
-            self.assertEqual(image_proxy.series, 0)
-            self.assertEqual(image_proxy.channel, 0)
-            self.assertEqual(image_proxy.zslice, i)
-            self.assertEqual(image_proxy.timepoint, 0)
+        for i, proxy_image in enumerate(image_collection.zstack_proxy_iterator()):
+            self.assertEqual(proxy_image.series, 0)
+            self.assertEqual(proxy_image.channel, 0)
+            self.assertEqual(proxy_image.zslice, i)
+            self.assertEqual(proxy_image.timepoint, 0)
 
         self.assertEqual(5,
             len([i for i in image_collection.zstack_proxy_iterator(s=0, c=1, t=3)]))
-        for i, image_proxy in enumerate(image_collection.zstack_proxy_iterator(s=0, c=1, t=3)):
-            self.assertEqual(image_proxy.series, 0)
-            self.assertEqual(image_proxy.channel, 1)
-            self.assertEqual(image_proxy.zslice, i)
-            self.assertEqual(image_proxy.timepoint, 3)
+        for i, proxy_image in enumerate(image_collection.zstack_proxy_iterator(s=0, c=1, t=3)):
+            self.assertEqual(proxy_image.series, 0)
+            self.assertEqual(proxy_image.channel, 1)
+            self.assertEqual(proxy_image.zslice, i)
+            self.assertEqual(proxy_image.timepoint, 3)
 
         zstack_array = image_collection.zstack_array(s=0, c=1, t=3)
         self.assertTrue(isinstance(zstack_array, np.ndarray))
