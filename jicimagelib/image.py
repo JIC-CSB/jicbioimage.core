@@ -118,6 +118,15 @@ class ProxyImage(object):
         """
         return self.image.png
 
+    def is_me(self, s, c, z, t):
+        """Return True is arguments match my meta data."""
+        if (self.series == s
+            and self.channel == c
+            and self.zslice == z
+            and self.timepoint == t):
+            return True
+        return False
+
 class ImageCollection(list):
     """Class for storing related images."""
 
