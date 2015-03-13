@@ -99,12 +99,8 @@ class Image(np.ndarray):
 class ProxyImage(object):
     """Lightweight image class."""
 
-    def __init__(self, fpath, s, c, z, t):
+    def __init__(self, fpath):
         self.fpath = fpath
-        self.series = s
-        self.channel = c
-        self.zslice = z
-        self.timepoint = t
 
     @property
     def image(self):
@@ -117,6 +113,16 @@ class ProxyImage(object):
         Used by IPython qtconsole/notebook to display images.
         """
         return self.image.png
+
+class MicroscopyImage(ProxyImage):
+    """Lightweight image class with microscopy meta data."""
+
+    def __init__(self, fpath, s, c, z, t):
+        ProxyImage.__init__(self, fpath)
+        self.series = s
+        self.channel = c
+        self.zslice = z
+        self.timepoint = t
 
     def is_me(self, s, c, z, t):
         """Return True is arguments match my meta data."""
@@ -135,9 +141,6 @@ class ProxyImage(object):
             return True
         return False
 
-class MicroscopyImage(ProxyImage):
-    """Lightweight image class with microscopy meta data."""
-
 class ImageCollection(list):
     """Class for storing related images."""
 
@@ -148,7 +151,7 @@ class ImageCollection(list):
         """
         with open(fpath, 'r') as fh:
             for entry in json.load(fh):
-                proxy_image = ProxyImage(entry["filename"],
+                proxy_image = MicroscopyImage(entry["filename"],
                                          s=entry["metadata"]["series"],
                                          c=entry["metadata"]["channel"],
                                          z=entry["metadata"]["zslice"],
