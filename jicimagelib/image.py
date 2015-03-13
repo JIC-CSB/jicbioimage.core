@@ -135,6 +135,9 @@ class ProxyImage(object):
             return True
         return False
 
+class MicroscopyImage(ProxyImage):
+    """Lightweight image class with microscopy meta data."""
+
 class ImageCollection(list):
     """Class for storing related images."""
 
