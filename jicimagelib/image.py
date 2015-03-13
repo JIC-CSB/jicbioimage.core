@@ -174,9 +174,7 @@ class ImageCollection(list):
         :returns: zstack :class:`jicimagelib.image.ProxyImage` iterator
         """
         for proxy_image in self:
-            if (proxy_image.series == s
-                and proxy_image.channel == c
-                and proxy_image.timepoint == t):
+            if proxy_image.in_zstack(s=s, c=c, t=t):
                 yield proxy_image
 
     def zstack_array(self, s=0, c=0, t=0):
