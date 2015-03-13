@@ -58,7 +58,7 @@ will use to install the packages that :mod:`jicimagelib` depend on.
 Although the :mod:`jicimage` package does not depend on it you may also want to
 install the IPython notebook as :mod:`jicimagelib` has been designed to work
 well with it, for example by providing the ability to view
-:class:`jicimagelib.image.Image` and :class:`jicimagelib.image.ImageProxy`
+:class:`jicimagelib.image.Image` and :class:`jicimagelib.image.ProxyImage`
 objects as images in the IPython notebook.
 
 ::

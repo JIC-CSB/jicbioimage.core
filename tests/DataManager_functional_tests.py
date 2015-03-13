@@ -78,9 +78,9 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(len(image_collection), 1)
         image = image_collection[0]
 
-        # An ImageCollection is a container for ImageProxy instances.
-        from jicimagelib.image import ImageProxy
-        self.assertTrue(isinstance(image, ImageProxy))
+        # An ImageCollection is a container for ProxyImage instances.
+        from jicimagelib.image import ProxyImage
+        self.assertTrue(isinstance(image, ProxyImage))
 
         # Alice then loads her second file of interest.
         data_manager.load(os.path.join(DATA_DIR, 'z-series.ome.tif'))

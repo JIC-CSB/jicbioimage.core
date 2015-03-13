@@ -33,13 +33,9 @@ class TestBasics(unittest.TestCase):
         # This throws an error if the class cannot be imported.
         from jicimagelib.image import ImageCollection
 
-    def test_import_ImageProxy_class(self):
+    def test_import_ProxyImage_class(self):
         # This throws an error if the class cannot be imported.
-        from jicimagelib.image import ImageProxy
-
-    def test_import_ImageProxy_class(self):
-        # This throws an error if the class cannot be imported.
-        from jicimagelib.image import ImageProxy
+        from jicimagelib.image import ProxyImage
 
 
 if __name__ == '__main__':

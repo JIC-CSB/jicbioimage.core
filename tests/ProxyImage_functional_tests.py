@@ -1,4 +1,4 @@
-"""ImageProxy functional tests."""
+"""ProxyImage functional tests."""
 
 import unittest
 import os
@@ -21,10 +21,10 @@ class ImageUserStory(unittest.TestCase):
         shutil.rmtree(TMP_DIR)
 
     def test_repr_png_return_type(self):
-        from jicimagelib.image import ImageProxy
+        from jicimagelib.image import ProxyImage
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
-        image_proxy = ImageProxy(fpath, 0, 0, 0, 0)
-        self.assertEqual(type(image_proxy._repr_png_()), bytes)
+        proxy_image = ProxyImage(fpath, 0, 0, 0, 0)
+        self.assertEqual(type(proxy_image._repr_png_()), bytes)
         
 
 if __name__ == '__main__':

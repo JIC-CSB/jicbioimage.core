@@ -15,10 +15,10 @@ class ImageCollectionTests(unittest.TestCase):
         self.assertTrue(callable(image_collection.image_proxy))
 
     def test_image_proxy(self):
-        from jicimagelib.image import ImageCollection, ImageProxy
+        from jicimagelib.image import ImageCollection, ProxyImage
         image_collection = ImageCollection()
-        image_collection.append(ImageProxy('test0.tif', s=0, c=0, z=0, t=0))
-        image_collection.append(ImageProxy('test1.tif', s=1, c=1, z=1, t=1))
+        image_collection.append(ProxyImage('test0.tif', s=0, c=0, z=0, t=0))
+        image_collection.append(ProxyImage('test1.tif', s=1, c=1, z=1, t=1))
 
         image_proxy = image_collection.image_proxy()
         self.assertEqual(image_proxy.fpath, 'test0.tif')

@@ -65,48 +65,48 @@ The data manager is essentially a list containing
     >>> image_collection = data_manager[0]
 
 And a :class:`jicimagelib.image.ImageCollection` is essentially just a list of
-:class:`jicimagelib.image.ImageProxy` instances.
+:class:`jicimagelib.image.ProxyImage` instances.
 
 .. code-block:: python
 
     >>> len(image_collection)
     105
     >>> image_collection  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-    [<jicimagelib.image.ImageProxy object at ...>,
-     <jicimagelib.image.ImageProxy object at ...>,
+    [<jicimagelib.image.ProxyImage object at ...>,
+     <jicimagelib.image.ProxyImage object at ...>,
       ...,
-     <jicimagelib.image.ImageProxy object at ...>]
+     <jicimagelib.image.ProxyImage object at ...>]
 
-The :class:`jicimagelib.image.ImageProxy` contains meta data about the image.
+The :class:`jicimagelib.image.ProxyImage` contains meta data about the image.
 
 .. code-block:: python
 
-    >>> image_proxy = image_collection[0]
-    >>> image_proxy.series
+    >>> proxy_image = image_collection[0]
+    >>> proxy_image.series
     0
-    >>> image_proxy.channel
+    >>> proxy_image.channel
     0
-    >>> image_proxy.zslice
+    >>> proxy_image.zslice
     0
-    >>> image_proxy.timepoint
+    >>> proxy_image.timepoint
     0
 
 One can use this meta data to access a specific
-:class:`jicimagelib.image.ImageProxy` using the
+:class:`jicimagelib.image.ProxyImage` using the
 :func:`jicimagelib.image.ImageCollection.image_proxy` function.
 
 .. code-block:: python
 
     >>> image_collection.image_proxy(s=0, c=1, z=2, t=3)  # doctest: +ELLIPSIS
-    <jicimagelib.image.ImageProxy object at ...>
+    <jicimagelib.image.ProxyImage object at ...>
 
 
 One can access the raw 2D :class:`jicimagelib.image.Image` instance
-from the :attr:`jicimage.image.ImageProxy.image` attribute.
+from the :attr:`jicimage.image.ProxyImage.image` attribute.
 
 .. code-block:: python
 
-    >>> image_proxy.image  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+    >>> proxy_image.image  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
     Image([[ 0,  0,  0, ...,  0,  0,  0],
            [ 1,  1,  1, ...,  1,  1,  1],
            [ 2,  2,  2, ...,  2,  2,  2],
@@ -120,7 +120,7 @@ from the :attr:`jicimage.image.ImageProxy.image` attribute.
 
 It is also possible to access the raw 2D :class:`jicimagelib.image.Image`
 instance from the :class:`jicimagelib.image.ImageCollection` directly,
-side-stepping the :class:`jicimagelib.image.ImageProxy`, using the
+side-stepping the :class:`jicimagelib.image.ProxyImage`, using the
 :func:`jicimagelib.image.ImageCollection.image` funciton.
 
 .. code-block:: python

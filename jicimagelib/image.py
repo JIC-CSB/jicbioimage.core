@@ -96,7 +96,7 @@ class Image(np.ndarray):
         """
         return self.png
 
-class ImageProxy(object):
+class ProxyImage(object):
     """Lightweight image class."""
 
     def __init__(self, fpath, s, c, z, t):
@@ -128,7 +128,7 @@ class ImageCollection(list):
         """
         with open(fpath, 'r') as fh:
             for entry in json.load(fh):
-                image_proxy = ImageProxy(entry["filename"],
+                image_proxy = ProxyImage(entry["filename"],
                                          s=entry["metadata"]["series"],
                                          c=entry["metadata"]["channel"],
                                          z=entry["metadata"]["zslice"],
@@ -136,13 +136,13 @@ class ImageCollection(list):
                 self.append(image_proxy)
 
     def image_proxy(self, s=0, c=0, z=0, t=0):
-        """Return a :class:`jicimagelib.image.ImageProxy` instance.
+        """Return a :class:`jicimagelib.image.ProxyImage` instance.
         
         :param s: series
         :param c: channel
         :param z: zslice
         :param t: timepoint
-        :returns: :class:`jicimagelib.image.ImageProxy`
+        :returns: :class:`jicimagelib.image.ProxyImage`
         """
         for image_proxy in self:
             if (image_proxy.series == s
@@ -152,12 +152,12 @@ class ImageCollection(list):
                 return image_proxy
 
     def zstack_proxy_iterator(self, s=0, c=0, t=0):
-        """Return iterator of :class:`jicimagelib.image.ImageProxy` instances in the zstack.
+        """Return iterator of :class:`jicimagelib.image.ProxyImage` instances in the zstack.
         
         :param s: series
         :param c: channel
         :param t: timepoint
-        :returns: zstack :class:`jicimagelib.image.ImageProxy` iterator
+        :returns: zstack :class:`jicimagelib.image.ProxyImage` iterator
         """
         for image_proxy in self:
             if (image_proxy.series == s
