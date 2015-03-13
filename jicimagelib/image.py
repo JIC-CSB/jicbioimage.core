@@ -154,10 +154,7 @@ class ImageCollection(list):
         :returns: :class:`jicimagelib.image.ProxyImage`
         """
         for proxy_image in self:
-            if (proxy_image.series == s
-                and proxy_image.channel == c
-                and proxy_image.zslice == z
-                and proxy_image.timepoint == t):
+            if proxy_image.is_me(s=s, c=c, z=z, t=t):
                 return proxy_image
 
     def zstack_proxy_iterator(self, s=0, c=0, t=0):
