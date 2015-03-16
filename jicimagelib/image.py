@@ -147,6 +147,14 @@ class ImageCollection(list):
         """
         with open(fpath, 'r') as fh:
             for entry in json.load(fh):
+
+                # Every entry of a manifest file needs to have a "filename"
+                # attribute. It is the only requirement so we check for it in a
+                # strict fashion.
+                if "filename" not in entry:
+                    raise(RuntimeError(
+                        'Entries in {} need to have "filename"'.format(fpath)))
+
                 proxy_image = MicroscopyImage(entry["filename"],
                                          s=entry["series"],
                                          c=entry["channel"],
