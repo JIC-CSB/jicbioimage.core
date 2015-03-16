@@ -30,9 +30,9 @@ class DataManagerTests(unittest.TestCase):
         self.assertTrue(isinstance(data_manager.backend, FileBackend))
          
     def test_default_convert(self):
-        from jicimagelib.image import DataManager, _BFConvertWrapper
+        from jicimagelib.image import DataManager, BFConvertWrapper
         data_manager = DataManager(os.path.join(TMP_DIR, 'dummy'))
-        self.assertTrue(isinstance(data_manager.convert, _BFConvertWrapper))
+        self.assertTrue(isinstance(data_manager.convert, BFConvertWrapper))
          
 
 if __name__ == '__main__':

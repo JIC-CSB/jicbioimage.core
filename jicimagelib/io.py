@@ -95,11 +95,7 @@ class FileBackend(object):
         return FileBackend.Entry(self.directory, fpath)
 
 
-#############################################################################
-# Conversion classes for unpacking microscopy data.
-#############################################################################
-
-class _BFConvertWrapper(object):
+class BFConvertWrapper(object):
     """Class for unpacking microscopy files using bfconvert."""
 
     def __init__(self, backend):

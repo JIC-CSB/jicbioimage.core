@@ -32,9 +32,9 @@ class DataManagerUserStory(unittest.TestCase):
 
         # The :func:`jicimagelib.image.DataManager.conver` function is be
         # default an instance of the callable
-        # :class:`jicimagelib.io._BFConvertWrapper` class.
-        from jicimagelib.io import _BFConvertWrapper
-        self.assertTrue(isinstance(data_manager.convert, _BFConvertWrapper))
+        # :class:`jicimagelib.io.BFConvertWrapper` class.
+        from jicimagelib.io import BFConvertWrapper
+        self.assertTrue(isinstance(data_manager.convert, BFConvertWrapper))
 
         # We also need to import an ImageCollection
         from jicimagelib.image import ImageCollection

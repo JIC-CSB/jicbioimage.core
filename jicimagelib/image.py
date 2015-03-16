@@ -8,13 +8,9 @@ from skimage.io import imread, imsave, use_plugin
 
 from jicimagelib.io import (
     TemporaryFilePath,
-    _BFConvertWrapper,
+    BFConvertWrapper,
 )
 
-
-#############################################################################
-# Classes for managing image data.
-#############################################################################
 
 class Image(np.ndarray):
     """Image class."""
@@ -210,7 +206,7 @@ class DataManager(list):
 
     def __init__(self, backend):
         self.backend = backend
-        self.convert = _BFConvertWrapper(self.backend)
+        self.convert = BFConvertWrapper(self.backend)
 
     def load(self, fpath):
         """Load a microscopy file.
