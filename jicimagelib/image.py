@@ -116,7 +116,14 @@ class MicroscopyImage(ProxyImage):
     """Lightweight image class with microscopy meta data."""
 
     def is_me(self, s, c, z, t):
-        """Return True is arguments match my meta data."""
+        """Return True if arguments match my meta data.
+
+        :param s: series
+        :param c: channel
+        :param z: zslice
+        :param t: timepoint
+        :returns: :class:`bool`
+        """
         if (self.series == s
             and self.channel == c
             and self.zslice == z
@@ -125,7 +132,13 @@ class MicroscopyImage(ProxyImage):
         return False
 
     def in_zstack(self, s, c, t):
-        """Return True is I am in the zstack."""
+        """Return True if I am in the zstack.
+
+        :param s: series
+        :param c: channel
+        :param t: timepoint
+        :returns: :class:`bool`
+        """
         if (self.series == s
             and self.channel == c
             and self.timepoint == t):
@@ -155,7 +168,7 @@ class ImageCollection(list):
                 self.append(proxy_image)
 
 class MicroscopyCollection(ImageCollection):
-    """Class for storing related :class:`jicimagelib.image.MicroscopyImage instances."""
+    """Class for storing related :class:`jicimagelib.image.MicroscopyImage` instances."""
 
     def proxy_image(self, s=0, c=0, z=0, t=0):
         """Return a :class:`jicimagelib.image.ProxyImage` instance.
