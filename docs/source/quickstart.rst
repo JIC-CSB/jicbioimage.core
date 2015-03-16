@@ -49,29 +49,29 @@ Now let us load the microscopy file into the ``data_manager``.
 
 .. code-block:: python
 
-    >>> data_manager.load(fpath)
+    >>> collection = data_manager.load(fpath)
 
 
 Accessing individual images
 ---------------------------
 
 The data manager is essentially a list containing
-:class:`jicimagelib.image.ImageCollection` instances.
+:class:`jicimagelib.image.ImageCollection` or
+:class:`jicimagelib.image.MicroscopyCollection` instances.
 
 .. code-block:: python
 
     >>> len(data_manager)
     1
-    >>> image_collection = data_manager[0]
 
 And a :class:`jicimagelib.image.ImageCollection` is essentially just a list of
 :class:`jicimagelib.image.MicroscopyImage` instances.
 
 .. code-block:: python
 
-    >>> len(image_collection)
+    >>> len(collection)
     105
-    >>> image_collection  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+    >>> collection  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
     [<jicimagelib.image.MicroscopyImage object at ...>,
      <jicimagelib.image.MicroscopyImage object at ...>,
       ...,
@@ -82,7 +82,7 @@ microscopy image.
 
 .. code-block:: python
 
-    >>> microscopy_image = image_collection[0]
+    >>> microscopy_image = collection[0]
     >>> microscopy_image.series
     0
     >>> microscopy_image.channel
@@ -98,7 +98,7 @@ One can use this meta data to access a specific
 
 .. code-block:: python
 
-    >>> image_collection.proxy_image(s=0, c=1, z=2, t=3)  # doctest: +ELLIPSIS
+    >>> collection.proxy_image(s=0, c=1, z=2, t=3)  # doctest: +ELLIPSIS
     <jicimagelib.image.MicroscopyImage object at ...>
 
 
@@ -126,7 +126,7 @@ side-stepping the :class:`jicimagelib.image.MicroscopyImage`, using the
 
 .. code-block:: python
 
-    >>> image = image_collection.image(s=0, c=1, z=2, t=3)
+    >>> image = collection.image(s=0, c=1, z=2, t=3)
     >>> image  # doctest: +ELLIPSIS
     Image([[ 0,  0,  0, ...,  0,  0,  0],
            [ 1,  1,  1, ...,  1,  1,  1],
