@@ -244,7 +244,7 @@ class DataManager(list):
         
         :param fpath: path to microscopy file
         """
-        def is_microscopy_data(fpath):
+        def is_microscopy_item(fpath):
             """Return True if the fpath is likely to be microscopy data.
 
             :param fpath: file path to image
@@ -267,7 +267,7 @@ class DataManager(list):
 
         
         collection = None
-        if is_microscopy_data(fpath):
+        if is_microscopy_item(fpath):
             collection = MicroscopyCollection()
         else:
             collection = ImageCollection()
