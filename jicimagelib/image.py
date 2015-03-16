@@ -274,4 +274,6 @@ class DataManager(list):
         collection.parse_manifest(path_to_manifest)
         self.append(collection)
 
+        return collection
+
             

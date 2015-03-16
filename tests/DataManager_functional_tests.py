@@ -215,5 +215,14 @@ class DataManagerUserStory(unittest.TestCase):
         third_image = image_collection.image(index=2)
         self.assertEqual(np.max(third_image), 120)
 
+    def test_load_returns_collection(self):
+        from jicimagelib.image import DataManager
+        from jicimagelib.image import ImageCollection
+        from jicimagelib.io import FileBackend
+        backend = FileBackend(directory=TMP_DIR)
+        data_manager = DataManager(backend)
+        collection = data_manager.load(os.path.join(DATA_DIR, 'multipage.tif'))
+        self.assertTrue(isinstance(collection, ImageCollection))
+
 if __name__ == '__main__':
     unittest.main()
