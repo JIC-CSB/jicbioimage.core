@@ -69,18 +69,18 @@ class DataManagerUserStory(unittest.TestCase):
         data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
         self.assertEqual(len(data_manager), 1)
         
-        # A DataManager is a container for ImageCollections.
-        from jicimagelib.image import ImageCollection
-        image_collection = data_manager[0]
-        self.assertTrue(isinstance(image_collection, ImageCollection))
+        # A DataManager is a container for MicroscopyCollection instances.
+        from jicimagelib.image import MicroscopyCollection
+        microscopy_collection = data_manager[0]
+        self.assertTrue(isinstance(microscopy_collection, MicroscopyCollection))
 
         # In this instance the image collection only contains one item.
-        self.assertEqual(len(image_collection), 1)
-        image = image_collection[0]
+        self.assertEqual(len(microscopy_collection), 1)
+        image = microscopy_collection[0]
 
-        # An ImageCollection is a container for ProxyImage instances.
-        from jicimagelib.image import ProxyImage
-        self.assertTrue(isinstance(image, ProxyImage))
+        # A MicroscopyCollection is a container for MicroscopyImage instances.
+        from jicimagelib.image import MicroscopyImage
+        self.assertTrue(isinstance(image, MicroscopyImage))
 
         # Alice then loads her second file of interest.
         data_manager.load(os.path.join(DATA_DIR, 'z-series.ome.tif'))
@@ -133,8 +133,8 @@ class DataManagerUserStory(unittest.TestCase):
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
         data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
-        image_collection = data_manager[0]
-        proxy_image = image_collection.proxy_image()
+        microscopy_collection = data_manager[0]
+        proxy_image = microscopy_collection.proxy_image()
         self.assertTrue(os.path.isfile(proxy_image.fpath),
                         'no such file: {}'.format(proxy_image.fpath))
         self.assertTrue(isinstance(proxy_image.image, np.ndarray))
@@ -146,44 +146,51 @@ class DataManagerUserStory(unittest.TestCase):
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
         data_manager.load(os.path.join(DATA_DIR, 'multi-channel-4D-series.ome.tif'))
-        image_collection = data_manager[0]
-        self.assertEqual(len(image_collection), 7*5*3) # 7t, 5z, 3c
+        microscopy_collection = data_manager[0]
+        self.assertEqual(len(microscopy_collection), 7*5*3) # 7t, 5z, 3c
 
-        proxy_image = image_collection.proxy_image()
+        proxy_image = microscopy_collection.proxy_image()
         self.assertEqual(proxy_image.series, 0)
         self.assertEqual(proxy_image.channel, 0)
         self.assertEqual(proxy_image.zslice, 0)
         self.assertEqual(proxy_image.timepoint, 0)
 
-        proxy_image = image_collection.proxy_image(s=0, c=1, z=2, t=3)
+        proxy_image = microscopy_collection.proxy_image(s=0, c=1, z=2, t=3)
         self.assertEqual(proxy_image.series, 0)
         self.assertEqual(proxy_image.channel, 1)
         self.assertEqual(proxy_image.zslice, 2)
         self.assertEqual(proxy_image.timepoint, 3)
 
         self.assertEqual(5,
-            len([i for i in image_collection.zstack_proxy_iterator()]))
-        for i, proxy_image in enumerate(image_collection.zstack_proxy_iterator()):
+            len([i for i in microscopy_collection.zstack_proxy_iterator()]))
+        for i, proxy_image in enumerate(microscopy_collection.zstack_proxy_iterator()):
             self.assertEqual(proxy_image.series, 0)
             self.assertEqual(proxy_image.channel, 0)
             self.assertEqual(proxy_image.zslice, i)
             self.assertEqual(proxy_image.timepoint, 0)
 
         self.assertEqual(5,
-            len([i for i in image_collection.zstack_proxy_iterator(s=0, c=1, t=3)]))
-        for i, proxy_image in enumerate(image_collection.zstack_proxy_iterator(s=0, c=1, t=3)):
+            len([i for i in microscopy_collection.zstack_proxy_iterator(s=0, c=1, t=3)]))
+        for i, proxy_image in enumerate(microscopy_collection.zstack_proxy_iterator(s=0, c=1, t=3)):
             self.assertEqual(proxy_image.series, 0)
             self.assertEqual(proxy_image.channel, 1)
             self.assertEqual(proxy_image.zslice, i)
             self.assertEqual(proxy_image.timepoint, 3)
 
-        zstack_array = image_collection.zstack_array(s=0, c=1, t=3)
+        zstack_array = microscopy_collection.zstack_array(s=0, c=1, t=3)
         self.assertTrue(isinstance(zstack_array, np.ndarray))
         self.assertEqual(zstack_array.shape, (167, 439, 5))
 
-        image = image_collection.image(s=0, c=1, z=2, t=3)
+        image = microscopy_collection.image(s=0, c=1, z=2, t=3)
         self.assertTrue(isinstance(image, np.ndarray))
         self.assertEqual(image.shape, (167, 439))
          
+#   def test_multipage_tiff(self):
+#       from jicimagelib.image import DataManager
+#       from jicimagelib.io import FileBackend
+#       data_manager = DataManager(backend)
+#       data_manager.load(os.path.join(DATA_DIR, 'multipage.tif'))
+
+        
 if __name__ == '__main__':
     unittest.main()
