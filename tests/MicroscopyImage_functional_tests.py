@@ -23,7 +23,8 @@ class ImageUserStory(unittest.TestCase):
     def test_repr_png_return_type(self):
         from jicimagelib.image import MicroscopyImage
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
-        microscopy_image = MicroscopyImage(fpath, 0, 0, 0, 0)
+        microscopy_image = MicroscopyImage(fpath,
+            dict(series=0, channel=0, zslice=0, timepoint=0))
         self.assertEqual(type(microscopy_image._repr_png_()), bytes)
         
 

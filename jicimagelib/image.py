@@ -95,8 +95,10 @@ class Image(np.ndarray):
 class ProxyImage(object):
     """Lightweight image class."""
 
-    def __init__(self, fpath):
+    def __init__(self, fpath, metadata={}):
         self.fpath = fpath
+        for key, value in metadata.items():
+            self.__setattr__(key, value)
 
     @property
     def image(self):
@@ -112,13 +114,6 @@ class ProxyImage(object):
 
 class MicroscopyImage(ProxyImage):
     """Lightweight image class with microscopy meta data."""
-
-    def __init__(self, fpath, s, c, z, t):
-        ProxyImage.__init__(self, fpath)
-        self.series = s
-        self.channel = c
-        self.zslice = z
-        self.timepoint = t
 
     def is_me(self, s, c, z, t):
         """Return True is arguments match my meta data."""
@@ -155,11 +150,8 @@ class ImageCollection(list):
                     raise(RuntimeError(
                         'Entries in {} need to have "filename"'.format(fpath)))
 
-                proxy_image = MicroscopyImage(entry["filename"],
-                                         s=entry["series"],
-                                         c=entry["channel"],
-                                         z=entry["zslice"],
-                                         t=entry["timepoint"])
+                filename = entry.pop("filename")
+                proxy_image = MicroscopyImage(filename, entry)
                 self.append(proxy_image)
 
     def proxy_image(self, s=0, c=0, z=0, t=0):
