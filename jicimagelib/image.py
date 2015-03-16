@@ -148,10 +148,10 @@ class ImageCollection(list):
         with open(fpath, 'r') as fh:
             for entry in json.load(fh):
                 proxy_image = MicroscopyImage(entry["filename"],
-                                         s=entry["metadata"]["series"],
-                                         c=entry["metadata"]["channel"],
-                                         z=entry["metadata"]["zslice"],
-                                         t=entry["metadata"]["timepoint"])
+                                         s=entry["series"],
+                                         c=entry["channel"],
+                                         z=entry["zslice"],
+                                         t=entry["timepoint"])
                 self.append(proxy_image)
 
     def proxy_image(self, s=0, c=0, z=0, t=0):

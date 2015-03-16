@@ -75,10 +75,10 @@ class BFConvertWrapperTests(unittest.TestCase):
                                                  'test_S1_C2_Z3_T4.tif'))
             self.assertEqual(wrapper.manifest(entry),
                              [{"filename": fpath,
-                               "metadata": {"series": 1,
-                                            "channel": 2,
-                                            "zslice": 3,
-                                            "timepoint": 4}}])
+                               "series": 1,
+                               "channel": 2,
+                               "zslice": 3,
+                               "timepoint": 4}])
         
 if __name__ == '__main__':
     unittest.main()

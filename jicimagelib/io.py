@@ -133,10 +133,10 @@ class BFConvertWrapper(object):
             fpath = os.path.abspath(os.path.join(entry.directory, fname))
             metadata = self.metadata_from_fname(fname)
             entries.append({"filename": fpath,
-                            "metadata": {"series": metadata.s,
-                                         "channel": metadata.c,
-                                         "zslice": metadata.z,
-                                         "timepoint": metadata.t}})
+                            "series": metadata.s,
+                            "channel": metadata.c,
+                            "zslice": metadata.z,
+                            "timepoint": metadata.t})
         return entries
 
     def run_command(self, input_file, output_dir=None):
