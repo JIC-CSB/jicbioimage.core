@@ -185,12 +185,35 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertTrue(isinstance(image, np.ndarray))
         self.assertEqual(image.shape, (167, 439))
          
-#   def test_multipage_tiff(self):
-#       from jicimagelib.image import DataManager
-#       from jicimagelib.io import FileBackend
-#       data_manager = DataManager(backend)
-#       data_manager.load(os.path.join(DATA_DIR, 'multipage.tif'))
+    def test_multipage_tiff(self):
+        from jicimagelib.image import DataManager
+        from jicimagelib.image import MicroscopyCollection, ImageCollection
+        from jicimagelib.io import FileBackend
+        backend = FileBackend(directory=TMP_DIR)
+        data_manager = DataManager(backend)
+        data_manager.load(os.path.join(DATA_DIR, 'multipage.tif'))
+        image_collection = data_manager[0]
 
-        
+        # When we load a multipage tiff file we get an ImageCollection not a
+        # MicroscopyCollection.
+        self.assertFalse(isinstance(image_collection, MicroscopyCollection))
+        self.assertTrue(isinstance(image_collection, ImageCollection))
+
+        # Let us get the first proxy image.
+        first_proxy_image = image_collection.proxy_image()
+        self.assertTrue(os.path.isfile(first_proxy_image.fpath))
+
+        # Let us get the last proxy image.
+        last_proxy_image = image_collection.proxy_image(index=-1)
+        self.assertTrue(os.path.isfile(last_proxy_image.fpath))
+
+        # Let us get some actual images.
+        first_image = image_collection.image()
+        self.assertEqual(np.max(first_image), 30)
+        second_image = image_collection.image(1)
+        self.assertEqual(np.max(second_image), 90)
+        third_image = image_collection.image(index=2)
+        self.assertEqual(np.max(third_image), 120)
+
 if __name__ == '__main__':
     unittest.main()

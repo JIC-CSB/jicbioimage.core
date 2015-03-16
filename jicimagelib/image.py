@@ -148,6 +148,22 @@ class MicroscopyImage(ProxyImage):
 class ImageCollection(list):
     """Class for storing related images."""
 
+    def proxy_image(self, index=0):
+        """Return a :class:`jicimagelib.image.ProxyImage` instance.
+        
+        :param index: list index
+        :returns: :class:`jicimagelib.image.ProxyImage`
+        """
+        return self[index]
+
+    def image(self, index=0):
+        """Return image as a :class:`jicimagelib.image.Image`.
+        
+        :param index: list index
+        :returns: :class:`jicimagelib.image.Image`
+        """
+        return self.proxy_image(index=index).image
+
     def parse_manifest(self, fpath):
         """Parse manifest file to build up the collection of images.
         
@@ -171,13 +187,13 @@ class MicroscopyCollection(ImageCollection):
     """Class for storing related :class:`jicimagelib.image.MicroscopyImage` instances."""
 
     def proxy_image(self, s=0, c=0, z=0, t=0):
-        """Return a :class:`jicimagelib.image.ProxyImage` instance.
+        """Return a :class:`jicimagelib.image.MicroscopyImage` instance.
         
         :param s: series
         :param c: channel
         :param z: zslice
         :param t: timepoint
-        :returns: :class:`jicimagelib.image.ProxyImage`
+        :returns: :class:`jicimagelib.image.MicroscopyImage`
         """
         for proxy_image in self:
             if proxy_image.is_me(s=s, c=c, z=z, t=t):
@@ -228,6 +244,20 @@ class DataManager(list):
         
         :param fpath: path to microscopy file
         """
+        def is_microscopy_data(fpath):
+            """Return True if the fpath is likely to be microscopy data.
+
+            :param fpath: file path to image
+            :returns: :class:`bool`
+            """
+            l = fpath.split('.')
+            ext = l[-1]
+            pre_ext = l[-2]
+            if ( (ext == 'tif' or ext == 'tiff')
+                and pre_ext != 'ome' ):
+                return False
+            return True
+
         if not self.convert.already_converted(fpath):
             path_to_manifest = self.convert(fpath)
         else:
@@ -235,8 +265,13 @@ class DataManager(list):
                                             os.path.basename(fpath),
                                             'manifest.json')
 
-        microscopy_collection = MicroscopyCollection()
-        microscopy_collection.parse_manifest(path_to_manifest)
-        self.append(microscopy_collection)
+        
+        collection = None
+        if is_microscopy_data(fpath):
+            collection = MicroscopyCollection()
+        else:
+            collection = ImageCollection()
+        collection.parse_manifest(path_to_manifest)
+        self.append(collection)
 
             
