@@ -1,4 +1,4 @@
-"""Image functional tests."""
+"""ImageCollectionImage functional tests."""
 
 import unittest
 import os

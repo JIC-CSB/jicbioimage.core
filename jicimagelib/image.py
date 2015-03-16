@@ -154,6 +154,9 @@ class ImageCollection(list):
                 proxy_image = MicroscopyImage(filename, entry)
                 self.append(proxy_image)
 
+class MicroscopyCollection(ImageCollection):
+    """Class for storing related :class:`jicimagelib.image.MicroscopyImage instances."""
+
     def proxy_image(self, s=0, c=0, z=0, t=0):
         """Return a :class:`jicimagelib.image.ProxyImage` instance.
         
@@ -200,7 +203,6 @@ class ImageCollection(list):
         """
         return self.proxy_image(s=s, c=c, z=z, t=t).image
 
-
 class DataManager(list):
     """Class for managing :class:`jicimagelib.image.ImageCollection` instances."""
 
@@ -220,8 +222,8 @@ class DataManager(list):
                                             os.path.basename(fpath),
                                             'manifest.json')
 
-        image_collection = ImageCollection()
-        image_collection.parse_manifest(path_to_manifest)
-        self.append(image_collection)
+        microscopy_collection = MicroscopyCollection()
+        microscopy_collection.parse_manifest(path_to_manifest)
+        self.append(microscopy_collection)
 
             
