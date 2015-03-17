@@ -180,7 +180,12 @@ class ImageCollection(list):
                         'Entries in {} need to have "filename"'.format(fpath)))
 
                 filename = entry.pop("filename")
-                proxy_image = MicroscopyImage(filename, entry)
+
+                proxy_image = None
+                if isinstance(self, MicroscopyCollection):
+                    proxy_image = MicroscopyImage(filename, entry)
+                else:
+                    proxy_image = ProxyImage(filename, entry)
                 self.append(proxy_image)
 
 class MicroscopyCollection(ImageCollection):

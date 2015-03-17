@@ -218,11 +218,14 @@ class DataManagerUserStory(unittest.TestCase):
     def test_load_returns_collection(self):
         from jicimagelib.image import DataManager
         from jicimagelib.image import ImageCollection
+        from jicimagelib.image import MicroscopyImage, ProxyImage
         from jicimagelib.io import FileBackend
         backend = FileBackend(directory=TMP_DIR)
         data_manager = DataManager(backend)
         collection = data_manager.load(os.path.join(DATA_DIR, 'multipage.tif'))
         self.assertTrue(isinstance(collection, ImageCollection))
+        self.assertFalse(isinstance(collection[0], MicroscopyImage))
+        self.assertTrue(isinstance(collection[0], ProxyImage))
 
 if __name__ == '__main__':
     unittest.main()
