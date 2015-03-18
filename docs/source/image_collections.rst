@@ -78,6 +78,8 @@ Which contains a number of :class:`jicimagelib.image.ProxyImage` instances.
      <jicimagelib.image.ProxyImage object at ...>]
 
 
+.. _accessing-data-from-microscopy-collections:
+
 Accessing data from microscopy collections
 ------------------------------------------
 
