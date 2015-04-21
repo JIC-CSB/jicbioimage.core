@@ -63,7 +63,8 @@ class FileBackend(object):
             """
             fname = os.path.basename(fpath)
             self._directory = os.path.join(base_dir, fname)
-            os.mkdir(self.directory)
+            if not os.path.isdir(self.directory):
+                os.mkdir(self.directory)
 
         @property
         def directory(self):
