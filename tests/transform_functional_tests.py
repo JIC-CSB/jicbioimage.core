@@ -51,10 +51,33 @@ class TransformationUserStory(unittest.TestCase):
         image = identity(image)
         self.assertEqual(image.history[-1], 'Applied identity transform')
         created_fpath = os.path.join(TMP_DIR, '1_identity.png')
-        print(os.listdir(TMP_DIR))
         self.assertTrue(os.path.isfile(created_fpath),
             'No such file: {}'.format(created_fpath))
 
+    def test_BZ2(self):
+        from skimage.filters import gaussian_filter
+
+        from jicimagelib.image import Image
+        from jicimagelib.transform import transformation
+        from jicimagelib.io import AutoName
+        AutoName.directory = TMP_DIR
+
+        @transformation
+        def blur(image):
+            return gaussian_filter(image, sigma=2)
+
+        image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
+        image = blur(image)
+
+        # Image returned is of jicimagelib.image.Image type.
+        self.assertTrue(isinstance(image, Image))
+
+        # Image returned contains the history.
+        self.assertEqual(image.history[-1], 'Applied blur transform')
+
+        created_fpath = os.path.join(TMP_DIR, '1_blur.png')
+        self.assertTrue(os.path.isfile(created_fpath),
+            'No such file: {}'.format(created_fpath))
 
 if __name__ == '__main__':
     unittest.main()
