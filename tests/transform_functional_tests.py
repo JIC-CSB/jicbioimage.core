@@ -64,7 +64,14 @@ class TransformationUserStory(unittest.TestCase):
 
         @transformation
         def blur(image):
-            return gaussian_filter(image, sigma=2)
+            sigma = 2
+            if len(image.shape) == 3:
+                # We have an RGB image.
+                for i in range(image.shape[2]):
+                    image[:][:][i] = gaussian_filter(image[:][:][i], sigma)
+            else:
+                image = gaussian_filter(image, sigma)
+            return image
 
         image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
         image = blur(image)
