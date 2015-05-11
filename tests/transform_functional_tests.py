@@ -86,5 +86,28 @@ class TransformationUserStory(unittest.TestCase):
         self.assertTrue(os.path.isfile(created_fpath),
             'No such file: {}'.format(created_fpath))
 
+    def test_stack_to_image_transform(self):
+        from jicimagelib.image import DataManager
+        from jicimagelib.io import FileBackend
+        backend = FileBackend(TMP_DIR)
+        data_manager = DataManager(backend)
+
+        from jicimagelib.transform import transformation
+        from jicimagelib.io import AutoName
+        AutoName.directory = TMP_DIR
+
+        @transformation
+        def average_projection(stack):
+            xmax, ymax, zmax = stack.shape
+            projection = np.sum(stack, axis=2, dtype=np.uint8) // zmax
+            print "projection {} {}".format(projection.shape, projection.dtype)
+            return projection
+
+        data_manager.load(os.path.join(DATA_DIR, 'z-series.ome.tif'))
+        microscopy_collection = data_manager[0]
+        stack = microscopy_collection.zstack_array()
+
+        image = average_projection(stack)
+
 if __name__ == '__main__':
     unittest.main()

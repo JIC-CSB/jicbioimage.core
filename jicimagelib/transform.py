@@ -16,7 +16,12 @@ def transformation(func):
         #  - Apply the transformation, which may return a numpy ndarray.
         #  - Force the image to the jicimagelib.image.Image type.
         #  - Re-attach the extracted history
-        history = args[0].history
+        if hasattr(args[0], 'history'):
+            # Working on jicimagelib.Image.
+            history = args[0].history
+        else:
+            # Working on something without a history, e.g. a ndarray stack.
+            history = []
         image = func(*args, **kwargs)
         image = Image.from_array(image)
         image.history = history
@@ -24,7 +29,12 @@ def transformation(func):
         image.history.append('Applied {} transform'.format(func.__name__))
         if AutoWrite.on:
             fpath = AutoName.name(func)
-            pil_im = PIL.Image.fromarray(args[0])
+            try:
+                pil_im = PIL.Image.fromarray(image)
+            except TypeError:
+                # Give a more meaningful error message.
+                raise(TypeError(
+                    "Cannot handle this data type: {}".format(image.dtype)))
             pil_im.save(fpath)
         return image
     return func_as_transformation
