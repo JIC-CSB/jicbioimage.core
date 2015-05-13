@@ -20,6 +20,16 @@ class Point2DUnitTests(unittest.TestCase):
         self.assertEqual(p.x, 1)
         self.assertEqual(p.y, 2)
         
+    def test_repr_int(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D( 1, 2 )
+        self.assertEqual(repr(p), "<Point2D(x=1, y=2)>")
+        
+    def test_repr_float(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D( 1.33333333333333 , 2.66666666667 )
+        self.assertEqual(repr(p), "<Point2D(x=1.33, y=2.67)>")
+        
         
 
 if __name__ == '__main__':
