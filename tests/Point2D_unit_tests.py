@@ -135,9 +135,15 @@ class Point2DUnitTests(unittest.TestCase):
 
     def test_magnitude_property(self):
         from jicimagelib.geometry import Point2D
-        import numpy as np
         p = Point2D(3,4)
         self.assertEqual(p.magnitude, 5.0)
+        
+    def test_unit_vector(self):
+        from jicimagelib.geometry import Point2D
+        import math
+        p = Point2D(1,1)
+        self.assertEqual(repr(p.unit_vector),
+            "<Point2D(x=0.71, y=0.71, dtype=float)>")
         
 
 if __name__ == '__main__':

@@ -41,8 +41,13 @@ class Point2D(object):
 
     @property
     def magnitude(self):
-        """Return the magnitude of the vector."""
+        """Return the magnitude when treating the point as a vector."""
         return math.sqrt( self.x * self.x + self.y * self.y )
+
+    @property
+    def unit_vector(self):
+        """Return the unit vector."""
+        return Point2D( self.x / self.magnitude, self.x / self.magnitude )
 
     def __repr__(self):
         s = "<Point2D(x={}, y={}, dtype={})>"
