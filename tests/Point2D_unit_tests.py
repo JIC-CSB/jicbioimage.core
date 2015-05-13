@@ -79,7 +79,17 @@ class Point2DUnitTests(unittest.TestCase):
         p2 = Point2D(2.0,3.0)
         self.assertEqual(p1+p2, Point2D(4.0,6.0))
         
-
+    def test_sub(self):
+        from jicimagelib.geometry import Point2D
+        p1 = Point2D(2,3)
+        p2 = Point2D(3, 1)
+        self.assertEqual(p1-p2, Point2D(-1,2))
+        
+    def test_sub_int_float_mixed(self):
+        from jicimagelib.geometry import Point2D
+        p1 = Point2D(2,3)
+        p2 = Point2D(3.0, 1.0)
+        self.assertEqual(p1-p2, Point2D(-1.0,2.0))
         
 
 if __name__ == '__main__':

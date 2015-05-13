@@ -50,3 +50,6 @@ class Point2D(object):
 
     def __add__(self, other):
         return Point2D( self.x + other.x, self.y + other.y ) 
+
+    def __sub__(self, other):
+        return Point2D( self.x - other.x, self.y - other.y ) 
