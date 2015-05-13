@@ -14,9 +14,10 @@ class Point2D(object):
         self._set_types()
 
     def __repr__(self):
+        s = "<Point2D(x={}, y={}, dtype={})>"
         if self.dtype == "float":
-            return "<Point2D(x={:.2f}, y={:.2f})>".format(self.x, self.y)
-        return "<Point2D(x={}, y={})>".format(self.x, self.y)
+            s = "<Point2D(x={:.2f}, y={:.2f}, dtype={})>"
+        return s.format( self.x, self.y, self.dtype)
 
     def _set_types(self):
         """Make sure that x, y have consistent types and set dtype."""
