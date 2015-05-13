@@ -53,3 +53,8 @@ class Point2D(object):
 
     def __sub__(self, other):
         return Point2D( self.x - other.x, self.y - other.y ) 
+
+    def __mul__(self, other):
+        if isinstance(other, Point2D):
+            return Point2D( self.x * other.x, self.y * other.y )
+        return Point2D( self.x * other, self.y * other)
