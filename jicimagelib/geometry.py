@@ -1,5 +1,7 @@
 """Module for geometric operations."""
 
+import math
+
 class Point2D(object):
     """Class representing a point in 2D space."""
 
@@ -37,6 +39,11 @@ class Point2D(object):
         """Return the type of the x, y coordinates as a string."""
         return self._dtype
 
+    @property
+    def magnitude(self):
+        """Return the magnitude of the vector."""
+        return math.sqrt( self.x * self.x + self.y * self.y )
+
     def __repr__(self):
         s = "<Point2D(x={}, y={}, dtype={})>"
         if self.dtype == "float":
@@ -72,5 +79,6 @@ class Point2D(object):
             return self.y
         else:
             raise(IndexError())
+
     def __iter__(self):
         return iter( [self.x, self.y] )
