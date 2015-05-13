@@ -91,11 +91,6 @@ class Point2DUnitTests(unittest.TestCase):
         p2 = Point2D(3.0, 1.0)
         self.assertEqual(p1-p2, Point2D(-1.0,2.0))
         
-    def test_mul_with_Point2D(self):
-        from jicimagelib.geometry import Point2D
-        p = Point2D(2,3)
-        self.assertEqual(p*p, Point2D(4,9))
-        
     def test_mul_with_int(self):
         from jicimagelib.geometry import Point2D
         p = Point2D(2,3)
