@@ -21,6 +21,10 @@ class TestBasics(unittest.TestCase):
         # This throws an error if the module cannot be imported.
         import jicimagelib.io
 
+    def test_import_geometry_module(self):
+        # This throws an error if the module cannot be imported.
+        import jicimagelib.geometry
+
     def test_import_transform_module(self):
         # This throws an error if the module cannot be imported.
         import jicimagelib.transform
