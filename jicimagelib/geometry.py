@@ -14,7 +14,7 @@ class Point2D(object):
         self._set_types()
 
     def __repr__(self):
-        if isinstance(self.x, float) or isinstance(self.y, float):
+        if self.dtype == "float":
             return "<Point2D(x={:.2f}, y={:.2f})>".format(self.x, self.y)
         return "<Point2D(x={}, y={})>".format(self.x, self.y)
 
