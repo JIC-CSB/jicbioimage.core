@@ -13,12 +13,6 @@ class Point2D(object):
 
         self._set_types()
 
-    def __repr__(self):
-        s = "<Point2D(x={}, y={}, dtype={})>"
-        if self.dtype == "float":
-            s = "<Point2D(x={:.2f}, y={:.2f}, dtype={})>"
-        return s.format( self.x, self.y, self.dtype)
-
     def _set_types(self):
         """Make sure that x, y have consistent types and set dtype."""
         # If we given something that is not an int or a float we raise
@@ -42,3 +36,17 @@ class Point2D(object):
     def dtype(self):
         """Return the type of the x, y coordinates as a string."""
         return self._dtype
+
+    def __repr__(self):
+        s = "<Point2D(x={}, y={}, dtype={})>"
+        if self.dtype == "float":
+            s = "<Point2D(x={:.2f}, y={:.2f}, dtype={})>"
+        return s.format( self.x, self.y, self.dtype)
+
+    def __eq__(self, other):
+        if self.dtype != other.dtype:
+            return False 
+        return self.x == other.x and self.y == other.y
+
+    def __add__(self, other):
+        return Point2D( self.x + other.x, self.y + other.y ) 

@@ -56,7 +56,31 @@ class Point2DUnitTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             p = Point2D( "1" , 2.0 )
         
-         
+    def test_equal(self):
+        from jicimagelib.geometry import Point2D
+        p1 = Point2D(1, 1)
+        p2 = Point2D(1, 1)
+        self.assertTrue(p1 == p2) 
+
+    def test_Point2D_of_different_dtypes_not_equal(self):
+        from jicimagelib.geometry import Point2D
+        p1 = Point2D(1, 1)
+        p2 = Point2D(1.0, 1.0)
+        self.assertFalse(p1 == p2) 
+
+    def test_add(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D(2,3)
+        self.assertEqual(p+p, Point2D(4,6))
+
+    def test_add_int_float_mixed(self):
+        from jicimagelib.geometry import Point2D
+        p1 = Point2D(2,3)
+        p2 = Point2D(2.0,3.0)
+        self.assertEqual(p1+p2, Point2D(4.0,6.0))
+        
+
+        
 
 if __name__ == '__main__':
     unittest.main()
