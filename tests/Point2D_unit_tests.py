@@ -140,11 +140,15 @@ class Point2DUnitTests(unittest.TestCase):
         
     def test_unit_vector(self):
         from jicimagelib.geometry import Point2D
-        import math
         p = Point2D(1,1)
         self.assertEqual(repr(p.unit_vector),
             "<Point2D(x=0.71, y=0.71, dtype=float)>")
         
+    def test_distance(self):
+        from jicimagelib.geometry import Point2D
+        p1 = Point2D(6,8)
+        p2 = Point2D(3,4)
+        self.assertEqual(p1.distance(p2), 5.0)
 
 if __name__ == '__main__':
     unittest.main()

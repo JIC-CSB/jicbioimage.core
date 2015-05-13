@@ -49,6 +49,11 @@ class Point2D(object):
         """Return the unit vector."""
         return Point2D( self.x / self.magnitude, self.x / self.magnitude )
 
+    def distance(self, other):
+        """Return distance to the other point."""
+        tmp = self - other
+        return tmp.magnitude
+
     def __repr__(self):
         s = "<Point2D(x={}, y={}, dtype={})>"
         if self.dtype == "float":
