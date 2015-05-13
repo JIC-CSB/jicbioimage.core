@@ -101,5 +101,38 @@ class Point2DUnitTests(unittest.TestCase):
         p = Point2D(2,3)
         self.assertEqual(p*3.0, Point2D(6.0,9.0))
         
+    def test_div_with_int(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D(2,3)
+        with self.assertRaises(NotImplementedError):
+            p/3
+
+    def test_div_with_float(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D(2,3)
+        self.assertEqual(p/3.0, Point2D(2/3.0,3/3.0))
+
+    def test_len(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D(2,3)
+        self.assertEqual(len(p), 2)
+        
+    def test_getitem(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D(2,3)
+        self.assertEqual(p[0], 2)
+        self.assertEqual(p[1], 3)
+        with self.assertRaises(IndexError):
+            p[3]
+
+    def test_iter(self):
+        from jicimagelib.geometry import Point2D
+        import numpy as np
+        p = Point2D(2,3)
+        ar = np.array(p)
+        self.assertEqual(ar[0], 2)
+        self.assertEqual(ar[1], 3)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -56,3 +56,21 @@ class Point2D(object):
 
     def __mul__(self, other):
         return Point2D( self.x * other, self.y * other)
+
+    def __div__(self, other):
+        if isinstance(other, int):
+            raise(NotImplementedError("Integer division not yet implemented"))
+        return self * (1/other)
+
+    def __len__(self):
+        return 2
+
+    def __getitem__(self, key):
+        if key == 0:
+            return self.x
+        elif key == 1:
+            return self.y
+        else:
+            raise(IndexError())
+    def __iter__(self):
+        return iter( [self.x, self.y] )
