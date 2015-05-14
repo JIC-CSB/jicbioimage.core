@@ -92,3 +92,12 @@ class Point2D(object):
 
     def __iter__(self):
         return iter( [self.x, self.y] )
+
+    def astype(self, dtype):
+        """Return a point of the specified dtype."""
+        if dtype == "int":
+            return Point2D( int( round(self.x, 0) ), int( round(self.y, 0) ) )
+        elif dtype == "float":
+            return Point2D( float(self.x), float(self.y))
+        else:
+            raise(RuntimeError("Invalid dtype: {}".format(dtype)))

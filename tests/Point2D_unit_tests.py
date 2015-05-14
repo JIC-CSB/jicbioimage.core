@@ -150,5 +150,25 @@ class Point2DUnitTests(unittest.TestCase):
         p2 = Point2D(3,4)
         self.assertEqual(p1.distance(p2), 5.0)
 
+    def test_astype_int(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D(5.9,8.2)
+        p = p.astype("int")
+        self.assertEqual(p, Point2D(6, 8))
+        
+    def test_astype_float(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D(5,8)
+        p = p.astype("float")
+        self.assertEqual(p, Point2D(5.0, 8.0))
+
+    def test_astype_invalid_type(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D(5,8)
+        p = p.astype("float")
+        with self.assertRaises(RuntimeError):
+            p.astype("Idontexist")
+        
+        
 if __name__ == '__main__':
     unittest.main()
