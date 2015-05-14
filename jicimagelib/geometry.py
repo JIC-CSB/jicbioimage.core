@@ -101,3 +101,7 @@ class Point2D(object):
             return Point2D( float(self.x), float(self.y))
         else:
             raise(RuntimeError("Invalid dtype: {}".format(dtype)))
+
+    def astuple(self):
+        """Return the x, y coordinates as a tuple."""
+        return self.x, self.y

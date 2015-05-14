@@ -169,6 +169,14 @@ class Point2DUnitTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             p.astype("Idontexist")
         
+    def test_astuple(self):
+        from jicimagelib.geometry import Point2D
+        p = Point2D(5,8)
+        t = p.astuple()
+        self.assertTrue(isinstance(t, tuple))
+        self.assertEqual(t[0], 5)
+        self.assertEqual(t[1], 8)
+        
         
 if __name__ == '__main__':
     unittest.main()
