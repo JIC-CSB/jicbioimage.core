@@ -178,3 +178,19 @@ class RegionTestCase(unittest.TestCase):
         print region.dilate()
         self.assertTrue(np.array_equal(region.dilate().bitmap,
             dilate_array))
+
+    def test_repr(self):
+        from jicimagelib.region import Region
+        test_array = np.array([[0, 1, 1],
+                               [0, 0, 1],
+                               [0, 0, 0]])
+        region = Region(test_array)
+        self.assertEqual(repr(region), repr(region.bitmap))
+
+    def test_str(self):
+        from jicimagelib.region import Region
+        test_array = np.array([[0, 1, 1],
+                               [0, 0, 1],
+                               [0, 0, 0]])
+        region = Region(test_array)
+        self.assertEqual(str(region), str(region.bitmap))
