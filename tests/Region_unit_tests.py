@@ -156,3 +156,25 @@ class RegionTestCase(unittest.TestCase):
         x_array, y_array =  region.index_arrays
         self.assertEqual(region.points,
             [(0,1), (0,2), (1,2)])
+
+    def test_dilate(self):
+        from jicimagelib.region import Region
+
+        test_array = np.array([[0, 0, 0, 0, 0],
+                               [0, 0, 1, 1, 0],
+                               [0, 1, 1, 0, 0],
+                               [0, 1, 0, 0, 0],
+                               [0, 0, 0, 0, 0]])
+
+        region = Region(test_array)
+
+        dilate_array = np.array([[0, 0, 1, 1, 0],
+                                 [0, 1, 1, 1, 1],
+                                 [1, 1, 1, 1, 0],
+                                 [1, 1, 1, 0, 0],
+                                 [0, 1, 0, 0, 0]], dtype=bool)
+
+
+        print region.dilate()
+        self.assertTrue(np.array_equal(region.dilate().bitmap,
+            dilate_array))
