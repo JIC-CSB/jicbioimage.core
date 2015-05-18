@@ -1,6 +1,7 @@
 import scipy.ndimage as nd
 import numpy as np
 import skimage
+import skimage.morphology
 
 class Region(object):
     """Class representing a particular point of interest in an image, 

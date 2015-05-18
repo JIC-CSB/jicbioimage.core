@@ -112,3 +112,24 @@ class RegionTestCase(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             Region(test_array)
+
+    def test_region_convex_hull(self):
+        from jicimagelib.region import Region
+
+        test_array = np.array([[0, 0, 0, 0, 0],
+                               [0, 1, 1, 1, 0],
+                               [0, 1, 0, 0, 0],
+                               [0, 1, 0, 0, 0],
+                               [0, 0, 0, 0, 0]])
+
+        region = Region(test_array)
+
+        convex_hull_array = np.array([[0, 0, 0, 0, 0],
+                                      [0, 1, 1, 1, 0],
+                                      [0, 1, 1, 0, 0],
+                                      [0, 1, 0, 0, 0],
+                                      [0, 0, 0, 0, 0]], dtype=bool)
+
+        self.assertTrue(np.array_equiv(region.convex_hull.bitmap,
+            convex_hull_array))
+
