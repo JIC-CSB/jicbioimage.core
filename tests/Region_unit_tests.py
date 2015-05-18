@@ -20,14 +20,14 @@ class RegionTestCase(unittest.TestCase):
         self.assertTrue(bitmap[0, 1])
         self.assertEqual(bitmap.shape, (3, 3))
 
-    def test_region_from_id_array(self):
+    def test_region_select_from_array(self):
         from jicimagelib.region import Region
 
         id_array = np.array([[0, 0, 0],
                              [1, 1, 1],
                              [2, 2, 2]])
 
-        region_1 = Region.from_id_array(id_array, 1)
+        region_1 = Region.select_from_array(id_array, 1)
 
         self.assertFalse(region_1.bitmap[0, 0])
         self.assertTrue(region_1.bitmap[1, 0])

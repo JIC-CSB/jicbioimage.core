@@ -14,12 +14,16 @@ class Region(object):
         self.bitmap = bitmap.astype(bool)
 
     @classmethod
-    def from_id_array(cls, id_array, id):
-        """Initialise from an array where each unique value represents a
-        region."""
+    def select_from_array(cls, array, identifier):
+        """Return a region from a numpy array.
+        
+        :param array: :class:`numpy.ndarray`
+        :param identifier: value representing the region to select in the array
+        :returns: :class:`jicimagelib.region.Region`
+        """
 
-        base_array = np.zeros(id_array.shape)
-        array_coords = np.where(id_array == id)
+        base_array = np.zeros(array.shape)
+        array_coords = np.where(array == identifier)
         base_array[array_coords] = 1
 
         return cls(base_array)
@@ -50,14 +54,16 @@ class Region(object):
         return np.count_nonzero(self.bitmap)
 
     @property
-    def coord_elements(self):
+    def index_arrays(self):
         """All nonzero elements as a pair of arrays."""
-
         return np.where(self.bitmap == True)
 
+
     @property
-    def coord_list(self):
-        return zip(*self.coord_elements)
+    def points(self):
+        """Return a list of points."""
+        return zip(*self.index_arrays)
+
 
     @property
     def perimeter(self):
