@@ -51,14 +51,12 @@ class Region(object):
     @property
     def area(self):
         """Number of non-zero elements."""
-
         return np.count_nonzero(self.bitmap)
 
     @property
     def index_arrays(self):
         """All nonzero elements as a pair of arrays."""
         return np.where(self.bitmap == True)
-
 
     @property
     def points(self):

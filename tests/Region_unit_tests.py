@@ -130,6 +130,17 @@ class RegionTestCase(unittest.TestCase):
                                       [0, 1, 0, 0, 0],
                                       [0, 0, 0, 0, 0]], dtype=bool)
 
-        self.assertTrue(np.array_equiv(region.convex_hull.bitmap,
+        self.assertTrue(np.array_equal(region.convex_hull.bitmap,
             convex_hull_array))
 
+    def test_index_arrays(self):
+        from jicimagelib.region import Region
+
+        test_array = np.array([[0, 1, 1],
+                               [0, 0, 1],
+                               [0, 0, 0]])
+
+        region = Region(test_array)
+        x_array, y_array =  region.index_arrays
+        self.assertTrue(np.array_equal(x_array, np.array([0, 0, 1])))
+        self.assertTrue(np.array_equal(y_array, np.array([1, 2, 2])))
