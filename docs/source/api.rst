@@ -56,3 +56,9 @@ The :mod:`jicimagelib.region` module
 
 .. automodule:: jicimagelib.region
    :members:
+
+The :mod:`jicimagelib.geometry` module
+---------------------------------------
+
+.. automodule:: jicimagelib.geometry
+   :members:
