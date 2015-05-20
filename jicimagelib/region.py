@@ -45,6 +45,7 @@ class Region(object):
 
     @property
     def convex_hull(self):
+        """Return region representing the convex hull."""
         hull_array = skimage.morphology.convex_hull_image(self.bitmap)
         return Region(hull_array)
 
@@ -66,9 +67,11 @@ class Region(object):
 
     @property
     def perimeter(self):
+        """Return the perimiter."""
         return self.border.area
 
     def dilate(self, iterations=1):
+        """Return a dilated region."""
         dilated_array = nd.morphology.binary_dilation(self.bitmap, 
                                                       iterations=iterations)
         return Region(dilated_array)

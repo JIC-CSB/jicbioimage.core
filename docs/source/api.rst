@@ -50,3 +50,9 @@ The :mod:`jicimagelib.transform` module
 
 .. automodule:: jicimagelib.transform
    :members:
+
+The :mod:`jicimagelib.region` module
+---------------------------------------
+
+.. automodule:: jicimagelib.region
+   :members:
