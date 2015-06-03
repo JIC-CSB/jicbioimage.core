@@ -11,7 +11,7 @@ class TestBasics(unittest.TestCase):
 
     def test_version(self):
         import jicimagelib
-        self.assertTrue(isinstance(jicimagelib.__version__, float))
+        self.assertTrue(isinstance(jicimagelib.__version__, str))
 
     def test_import_image_module(self):
         # This throws an error if the module cannot be imported.
