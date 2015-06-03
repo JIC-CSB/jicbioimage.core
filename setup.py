@@ -22,7 +22,14 @@ class NoseTestCommand(TestCommand):
         nose.run_exit(argv=['nosetests'])
 
 setup(name='jicimagelib',
+      packages=['jicimagelib'],
       version=jicimagelib.__version__,
+      description='Python package designed to make it easy to work with microscopy images.',
+      author='Tjelvar Olsson',
+      author_email = 'tjelvar.olsson@jic.ac.uk',
+      url = 'https://github.com/JIC-CSB/jicimagelib',
+      download_url = 'https://github.com/JIC-CSB/jicimagelib/tarball/{}'.format(jicimagelib.__version__),
+      keywords = ['microscopy', 'image analysis'],
       cmdclass={'test': NoseTestCommand},
       install_requires=[
         'numpy',
