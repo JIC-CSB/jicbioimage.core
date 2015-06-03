@@ -1,0 +1,16 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
+  - "nightly"
+before_script:
+  - wget http://downloads.openmicroscopy.org/latest/bio-formats5.1/artifacts/bftools.zip -O /tmp/bftools.zip
+  - unzip /tmp/bftools.zip
+  - export PATH=$PATH:$PWD/bftools/
+# command to install dependencies
+install: "pip install -r requirements.txt"
+# command to run tests
+script: nosetests
