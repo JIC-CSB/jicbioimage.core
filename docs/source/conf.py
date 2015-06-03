@@ -22,9 +22,12 @@ try:
 except ImportError:
     from mock import MagicMock
 class Mock(MagicMock):
+    def __call__(self, *args, **kwargs):
+        return Mock()
+
     @classmethod
     def __getattr__(cls, name):
-            return Mock()
+        return Mock()
 MOCK_MODULES = ['numpy', 'scipy', 'scikit-image']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
  
