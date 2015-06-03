@@ -10,7 +10,8 @@ python:
 before_install:
   - "sudo apt-get install -qq python-numpy python-scipy"
 install:
-  - "pip install -r requirements.txt"
+  - "pip install scikit-image"
+  - "python setup.py install"
 before_script:
   - "wget http://downloads.openmicroscopy.org/latest/bio-formats5.1/artifacts/bftools.zip -O /tmp/bftools.zip"
   - "unzip /tmp/bftools.zip"
