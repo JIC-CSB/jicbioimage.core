@@ -7,6 +7,8 @@ try:
 except ImportError:
     pass
 
+import jicimagelib
+
 # Define the test runner.
 # See also:
 # http://fgimian.github.io/blog/2014/04/27/running-nose-tests-with-plugins-using-the-python-setuptools-test-command/
