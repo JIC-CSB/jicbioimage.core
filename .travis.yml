@@ -9,7 +9,7 @@ python:
 # command to install dependencies
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get -qq install build-essential python-dev swig gfortran
+  - sudo apt-get -qq install build-essential python-dev swig gfortran libblas-dev liblapack-dev
 install:
   - pip install scipy
   - pip install scikit-image
