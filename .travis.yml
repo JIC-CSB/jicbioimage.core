@@ -9,6 +9,8 @@ python:
 # command to install dependencies
 before_install:
   - "sudo apt-get install -qq python-numpy python-scipy"
+virtualenv:
+  system_site_packages: true
 install:
   - "pip install scikit-image"
   - "python setup.py install"
