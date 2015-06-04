@@ -8,12 +8,11 @@ python:
   - "nightly"
 # command to install dependencies
 before_install:
-  - "sudo apt-get install -qq python-numpy python-scipy"
-virtualenv:
-  system_site_packages: true
+  - sudo apt-get update -qq
+  - sudo apt-get -qq install build-essential python-dev swig gfortran
 install:
-  - "pip install scikit-image"
-  - "python setup.py install"
+  - pip install scipy
+  - pip install scikit-image
 before_script:
   - "wget http://downloads.openmicroscopy.org/latest/bio-formats5.1/artifacts/bftools.zip -O /tmp/bftools.zip"
   - "unzip /tmp/bftools.zip"
