@@ -49,5 +49,9 @@ class TestBasics(unittest.TestCase):
         # This throws an error if the module cannot be imported.
         import jicimagelib.util
 
+    def test_import_util_array_module(self):
+        # This throws an error if the module cannot be imported.
+        import jicimagelib.util.array
+
 if __name__ == '__main__':
     unittest.main()
