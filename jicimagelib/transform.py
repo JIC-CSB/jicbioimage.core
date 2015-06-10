@@ -1,9 +1,12 @@
 """Module for storing transformation functions."""
 
+import numpy as np
+import PIL.Image
+
 from jicimagelib.io import AutoName, AutoWrite
 from jicimagelib.image import Image
+from jicimagelib.util.array import normalise
 
-import PIL.Image
 
 def transformation(func):
     """Function decorator to turn another function into a transformation."""
@@ -30,7 +33,11 @@ def transformation(func):
         if AutoWrite.on:
             fpath = AutoName.name(func)
             try:
-                pil_im = PIL.Image.fromarray(image)
+                if AutoWrite.auto_safe_dtype:
+                    safe_range_im = 255 * normalise(image)
+                    pil_im = PIL.Image.fromarray(safe_range_im.astype(np.uint8))
+                else:
+                    pil_im = PIL.Image.fromarray(image)
             except TypeError:
                 # Give a more meaningful error message.
                 raise(TypeError(

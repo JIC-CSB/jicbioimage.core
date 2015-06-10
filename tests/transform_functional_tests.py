@@ -109,5 +109,26 @@ class TransformationUserStory(unittest.TestCase):
 
         image = average_projection(stack)
 
+    def test_auto_safe_dtype(self):
+        # AutoSave.auto_safe_type is True by default
+        from jicimagelib.transform import transformation
+        from jicimagelib.io import AutoName
+        import numpy as np
+
+        AutoName.directory = TMP_DIR
+
+        def some_transform(image):
+            return image
+
+        decorated = transformation(some_transform)
+        im = np.zeros((50,50), dtype=np.uint64)
+
+        decorated(im)
+        created_fpath = os.path.join(TMP_DIR, '1_some_transform.png')
+        print os.listdir(TMP_DIR)
+        self.assertTrue(os.path.isfile(created_fpath),
+            'No such file: {}'.format(created_fpath))
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -15,12 +15,14 @@ class TestTransformationDecorator(unittest.TestCase):
         decorated = transformation(tmp)
         self.assertTrue(callable(decorated))
 
-    def test_uint64_image_raises(self):
+    def test_uint64_image_raises_when_auto_safe_dtype_is_false(self):
         from jicimagelib.transform import transformation
+        from jicimagelib.io import AutoWrite
         import numpy as np
-        def some_tranform(image):
+        AutoWrite.auto_safe_dtype = False
+        def some_transform(image):
             return image
-        decorated = transformation(some_tranform)
+        decorated = transformation(some_transform)
         im = np.zeros((50,50), dtype=np.uint64)
         with self.assertRaisesRegexp(TypeError,
             "Cannot handle this data type: uint64"):
