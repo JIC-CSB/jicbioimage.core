@@ -25,8 +25,8 @@ class TemporaryFilePath(object):
 class AutoName(object):
     """Class for generating output file names automatically."""
     count = 0
-    directory = None
-    suffix = '.png'
+    directory = None  #: Output directory to save images to.
+    suffix = '.png'   #: Image file suffix.
     
     @classmethod
     def name(cls, func):
@@ -39,7 +39,12 @@ class AutoName(object):
             
 class AutoWrite(object):
     """Class for writing images automatically."""
+
+    #: Whether or not auto writing of images is enabled.
     on = True
+
+    #: Ensure image to be written has a safe dtype for writing to file.
+    auto_safe_dtype = True
 
     
 #############################################################################
