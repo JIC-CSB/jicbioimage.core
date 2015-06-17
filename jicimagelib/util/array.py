@@ -23,3 +23,19 @@ def normalise(array):
         return np.zeros(array.shape, dtype=np.float)
 
     return (array.astype(np.float) - min_val) / array_range
+
+def project_by_function(array3D, z_function):
+    """Return 2D array projection of the input 3D array.
+
+    The input function is applied to each line of an input x, y value.
+
+    :param array3D: 3D numpy.array
+    :param z_function: function to use for the projection (e.g. :func:`max`)
+    """
+    xmax, ymax, _ = array3D.shape
+    projection = np.zeros((xmax, ymax), dtype=array3D.dtype)
+    for x in range(xmax):
+        for y in range(ymax):
+            projection[x, y] = z_function(sa[x, y, :])
+    return projection
+ 
