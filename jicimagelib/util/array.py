@@ -39,3 +39,14 @@ def project_by_function(array3D, z_function):
             projection[x, y] = z_function(array3D[x, y, :])
     return projection
  
+def check_dtype(array, allowed):
+    """Raises TypeError if the array is not of an allowed dtype.
+
+    :param array: array whose dtype is to be checked
+    :param allowed: instance or list of allowed dtypes
+    """
+    if not hasattr(allowed, "__iter__"):
+        allowed = [allowed,]
+    if array.dtype not in allowed:
+        raise(TypeError(
+            "Invalid dtype {}. Allowed dtype(s): {}".format(array.dtype, allowed)))

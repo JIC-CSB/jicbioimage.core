@@ -66,3 +66,24 @@ class UtilArrayTests(unittest.TestCase):
              [3, 3, 3]], dtype=np.uint8)
         max_projection = project_by_function(zstack, max)
         self.assertTrue(np.array_equal(expected, max_projection))
+
+class CheckDTypeTests(unittest.TestCase):
+
+    def test_import_check_dtype(self):
+        from jicimagelib.util.array import check_dtype
+
+    def test_disallowed_raises_TypeError(self):
+        from jicimagelib.util.array import check_dtype
+        ar = np.zeros((5,5), dtype=np.uint64)
+        with self.assertRaises(TypeError):
+            check_dtype(ar, np.uint8)
+
+    def test_allowed_does_not_raise_TypeError(self):
+        from jicimagelib.util.array import check_dtype
+        ar = np.zeros((5,5), dtype=np.uint64)
+        check_dtype(ar, np.uint64)
+
+    def test_check_dtype_with_allowed_as_list(self):
+        from jicimagelib.util.array import check_dtype
+        ar = np.zeros((5,5), dtype=np.uint64)
+        check_dtype(ar, [np.uint8, np.uint16, np.uint64])
