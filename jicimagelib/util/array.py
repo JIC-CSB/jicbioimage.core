@@ -36,6 +36,6 @@ def project_by_function(array3D, z_function):
     projection = np.zeros((xmax, ymax), dtype=array3D.dtype)
     for x in range(xmax):
         for y in range(ymax):
-            projection[x, y] = z_function(sa[x, y, :])
+            projection[x, y] = z_function(array3D[x, y, :])
     return projection
  
