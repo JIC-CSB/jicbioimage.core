@@ -39,6 +39,16 @@ def reduce_stack(array3D, z_function):
             projection[x, y] = z_function(array3D[x, y, :])
     return projection
  
+def map_stack(array3D, z_function):
+    """Return 3D array where each z-slice has had the function applied to it.
+
+    :param array3D: 3D numpy.array
+    :param z_function: function to be mapped to each z-slice
+    """
+    _, _, zdim = array3D.shape
+    return np.dstack([z_function(array3D[:,:,z]) for z in range(zdim)])
+
+
 def check_dtype(array, allowed):
     """Raises TypeError if the array is not of an allowed dtype.
 

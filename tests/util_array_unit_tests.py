@@ -46,8 +46,7 @@ class ReduceStackTests(unittest.TestCase):
         # This throws an error if the function cannot be imported.
         from jicimagelib.util.array import reduce_stack
 
-    def test_project_by_function(self):
-        # This throws an error if the function cannot be imported.
+    def test_reduce_stack(self):
         from jicimagelib.util.array import reduce_stack
         zslice0 = np.array(
             [[0, 1, 2],
@@ -68,6 +67,30 @@ class ReduceStackTests(unittest.TestCase):
              [3, 3, 3]], dtype=np.uint8)
         max_projection = reduce_stack(zstack, max)
         self.assertTrue(np.array_equal(expected, max_projection))
+
+class MapStackTests(unittest.TestCase):
+
+    def test_import_map_stack(self):
+        # This throws an error if the function cannot be imported.
+        from jicimagelib.util.array import map_stack
+
+    def test_map_stack(self):
+        from jicimagelib.util.array import map_stack
+        def double(ar):
+            return ar * 2
+        zslice0 = np.array(
+            [[0, 1, 2],
+             [0, 1, 2],
+             [0, 1, 2]], dtype=np.uint8)
+        zslice1 = np.array(
+            [[2, 1, 0],
+             [2, 1, 0],
+             [2, 1, 0]], dtype=np.uint8)
+        zstack = np.dstack([zslice0, zslice1])
+        expected = np.dstack([double(zslice0), double(zslice1)])
+
+        mapped = map_stack(zstack, double)
+        self.assertTrue(np.array_equal(expected, mapped))
 
 class CheckDTypeTests(unittest.TestCase):
 
