@@ -50,3 +50,16 @@ def check_dtype(array, allowed):
     if array.dtype not in allowed:
         raise(TypeError(
             "Invalid dtype {}. Allowed dtype(s): {}".format(array.dtype, allowed)))
+
+def dtype_contract(input_dtype=None, output_dtype=None):
+    """Function decorator for specifying input and/or output array dtypes."""
+    def wrap(function):
+        def wrapped_function(*args, **kwargs):
+            if input_dtype is not None:
+                check_dtype(args[0], input_dtype)
+            array = function(*args, **kwargs)
+            if output_dtype is not None:
+                check_dtype(array, output_dtype)
+            return array
+        return wrapped_function
+    return wrap

@@ -72,6 +72,7 @@ class ProjectByFunctionTests(unittest.TestCase):
 class CheckDTypeTests(unittest.TestCase):
 
     def test_import_check_dtype(self):
+        # This throws an error if the function cannot be imported.
         from jicimagelib.util.array import check_dtype
 
     def test_disallowed_raises_TypeError(self):
@@ -89,3 +90,55 @@ class CheckDTypeTests(unittest.TestCase):
         from jicimagelib.util.array import check_dtype
         ar = np.zeros((5,5), dtype=np.uint64)
         check_dtype(ar, [np.uint8, np.uint16, np.uint64])
+
+class DTypeContract(unittest.TestCase):
+    
+    def test_import_dtype_contract(self):
+        # This throws an error if the function cannot be imported.
+        from jicimagelib.util.array import dtype_contract
+        
+    def test_input_dtype_only(self):
+        from jicimagelib.util.array import dtype_contract
+        @dtype_contract(input_dtype=np.uint8)
+        def some_func(ar):
+            return ar
+
+        # This should not raise any error. 
+        ar = some_func( np.zeros((2,2), dtype=np.uint8) )
+        
+        # However, this should.
+        with self.assertRaises(TypeError):
+            ar = some_func( np.zeros((2,2), dtype=np.uint64) )
+        
+    def test_output_dtype_only(self):
+        from jicimagelib.util.array import dtype_contract
+        @dtype_contract(output_dtype=np.uint8)
+        def some_func(ar):
+            return ar
+
+        # This should not raise any error. 
+        ar = some_func( np.zeros((2,2), dtype=np.uint8) )
+        
+        # However, this should.
+        with self.assertRaises(TypeError):
+            ar = some_func( np.zeros((2,2), dtype=np.uint64) )
+        
+    def test_input_and_output_dtypes(self):
+        from jicimagelib.util.array import dtype_contract
+        @dtype_contract(input_dtype=np.uint8, output_dtype=np.uint64)
+        def working_func(ar):
+            return ar.astype(np.uint64)
+
+        # This should not raise any error. 
+        ar = working_func( np.zeros((2,2), dtype=np.uint8) )
+        # However, this should (wrong input).
+        with self.assertRaises(TypeError):
+            ar = working_func( np.zeros((2,2), dtype=np.uint64) )
+
+        # Function generates wrong output dtype.
+        @dtype_contract(input_dtype=np.uint8, output_dtype=np.uint8)
+        def broken_func(ar):
+            return ar.astype(np.uint64)
+
+        with self.assertRaises(TypeError):
+            ar = broken_func( np.zeros((2,2), dtype=np.uint8) )
