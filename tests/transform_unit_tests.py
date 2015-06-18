@@ -38,6 +38,9 @@ class TransformTests(unittest.TestCase):
         # This throws an error if the function cannot be imported.
         from jicimagelib.transform import min_intensity_projection
     
+    def test_import_smooth_gaussian(self):
+        # This throws an error if the function cannot be imported.
+        from jicimagelib.transform import smooth_gaussian
 
 if __name__ == '__main__':
     unittest.main()

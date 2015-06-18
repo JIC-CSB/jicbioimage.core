@@ -134,6 +134,7 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
     def setUp(self):
         from jicimagelib.io import AutoName
         AutoName.count = 0
+        AutoName.directory = TMP_DIR
         if not os.path.isdir(TMP_DIR):
             os.mkdir(TMP_DIR)
 
@@ -182,6 +183,25 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
         self.assertTrue( np.array_equal(expected, min_projection) )
         self.assertTrue( isinstance(min_projection, Image) )
         
+    def test_smooth_gaussian(self):
+        from jicimagelib.transform import smooth_gaussian
+        from jicimagelib.image import Image
+        array = np.array(
+            [[ 0.,  0.,  0.],
+             [ 0.,  1.,  0.],
+             [ 0.,  0.,  0.]], dtype=np.float)
+        expected = np.array(
+            [[ 0.05855018,  0.09653293,  0.05855018],
+             [ 0.09653293,  0.15915589,  0.09653293],
+             [ 0.05855018,  0.09653293,  0.05855018]], dtype=np.float)
+        smoothed = smooth_gaussian(array)
+        self.assertTrue( np.allclose(expected, smoothed) )
+        self.assertTrue( isinstance(smoothed, Image) )
+
+        # The smooth_gaussian function only makes sense on dtype np.float.
+        with self.assertRaises(TypeError):
+            smoothed = smooth_gaussian(array.astype(np.uint8))
+
 
 if __name__ == '__main__':
     unittest.main()

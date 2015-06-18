@@ -3,9 +3,15 @@
 import numpy as np
 import PIL.Image
 
+import scipy.ndimage.filters
+
 from jicimagelib.io import AutoName, AutoWrite
 from jicimagelib.image import Image
-from jicimagelib.util.array import normalise, project_by_function
+from jicimagelib.util.array import (
+    normalise,
+    project_by_function,
+    dtype_contract,
+)
 
 #############################################################################
 # Function decorator for creating transforms.
@@ -70,3 +76,14 @@ def min_intensity_projection(stack):
     :returns: :class:`jicimagelib.image.Image`
     """
     return project_by_function(stack, min)
+
+@transformation
+@dtype_contract(input_dtype=np.float, output_dtype=np.float)
+def smooth_gaussian(image, sigma=1):
+    """Returns Gaussian smoothed image.
+
+    :param image: numpy array or :class:`jicimagelib.image.Image`
+    :param sigma: standard deviation
+    :returns: :class:'jicimagelib.image.Image'
+    """
+    return scipy.ndimage.filters.gaussian_filter(image, sigma=sigma, mode="nearest")
