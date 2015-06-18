@@ -42,6 +42,10 @@ class TransformTests(unittest.TestCase):
         # This throws an error if the function cannot be imported.
         from jicimagelib.transform import smooth_gaussian
 
+    def test_equalize_adaptive_clahe(self):
+        # This throws an error if the function cannot be imported.
+        from jicimagelib.transform import equalize_adaptive_clahe
+
     def test_import_remove_small_objects(self):
         # This throws an error if the function cannot be imported.
         from jicimagelib.transform import remove_small_objects
