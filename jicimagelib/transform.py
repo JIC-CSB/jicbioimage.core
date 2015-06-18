@@ -5,8 +5,11 @@ import PIL.Image
 
 from jicimagelib.io import AutoName, AutoWrite
 from jicimagelib.image import Image
-from jicimagelib.util.array import normalise
+from jicimagelib.util.array import normalise, project_by_function
 
+#############################################################################
+# Function decorator for creating transforms.
+#############################################################################
 
 def transformation(func):
     """Function decorator to turn another function into a transformation."""
@@ -45,3 +48,16 @@ def transformation(func):
             pil_im.save(fpath)
         return image
     return func_as_transformation
+
+#############################################################################
+# General purpose transforms.
+#############################################################################
+
+@transformation
+def max_intensity_projection(stack):
+    """Return maximum intensity projection of a stack.
+    
+    :param stack: 3D array from which to project third dimension 
+    :returns: :class:`jicimagelib.image.Image`
+    """
+    return project_by_function(stack, max)

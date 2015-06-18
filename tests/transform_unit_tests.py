@@ -2,7 +2,7 @@
 
 import unittest
 
-class TestTransformationDecorator(unittest.TestCase):
+class TransformationDecoratorTests(unittest.TestCase):
 
     def test_is_callable(self):
         from jicimagelib.transform import transformation
@@ -27,6 +27,13 @@ class TestTransformationDecorator(unittest.TestCase):
         with self.assertRaisesRegexp(TypeError,
             "Cannot handle this data type: uint64"):
             decorated(im)
+
+class TransformTests(unittest.TestCase):
+
+    def test_import_max_intensity_projection(self):
+        # This throws an error if the function cannot be imported.
+        from jicimagelib.transform import max_intensity_projection
+    
 
 if __name__ == '__main__':
     unittest.main()

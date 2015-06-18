@@ -129,6 +129,39 @@ class TransformationUserStory(unittest.TestCase):
         self.assertTrue(os.path.isfile(created_fpath),
             'No such file: {}'.format(created_fpath))
 
+class GeneralPurposeTransoformTests(unittest.TestCase):
+
+    def setUp(self):
+        from jicimagelib.io import AutoName
+        AutoName.count = 0
+        if not os.path.isdir(TMP_DIR):
+            os.mkdir(TMP_DIR)
+
+    def tearDown(self):
+        from jicimagelib.io import AutoName
+        AutoName.count = 0
+        shutil.rmtree(TMP_DIR)
+
+    def test_max_intensity_projection(self):
+        from jicimagelib.transform import max_intensity_projection
+        from jicimagelib.image import Image
+        slice0 = np.array(
+            [[ 0, 1, 2],
+             [ 0, 1, 2],
+             [ 0, 1, 2]], dtype=np.uint8)
+        slice1 = np.array(
+            [[ 2, 1, 0],
+             [ 2, 1, 0],
+             [ 2, 1, 0]], dtype=np.uint8)
+        expected = np.array(
+            [[ 2, 1, 2],
+             [ 2, 1, 2],
+             [ 2, 1, 2]], dtype=np.uint8)
+        stack = np.dstack([slice0, slice1])
+        max_projection = max_intensity_projection(stack)
+        self.assertTrue( np.array_equal(expected, max_projection) )
+        self.assertTrue( isinstance(max_projection, Image) )
+        
 
 if __name__ == '__main__':
     unittest.main()
