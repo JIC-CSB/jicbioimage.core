@@ -3,7 +3,7 @@
 import unittest
 import numpy as np
 
-class UtilArrayTests(unittest.TestCase):
+class NormaliseTests(unittest.TestCase):
 
     def test_import_normalise(self):
         # This throws an error if the function cannot be imported.
@@ -39,6 +39,8 @@ class UtilArrayTests(unittest.TestCase):
         normed = normalise(ar)
         expected = np.array([0., .5, 1.], dtype=np.float)
         self.assertTrue( np.array_equiv(normed, expected) )
+
+class ProjectByFunctionTests(unittest.TestCase):
 
     def test_import_project_by_function(self):
         # This throws an error if the function cannot be imported.
