@@ -100,7 +100,6 @@ class TransformationUserStory(unittest.TestCase):
         def average_projection(stack):
             xmax, ymax, zmax = stack.shape
             projection = np.sum(stack, axis=2, dtype=np.uint8) // zmax
-            print "projection {} {}".format(projection.shape, projection.dtype)
             return projection
 
         data_manager.load(os.path.join(DATA_DIR, 'z-series.ome.tif'))
@@ -125,7 +124,6 @@ class TransformationUserStory(unittest.TestCase):
 
         decorated(im)
         created_fpath = os.path.join(TMP_DIR, '1_some_transform.png')
-        print os.listdir(TMP_DIR)
         self.assertTrue(os.path.isfile(created_fpath),
             'No such file: {}'.format(created_fpath))
 
@@ -201,6 +199,29 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
         # The smooth_gaussian function only makes sense on dtype np.float.
         with self.assertRaises(TypeError):
             smoothed = smooth_gaussian(array.astype(np.uint8))
+
+    def test_remove_small_objects(self):
+        from jicimagelib.transform import remove_small_objects
+        from jicimagelib.image import Image
+        array = np.array(
+            [[ 0,  0,  0, 0, 1],
+             [ 0,  1,  1, 0, 0],
+             [ 0,  1,  1, 0, 0],
+             [ 0,  0,  0, 0, 1],
+             [ 1,  1,  0, 1, 1]], dtype=np.bool)
+        expected = np.array(
+            [[ 0,  0,  0, 0, 0],
+             [ 0,  1,  1, 0, 0],
+             [ 0,  1,  1, 0, 0],
+             [ 0,  0,  0, 0, 0],
+             [ 0,  0,  0, 0, 0]], dtype=np.bool)
+        no_small = remove_small_objects(array, min_size=4)
+        self.assertTrue( np.array_equal(expected, no_small) )
+        self.assertTrue( isinstance(no_small, Image) )
+
+        # The smooth_gaussian function only makes sense on dtype np.bool.
+        with self.assertRaises(TypeError):
+            smoothed = remove_small_objects(array.astype(np.uint8))
 
 
 if __name__ == '__main__':

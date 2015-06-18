@@ -5,6 +5,8 @@ import PIL.Image
 
 import scipy.ndimage.filters
 
+import skimage.morphology
+
 from jicimagelib.io import AutoName, AutoWrite
 from jicimagelib.image import Image
 from jicimagelib.util.array import (
@@ -87,3 +89,13 @@ def smooth_gaussian(image, sigma=1):
     :returns: :class:'jicimagelib.image.Image'
     """
     return scipy.ndimage.filters.gaussian_filter(image, sigma=sigma, mode="nearest")
+
+@transformation
+@dtype_contract(input_dtype=np.bool, output_dtype=np.bool)
+def remove_small_objects(image, min_size=50):
+    """Remove small objects from an boolean image.
+
+    :param image: boolean numpy array or :class:`jicimagelib.image.Image`
+    :returns: boolean :class:`jicimagelib.image.Image`
+    """ 
+    return skimage.morphology.remove_small_objects(image, min_size=min_size)
