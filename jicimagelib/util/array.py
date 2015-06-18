@@ -24,7 +24,7 @@ def normalise(array):
 
     return (array.astype(np.float) - min_val) / array_range
 
-def project_by_function(array3D, z_function):
+def reduce_stack(array3D, z_function):
     """Return 2D array projection of the input 3D array.
 
     The input function is applied to each line of an input x, y value.

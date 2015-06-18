@@ -11,7 +11,7 @@ from jicimagelib.io import AutoName, AutoWrite
 from jicimagelib.image import Image
 from jicimagelib.util.array import (
     normalise,
-    project_by_function,
+    reduce_stack,
     dtype_contract,
 )
 
@@ -68,7 +68,7 @@ def max_intensity_projection(stack):
     :param stack: 3D array from which to project third dimension 
     :returns: :class:`jicimagelib.image.Image`
     """
-    return project_by_function(stack, max)
+    return reduce_stack(stack, max)
 
 @transformation
 def min_intensity_projection(stack):
@@ -77,7 +77,7 @@ def min_intensity_projection(stack):
     :param stack: 3D array from which to project third dimension 
     :returns: :class:`jicimagelib.image.Image`
     """
-    return project_by_function(stack, min)
+    return reduce_stack(stack, min)
 
 @transformation
 @dtype_contract(input_dtype=np.float, output_dtype=np.float)

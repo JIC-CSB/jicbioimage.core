@@ -40,15 +40,15 @@ class NormaliseTests(unittest.TestCase):
         expected = np.array([0., .5, 1.], dtype=np.float)
         self.assertTrue( np.array_equiv(normed, expected) )
 
-class ProjectByFunctionTests(unittest.TestCase):
+class ReduceStackTests(unittest.TestCase):
 
-    def test_import_project_by_function(self):
+    def test_import_reduce_stack(self):
         # This throws an error if the function cannot be imported.
-        from jicimagelib.util.array import project_by_function
+        from jicimagelib.util.array import reduce_stack
 
     def test_project_by_function(self):
         # This throws an error if the function cannot be imported.
-        from jicimagelib.util.array import project_by_function
+        from jicimagelib.util.array import reduce_stack
         zslice0 = np.array(
             [[0, 1, 2],
              [0, 1, 2],
@@ -66,7 +66,7 @@ class ProjectByFunctionTests(unittest.TestCase):
             [[2, 1, 2],
              [2, 1, 2],
              [3, 3, 3]], dtype=np.uint8)
-        max_projection = project_by_function(zstack, max)
+        max_projection = reduce_stack(zstack, max)
         self.assertTrue(np.array_equal(expected, max_projection))
 
 class CheckDTypeTests(unittest.TestCase):
