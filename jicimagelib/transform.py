@@ -61,3 +61,12 @@ def max_intensity_projection(stack):
     :returns: :class:`jicimagelib.image.Image`
     """
     return project_by_function(stack, max)
+
+@transformation
+def min_intensity_projection(stack):
+    """Return minimum intensity projection of a stack.
+    
+    :param stack: 3D array from which to project third dimension 
+    :returns: :class:`jicimagelib.image.Image`
+    """
+    return project_by_function(stack, min)

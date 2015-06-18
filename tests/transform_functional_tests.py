@@ -162,6 +162,26 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
         self.assertTrue( np.array_equal(expected, max_projection) )
         self.assertTrue( isinstance(max_projection, Image) )
         
+    def test_min_intensity_projection(self):
+        from jicimagelib.transform import min_intensity_projection
+        from jicimagelib.image import Image
+        slice0 = np.array(
+            [[ 0, 1, 2],
+             [ 0, 1, 2],
+             [ 0, 1, 2]], dtype=np.uint8)
+        slice1 = np.array(
+            [[ 2, 1, 0],
+             [ 2, 1, 0],
+             [ 2, 1, 0]], dtype=np.uint8)
+        expected = np.array(
+            [[ 0, 1, 0],
+             [ 0, 1, 0],
+             [ 0, 1, 0]], dtype=np.uint8)
+        stack = np.dstack([slice0, slice1])
+        min_projection = min_intensity_projection(stack)
+        self.assertTrue( np.array_equal(expected, min_projection) )
+        self.assertTrue( isinstance(min_projection, Image) )
+        
 
 if __name__ == '__main__':
     unittest.main()
