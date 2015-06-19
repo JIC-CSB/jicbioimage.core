@@ -118,6 +118,14 @@ def equalize_adaptive_clahe(image, ntiles=8, clip_limit=0.01):
     return normalised
 
 @transformation
+@dtype_contract(output_dtype=np.bool)
+def threshold_otsu(image, multiplier=1.0):
+    """Return image thresholded using Otsu's method.
+    """
+    otsu_value = skimage.filters.threshold_otsu(image)
+    return image > otsu_value * multiplier
+
+@transformation
 @dtype_contract(input_dtype=np.bool, output_dtype=np.bool)
 def remove_small_objects(image, min_size=50):
     """Remove small objects from an boolean image.

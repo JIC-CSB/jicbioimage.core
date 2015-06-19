@@ -50,5 +50,9 @@ class TransformTests(unittest.TestCase):
         # This throws an error if the function cannot be imported.
         from jicimagelib.transform import remove_small_objects
 
+    def test_threshold_otsu(self):
+        # This throws an error if the function cannot be imported.
+        from jicimagelib.transform import threshold_otsu
+
 if __name__ == '__main__':
     unittest.main()

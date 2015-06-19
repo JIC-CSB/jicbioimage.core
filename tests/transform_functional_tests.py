@@ -227,6 +227,43 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
             array = np.ones((6,6))
             equalised = equalize_adaptive_clahe(array, ntiles=2)
 
+    def test_threshold_otsu(self):
+        from jicimagelib.transform import threshold_otsu
+        from jicimagelib.image import Image
+
+        # Test with uint8.
+        array = np.array(
+            [[ 1,  2,  3],
+             [ 7,  8,  9]], dtype=np.uint8)
+        expected = np.array(
+            [[ 0,  0,  0],
+             [ 1,  1,  1]], dtype=np.bool)
+        thresholded = threshold_otsu(array)
+        self.assertTrue( np.array_equal(expected, thresholded) )
+        self.assertTrue( isinstance(thresholded, Image) )
+
+        # Test with float.
+        array = np.array(
+            [[ 1,  2,  3],
+             [ 7,  8,  9]], dtype=np.float)
+        expected = np.array(
+            [[ 0,  0,  0],
+             [ 1,  1,  1]], dtype=np.bool)
+        thresholded = threshold_otsu(array)
+        self.assertTrue( np.array_equal(expected, thresholded) )
+        self.assertTrue( isinstance(thresholded, Image) )
+
+    def test_threshold_otsu_multiplier(self):
+        from jicimagelib.transform import threshold_otsu
+        array = np.array(
+            [[ 1,  2,  3],
+             [ 7,  8,  9]], dtype=np.uint8)
+        # Threshold used: 3 * 0.6 = 1.79
+        expected = np.array(
+            [[ 0,  1,  1],
+             [ 1,  1,  1]], dtype=np.bool)
+        thresholded = threshold_otsu(array, multiplier=0.6)
+        self.assertTrue( np.array_equal(expected, thresholded) )
 
     def test_remove_small_objects(self):
         from jicimagelib.transform import remove_small_objects
