@@ -24,7 +24,7 @@ class NoseTestCommand(TestCommand):
         nose.run_exit(argv=['nosetests'])
 
 setup(name='jicimagelib',
-      packages=['jicimagelib'],
+      packages=['jicimagelib', 'jicimagelib.util'],
       version=jicimagelib.__version__,
       description='Python package designed to make it easy to work with microscopy images.',
       author='Tjelvar Olsson',
