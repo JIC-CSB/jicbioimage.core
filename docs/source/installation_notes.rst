@@ -65,6 +65,17 @@ objects as images in the IPython notebook.
 
     pip install "ipython[notebook]"
 
+
+Install freeimage
+-----------------
+
+JICImageLib depends on ``freeimage`` to open image file.
+
+::
+
+    sudo yum install freeimage
+
+
 Install the BioFormats command line tools
 -----------------------------------------
 
