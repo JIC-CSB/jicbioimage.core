@@ -32,9 +32,11 @@ MOCK_MODULES = [
     'numpy',
     'scipy',
     'scipy.ndimage',
+    'scipy.ndimage.filters',
     'skimage',
     'skimage.morphology',
     'skimage.io',
+    'skimage.exposure',
 ]
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
  
