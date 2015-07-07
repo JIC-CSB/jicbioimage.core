@@ -165,3 +165,11 @@ class DTypeContract(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             ar = broken_func( np.zeros((2,2), dtype=np.uint8) )
+
+    def test_function_name_not_mangled(self):
+        from jicimagelib.util.array import dtype_contract
+        @dtype_contract(input_dtype=np.uint8, output_dtype=np.uint64)
+        def working_func(ar):
+            return ar.astype(np.uint64)
+        
+        self.assertEqual(working_func.__name__, "working_func")

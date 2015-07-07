@@ -1,5 +1,7 @@
 """Module containing utility functions for manipulating numpy arrays."""
 
+from functools import wraps
+
 import numpy as np
 
 def normalise(array):
@@ -64,6 +66,7 @@ def check_dtype(array, allowed):
 def dtype_contract(input_dtype=None, output_dtype=None):
     """Function decorator for specifying input and/or output array dtypes."""
     def wrap(function):
+        @wraps(function)
         def wrapped_function(*args, **kwargs):
             if input_dtype is not None:
                 check_dtype(args[0], input_dtype)
