@@ -5,8 +5,8 @@ JIC Image Library
    :target: http://badge.fury.io/py/jicimagelib
    :alt: PyPi package
 
-.. image:: https://readthedocs.org/projects/jicimagelib?version=latest
-   :target: https://readthedocs.org/projects/jicimagelib?badge=latest
+.. image:: https://readthedocs.org/projects/jicimagelib/badge/?version=latest
+   :target: https://readthedocs.org/projects/jicimagelib/?badge=latest
    :alt: Documentation Status
 
 JIC Image Library is a python package aimed at making it easy to rapidly
