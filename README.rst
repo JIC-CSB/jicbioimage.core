@@ -1,9 +1,13 @@
-README
-======
+JIC Image Library
+=================
 
 .. image:: https://badge.fury.io/py/jicimagelib.svg
    :target: http://badge.fury.io/py/jicimagelib
    :alt: PyPi package
+
+.. image:: https://readthedocs.org/projects/jicimagelib?version=latest
+   :target: https://readthedocs.org/projects/jicimagelib?badge=latest
+   :alt: Documentation Status
 
 JIC Image Library is a python package aimed at making it easy to rapidly
 explore microscopy data in a programmatic fashion so that the exploratory work
