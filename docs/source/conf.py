@@ -74,7 +74,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'JIC Image Library'
+project = u'jicimagelib'
 copyright = u'2015, Tjelvar Olsson and Matthew Hartley'
 
 # The version info for the project you're documenting, acts as replacement for
