@@ -1,53 +1,33 @@
 Installation notes
 ==================
 
-Create a virtual Python environment
------------------------------------
+Install the freeimage library
+-----------------------------
 
-Although you can install the :mod:`jicimagelib` package into your system Python
-we recommend that you install it into a Python virtual environment.  To do this
-you need to install ``virtualenv``.
+The :mod:`jicimagelib` package depends on
+`freeimage <http://freeimage.sourceforge.net/>`_ to open image file.
 
-You can install ``virtualenv`` using ``easy_install``.
-
-::
-
-    easy_install virtualenv
-
-Or using ``pip``.
+On Linux bases system freeimage can usually be installed using the package
+manager.  For example on Fedora it can be installed using the command below.
 
 ::
 
-    pip install virtualenv
+    sudo yum install freeimage
 
-If your computer does not have ``easy_install`` or ``pip`` installed you can
-try installing them using your package manager.
-
-.. note:: More information on how to install ``virtualenv`` can be found in the
-          `virtualenv documentation
-          <https://virtualenv.pypa.io/en/latest/installation.html#installation>`_
-
-When you have ``virtualenv`` installed you can create a virtual environment.
+On Macs it can be installed using `homebrew <http://brew.sh/>`_ using the
+command below.
 
 ::
 
-    virtualenv env
+    brew install freeimage
 
-The command above will create a directory called ``env`` in which your virtual
-environment is stored. To activate it source the ``env/bin/activate`` file.
 
-::
+Install the Python package dependencies
+---------------------------------------
 
-    . ./env/bin/activate
-
-.. note:: Note that the command above starts with a single ``.`` followed by a
-          space.
-
-Install the :mod:`jicimagelib` dependencies
--------------------------------------------
-
-When you create a virtual environment it comes bundled with ``pip``, which we
-will use to install the packages that :mod:`jicimagelib` depend on.
+The :mod:`jicimagelib` package depends on a number of other scientific Python
+packages. These can be installed using
+`pip <https://pypi.python.org/pypi/pip>`_.
 
 ::
 
@@ -66,29 +46,21 @@ objects as images in the IPython notebook.
     pip install "ipython[notebook]"
 
 
-Install freeimage
------------------
-
-JICImageLib depends on ``freeimage`` to open image file.
-
-::
-
-    sudo yum install freeimage
-
 
 Install the BioFormats command line tools
 -----------------------------------------
 
 The :mod:`jicimagelib` package does not explicitly depend on the BioFormats
-command line tools. However, it is needed if you want to be able to work with
-microscopy file.
+command line tools. However, they are needed if you want to be able to work
+with microscopy files.
 
 Download the `bftools.zip
 <http://downloads.openmicroscopy.org/latest/bio-formats5.0/artifacts/bftools.zip>`_
 file from the `openmicroscopy website
 <http://www.openmicroscopy.org/site/support/bio-formats5.0/users/comlinetools/>`_.
 
-Unzip the ``bftools.zip`` file into a memorable location for example ``tools``.
+Unzip the ``bftools.zip`` file into a memorable location for example a
+directory named ``tools``.
 
 ::
 
@@ -105,19 +77,20 @@ Finally add the ``bftools`` directory to your ``PATH``.
 
 .. note:: You may want to add the line above to your ``.bashrc`` file.
 
-Install :mod:`jicimagelib`
---------------------------
+Install the :mod:`jicimagelib` package
+--------------------------------------
 
-Download the zip file from `githq
-<https://githq.nbi.ac.uk/rg-matthew-hartley/jic-image-lib>`_ and unzip it.
-
-::
-
-    unzip jic-image-lib.git.zip
-
-Finally install the :mod:`jicimagelib` package.
+Finally install the :mod:`jicimagelib` package using ``pip``.
 
 ::
 
-    cd jic-image-lib.git
+    pip install jicimagelib
+
+Alternatively clone the package from `GitHub <https://github.com/>`_
+and install it from source.
+
+::
+
+    git clone https://github.com/JIC-CSB/jicimagelib.git
+    cd jicimagelib
     python setup.py install
