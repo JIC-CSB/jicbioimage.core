@@ -1,4 +1,56 @@
-"""Module for geometric operations."""
+"""Module for geometric operations.
+
+This module contains the :class:`jicimagelib.geometry.Point2D` class,
+which can be used to perform geometric operations in 2D space.
+
+A 2D point can be generated using a pair of x, y coordinates.
+
+>>> p1 = Point2D(3, 0)
+
+Alternatively, a 2D point can be created from a sequence.
+
+>>> l = [0, 4]
+>>> p2 = Point2D(l)
+
+The x, y coordinates can be accessed as properties or by their index.
+
+>>> p1.x
+3
+>>> p1[0]
+3
+
+Addition and subtraction result in vector arithmetic.
+
+>>> p1 + p2
+<Point2D(x=3, y=4, dtype=int)>
+>>> p1 - p2
+<Point2D(x=3, y=-4, dtype=int)>
+
+Scalar multiplication is supported.
+
+>>> (p1 + p2) * 2
+<Point2D(x=6, y=8, dtype=int)>
+
+Scalar division requires the denominator to be of type ``float``.
+Note that the ``dtype`` of the 2D point that is returned.
+
+>>> p1 / 2.0
+<Point2D(x=1.50, y=0.00, dtype=float)>
+
+It is possible to calculate the distance between two points.
+
+>>> p1.distance(p2)
+5.0
+
+Points can also be treated as vectors.
+
+>>> p3 = p1 + p2
+>>> p3.unit_vector
+<Point2D(x=0.60, y=0.80, dtype=float)>
+>>> p3.magnitude
+5.0
+
+"""
 
 import math
 
