@@ -12,7 +12,7 @@ Alternatively, a 2D point can be created from a sequence.
 >>> l = [0, 4]
 >>> p2 = Point2D(l)
 
-The x, y coordinates can be accessed as properties or by their index.
+The x and y coordinates can be accessed as properties or by their index.
 
 >>> p1.x
 3
