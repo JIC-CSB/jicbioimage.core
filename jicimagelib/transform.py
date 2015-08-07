@@ -38,7 +38,7 @@ def transformation(func):
             # Working on something without a history, e.g. a ndarray stack.
             history = []
         image = func(*args, **kwargs)
-        image = Image.from_array(image)
+        image = Image.from_array(image, log_in_history=False)
         image.history = history
 
         image.history.append('Applied {} transform'.format(func.__name__))

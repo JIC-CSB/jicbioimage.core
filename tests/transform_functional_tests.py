@@ -49,6 +49,7 @@ class TransformationUserStory(unittest.TestCase):
 
         image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
         image = identity(image)
+        self.assertEqual(len(image.history), 2, image.history)
         self.assertEqual(image.history[-1], 'Applied identity transform')
         created_fpath = os.path.join(TMP_DIR, '1_identity.png')
         self.assertTrue(os.path.isfile(created_fpath),
