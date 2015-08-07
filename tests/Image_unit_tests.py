@@ -14,6 +14,9 @@ class ImageTests(unittest.TestCase):
         image = Image((50, 50))
         self.assertTrue(isinstance(image, np.ndarray))
         self.assertEqual(image.shape, (50, 50))
+        self.assertEqual(image.history[0],
+                         'Instantiated image from shape (50, 50)')
+        
         
     def test_rgb_instantiation_from_shape(self):
         from jicimagelib.image import Image
@@ -35,6 +38,8 @@ class ImageTests(unittest.TestCase):
         from jicimagelib.image import Image
         image = Image((50, 50), name='test')
         self.assertEqual(image.name, 'test')
+        self.assertEqual(image.history[0],
+                         'Instantiated image from shape (50, 50) as test')
     
     def test_repr_png_callable(self):
         from jicimagelib.image import Image
@@ -53,5 +58,20 @@ class ImageTests(unittest.TestCase):
         # before returning the png string.
         png = image.png
 
+    def test_from_array(self):
+        from jicimagelib.image import Image
+        ar = np.zeros((50,50), dtype=np.uint8)
+        im = Image.from_array(ar)
+        self.assertTrue(isinstance(im, Image))
+        self.assertEqual(im.history[0], 'Created image from array')
+
+    def test_from_array_with_name(self):
+        from jicimagelib.image import Image
+        ar = np.zeros((50,50), dtype=np.uint8)
+        im = Image.from_array(ar, name='Test1')
+        self.assertEqual(im.history[0], 'Created image from array as Test1')
+
+
+        
 if __name__ == '__main__':
     unittest.main()

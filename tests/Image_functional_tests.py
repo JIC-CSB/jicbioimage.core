@@ -20,7 +20,7 @@ class ImageUserStory(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(TMP_DIR)
 
-    def test_manual_image_creation(self):
+    def test_manual_image_creation_from_file(self):
 
         from jicimagelib.image import Image
 
@@ -33,43 +33,18 @@ class ImageUserStory(unittest.TestCase):
         use_plugin('freeimage')
         ar = imread(path_to_tiff)
 
-        # An image is just a subclass of a numpy.ndarray, so we can instantiate
-        # it as such.
-        image = Image((50, 50))
-        self.assertTrue(isinstance(image, np.ndarray))
 
-        # However, unlike a numpy.ndarray our image has a history associated
-        # with it.
-        self.assertEqual(image.history[0],
-                         'Instantiated image from shape (50, 50)')
-
-        # Optionally, we can also give our image a name.
-        image = Image((50, 50), name='Test1')
-        self.assertEqual(image.history[0],
-                         'Instantiated image from shape (50, 50) as Test1')
-        
-
-        # It is also possible to create an image from an array.
-        image = Image.from_array(ar)
-        self.assertEqual(image.history[0],
-                         'Created image from array')
-        image = Image.from_array(ar, name='Test1')
-        self.assertEqual(image.history[0],
-                         'Created image from array as Test1')
-
-        # It is also possible to create an image from a file.
+        # It is possible to create an image from a file.
         image = Image.from_file(path_to_tiff)
         self.assertEqual(image.history[0],
                          'Created image from {}'.format(path_to_tiff))
 
-        # File format from file name.
+        # With name...
         image = Image.from_file(path_to_tiff, name='Test1')
         self.assertEqual(image.history[0],
                          'Created image from {} as Test1'.format(path_to_tiff))
 
         # It is worth noting the image can support more multiple channels.
-        image = Image((50, 50, 3))
-
         # This is particularly important when reading in images in rgb format.
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
         image = Image.from_file(fpath)
