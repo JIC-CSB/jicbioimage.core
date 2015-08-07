@@ -1,12 +1,12 @@
-Quick start guide to :mod:`jicimagelib`
-=======================================
+Quick start guide
+=================
 
 
 Introdcution
 ------------
 
 The :mod:`jicimagelib` package has been designed to make it easy to work with
-microscopy images. To illustrate its use we will use
+microscopy images. To illustrate its use we will use a
 `multi-channel-4D-series.ome.tif
 <http://www.openmicroscopy.org/Schemas/Samples/2015-01/bioformats-artificial/multi-channel-4D-series.ome.tif.zip>`_
 file.
