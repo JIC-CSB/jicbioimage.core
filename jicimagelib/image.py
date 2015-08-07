@@ -11,6 +11,7 @@ from jicimagelib.io import (
     BFConvertWrapper,
 )
 
+from jicimagelib.util.array import normalise
 
 class Image(np.ndarray):
     """Image class."""
@@ -80,7 +81,8 @@ class Image(np.ndarray):
         """Return png string of image."""
         use_plugin('freeimage')
         with TemporaryFilePath(suffix='.png') as tmp:
-            imsave(tmp.fpath, self)
+            safe_range_im = 255 * normalise(self)
+            imsave(tmp.fpath, safe_range_im.astype(np.uint8))
             with open(tmp.fpath, 'rb') as fh:
                 return fh.read()
 

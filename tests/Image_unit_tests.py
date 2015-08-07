@@ -46,5 +46,12 @@ class ImageTests(unittest.TestCase):
         image = Image((50, 50))
         self.assertTrue(hasattr(image, 'png'))
         
+    def test_png_converts_to_uint8(self):
+        from jicimagelib.image import Image
+        image = Image((50, 50), dtype=np.uint64)
+        # The below raises error if the image is not converted to uint8
+        # before returning the png string.
+        png = image.png
+
 if __name__ == '__main__':
     unittest.main()
