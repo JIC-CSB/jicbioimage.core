@@ -47,7 +47,7 @@ class Point2D(object):
     @property
     def unit_vector(self):
         """Return the unit vector."""
-        return Point2D( self.x / self.magnitude, self.x / self.magnitude )
+        return Point2D( self.x / self.magnitude, self.y / self.magnitude )
 
     def distance(self, other):
         """Return distance to the other point."""
