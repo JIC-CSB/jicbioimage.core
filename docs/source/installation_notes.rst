@@ -12,7 +12,7 @@ manager.  For example on Fedora it can be installed using the command below.
 
 ::
 
-    sudo yum install freeimage
+    yum install freeimage
 
 On Macs it can be installed using `homebrew <http://brew.sh/>`_ using the
 command below.
