@@ -56,6 +56,7 @@ def transformation(func):
                     "Cannot handle this data type: {}".format(image.dtype)))
             pil_im.save(fpath)
         return image
+    func_as_transformation.__doc__ = func.__doc__
     return func_as_transformation
 
 #############################################################################
