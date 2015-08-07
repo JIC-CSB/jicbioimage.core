@@ -78,15 +78,9 @@ To assign a creation event to the image history one can use the
 
 .. code-block:: python
 
-    >>> Image.from_array(np.zeros((50,50), dtype=np.uint8))
-    Image([[0, 0, 0, ..., 0, 0, 0],
-           [0, 0, 0, ..., 0, 0, 0],
-           [0, 0, 0, ..., 0, 0, 0],
-           ..., 
-           [0, 0, 0, ..., 0, 0, 0],
-           [0, 0, 0, ..., 0, 0, 0],
-           [0, 0, 0, ..., 0, 0, 0]], dtype=uint8)
-    >>> Image.from_array(np.zeros((50,50), dtype=np.uint8)).history
+    >>> ar = np.zeros((50,50), dtype=np.uint8)
+    >>> im = Image.from_array(ar)
+    >>> im.history
     ['Created image from array']
 
 Creating images from file
