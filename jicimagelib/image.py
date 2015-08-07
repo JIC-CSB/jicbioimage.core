@@ -17,27 +17,31 @@ class Image(np.ndarray):
     """Image class."""
 
     @classmethod
-    def from_array(cls, array, name=None):
+    def from_array(cls, array, name=None, log_in_history=True):
         """Return :class:`jicimagelib.image.Image` instance from an array.
         
         :param array: :class:`numpy.ndarray`
         :param name: name of the image
+        :param log_in_history: whether or not to log the creation event
+                               in the image's history
         :returns: :class:`jicimagelib.image.Image`
         """
         image = array.view(cls)
         event = 'Created image from array'
         if name:
             event = '{} as {}'.format(event, name)
-        image.history.append(event)
+        if log_in_history:
+            image.history.append(event)
         return image
         
     @classmethod
-    def from_file(cls, fpath, name=None):
+    def from_file(cls, fpath, name=None, log_in_history=True):
         """Return :class:`jicimagelib.image.Image` instance from a file.
         
         :param fpath: path to the image file
         :param name: name of the image
-        :param format: file format of the image file
+        :param log_in_history: whether or not to log the creation event
+                               in the image's history
         :returns: :class:`jicimagelib.image.Image`
         """
         use_plugin('freeimage')
@@ -51,12 +55,13 @@ class Image(np.ndarray):
         event = 'Created image from {}'.format(fpath)
         if name:
             event = '{} as {}'.format(event, name)
-        image.history.append(event)
+        if log_in_history:
+            image.history.append(event)
 
         return image
 
     def __new__(subtype, shape, dtype=np.uint8, buffer=None, offset=0,
-                 strides=None, order=None, name=None):
+                 strides=None, order=None, name=None, log_in_history=True):
         obj = np.ndarray.__new__(subtype, shape, dtype, buffer, offset,
                                  strides, order)
         obj.name = name
@@ -64,11 +69,12 @@ class Image(np.ndarray):
         return obj
 
     def __init__(self, shape, dtype=np.uint8, buffer=None, offset=0,
-                 strides=None, order=None, name=None):
+                 strides=None, order=None, name=None, log_in_history=True):
         event = 'Instantiated image from shape {}'.format(shape)
         if name:
             event = '{} as {}'.format(event, name)
-        self.history.append(event)
+        if log_in_history:
+            self.history.append(event)
         
     def __array_finalize__(self, obj):
         if obj is None:

@@ -17,6 +17,11 @@ class ImageTests(unittest.TestCase):
         self.assertEqual(image.history[0],
                          'Instantiated image from shape (50, 50)')
         
+    def test_instantiation_from_shape_no_history(self):
+        from jicimagelib.image import Image
+        image = Image((50, 50), log_in_history=False)
+        self.assertEqual(len(image.history), 0)
+        
         
     def test_rgb_instantiation_from_shape(self):
         from jicimagelib.image import Image
@@ -70,6 +75,12 @@ class ImageTests(unittest.TestCase):
         ar = np.zeros((50,50), dtype=np.uint8)
         im = Image.from_array(ar, name='Test1')
         self.assertEqual(im.history[0], 'Created image from array as Test1')
+
+    def test_from_array_no_history(self):
+        from jicimagelib.image import Image
+        ar = np.zeros((50,50), dtype=np.uint8)
+        im = Image.from_array(ar, log_in_history=False)
+        self.assertEqual(len(im.history), 0)
 
 
         

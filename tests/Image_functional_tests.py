@@ -44,6 +44,10 @@ class ImageUserStory(unittest.TestCase):
         self.assertEqual(image.history[0],
                          'Created image from {} as Test1'.format(path_to_tiff))
 
+        # Without history...
+        image = Image.from_file(path_to_tiff, log_in_history=False)
+        self.assertEqual(len(image.history), 0)
+         
         # It is worth noting the image can support more multiple channels.
         # This is particularly important when reading in images in rgb format.
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
