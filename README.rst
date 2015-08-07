@@ -9,10 +9,11 @@ JIC Image Library
    :target: https://readthedocs.org/projects/jicimagelib/?badge=latest
    :alt: Documentation Status
 
-JIC Image Library is a python package aimed at making it easy to rapidly
-explore microscopy data in a programmatic fashion so that the exploratory work
-becomes reproducible and so that it can more easily be converted into
-work-flows and web applications.
+The :mod:`jicimagelib` Python package makes it easy to explore microscopy data
+in a programmatic fashion. Exploring images via coding means that the
+exploratory work becomes recorded and reproducible.  Furthermore, it makes it
+easier to convert the exploratory work into (semi) automated analysis work
+flows.
 
 - Documentation: http://jicimagelib.readthedocs.org/en/latest/
 - GitHub: https://github.com/JIC-CSB/jicimagelib
