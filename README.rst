@@ -9,7 +9,7 @@ JIC Image Library
    :target: https://readthedocs.org/projects/jicimagelib/?badge=latest
    :alt: Documentation Status
 
-The :mod:`jicimagelib` Python package makes it easy to explore microscopy data
+The ``jicimagelib`` Python package makes it easy to explore microscopy data
 in a programmatic fashion. Exploring images via coding means that the
 exploratory work becomes recorded and reproducible.  Furthermore, it makes it
 easier to convert the exploratory work into (semi) automated analysis work
