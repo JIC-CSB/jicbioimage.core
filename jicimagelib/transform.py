@@ -1,5 +1,7 @@
 """Module for storing transformation functions."""
 
+from functools import wraps
+
 import numpy as np
 import PIL.Image
 
@@ -22,6 +24,7 @@ from jicimagelib.util.array import (
 
 def transformation(func):
     """Function decorator to turn another function into a transformation."""
+    @wraps(func)
     def func_as_transformation(*args, **kwargs):
         
         # When using transforms that return new ndarrays we lose the
@@ -56,7 +59,6 @@ def transformation(func):
                     "Cannot handle this data type: {}".format(image.dtype)))
             pil_im.save(fpath)
         return image
-    func_as_transformation.__doc__ = func.__doc__
     return func_as_transformation
 
 #############################################################################
