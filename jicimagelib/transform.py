@@ -1,4 +1,25 @@
-"""Module for storing transformation functions."""
+"""Module containing image transformation functions.
+
+This module contains the function decorator
+:func:`jicimagelib.transform.transformation` that can be used
+to turn functions into image transformations.
+
+Below is an example of how to create a transformation that inverts an image.
+
+>>> import numpy as np
+>>> @transformation
+... def invert(image):
+...     "Return the inverted image."
+...     maximum = np.iinfo(image.dtype).max
+...     maximum_array = np.ones(image.shape, dtype=image.dtype) * maximum
+...     return maximum_array - image
+...
+
+The :mod:`jicimagelib.transform` module also contains a number of built-in
+general purpose transformations that have already had the
+:func:`jicimagelib.transform.transformation` function decorator applied to
+them.
+"""
 
 from functools import wraps
 
@@ -90,7 +111,7 @@ def smooth_gaussian(image, sigma=1):
 
     :param image: numpy array or :class:`jicimagelib.image.Image`
     :param sigma: standard deviation
-    :returns: :class:'jicimagelib.image.Image'
+    :returns: :class:`jicimagelib.image.Image`
     """
     return scipy.ndimage.filters.gaussian_filter(image, sigma=sigma, mode="nearest")
 
