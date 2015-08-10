@@ -72,10 +72,10 @@ And a :class:`jicimagelib.image.ImageCollection` is essentially just a list of
     >>> len(collection)
     105
     >>> collection  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-    [<jicimagelib.image.MicroscopyImage object at ...>,
-     <jicimagelib.image.MicroscopyImage object at ...>,
+    [<MicroscopyImage(s=0, c=0, z=0, t=0) object at ...>,
+     <MicroscopyImage(s=0, c=0, z=0, t=1) object at ...>,
       ...,
-     <jicimagelib.image.MicroscopyImage object at ...>]
+     <MicroscopyImage(s=0, c=2, z=4, t=6) object at ...>]
 
 The :class:`jicimagelib.image.MicroscopyImage` contains meta data about the
 microscopy image.
@@ -99,7 +99,7 @@ One can use this meta data to access a specific
 .. code-block:: python
 
     >>> collection.proxy_image(s=0, c=1, z=2, t=3)  # doctest: +ELLIPSIS
-    <jicimagelib.image.MicroscopyImage object at ...>
+    <MicroscopyImage(s=0, c=1, z=2, t=3) object at ...>
 
 
 One can access the raw 2D :class:`jicimagelib.image.Image` instance

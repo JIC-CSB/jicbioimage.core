@@ -106,11 +106,12 @@ Let us now load a microscopy file instead.
     >>> type(microscopy_collection)
     <class 'jicimagelib.image.MicroscopyCollection'>
     >>> microscopy_collection  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-    [<jicimagelib.image.MicroscopyImage object at ...>,
-     <jicimagelib.image.MicroscopyImage object at ...>,
-     <jicimagelib.image.MicroscopyImage object at ...>,
-     <jicimagelib.image.MicroscopyImage object at ...>,
-     <jicimagelib.image.MicroscopyImage object at ...>]
+    [<MicroscopyImage(s=0, c=0, z=0, t=0) object at ...>,
+     <MicroscopyImage(s=0, c=0, z=1, t=0) object at ...>,
+     <MicroscopyImage(s=0, c=0, z=2, t=0) object at ...>,
+     <MicroscopyImage(s=0, c=0, z=3, t=0) object at ...>,
+     <MicroscopyImage(s=0, c=0, z=4, t=0) object at ...>]
+
 
 One can now use a variety of methods to access the underlying microscopy
 images. For example to access the third z-slice one could use the code snipped
@@ -119,7 +120,7 @@ below.
 .. code-block:: python
 
     >>> microscopy_collection.proxy_image(z=2)  # doctest: +ELLIPSIS
-    <jicimagelib.image.MicroscopyImage object at ...>
+    <MicroscopyImage(s=0, c=0, z=2, t=0) object at ...>
 
 Alternatively to access the raw underlying image data of the same z-slice one
 could use the code snippet below.
@@ -143,11 +144,12 @@ snippet below.
     >>> for i in microscopy_collection.zstack_proxy_iterator():  # doctest: +ELLIPSIS
     ...     print(i)
     ...
-    <jicimagelib.image.MicroscopyImage object at ...>
-    <jicimagelib.image.MicroscopyImage object at ...>
-    <jicimagelib.image.MicroscopyImage object at ...>
-    <jicimagelib.image.MicroscopyImage object at ...>
-    <jicimagelib.image.MicroscopyImage object at ...>
+    <MicroscopyImage(s=0, c=0, z=0, t=0)>
+    <MicroscopyImage(s=0, c=0, z=1, t=0)>
+    <MicroscopyImage(s=0, c=0, z=2, t=0)>
+    <MicroscopyImage(s=0, c=0, z=3, t=0)>
+    <MicroscopyImage(s=0, c=0, z=4, t=0)>
+
 
 Finally, one can also access the z-stack as a :class:`numpy.ndarray`.
 

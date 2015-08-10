@@ -123,6 +123,21 @@ class ProxyImage(object):
 class MicroscopyImage(ProxyImage):
     """Lightweight image class with microscopy meta data."""
 
+    def __str__(self):
+        return "<MicroscopyImage(s={}, c={}, z={}, t={})>".format(
+            self.series,
+            self.channel,
+            self.zslice,
+            self.timepoint)
+
+    def __repr__(self):
+        return "<MicroscopyImage(s={}, c={}, z={}, t={}) object at {}>".format(
+            self.series,
+            self.channel,
+            self.zslice,
+            self.timepoint,
+            hex(id(self)))
+
     def is_me(self, s, c, z, t):
         """Return True if arguments match my meta data.
 
