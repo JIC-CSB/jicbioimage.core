@@ -11,6 +11,7 @@ Table of contents
 
    readme
    installation_notes
+   microscopy_data
    quickstart
    images
    image_collections
