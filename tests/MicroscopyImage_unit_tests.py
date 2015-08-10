@@ -28,12 +28,6 @@ class MicroscopyImage(unittest.TestCase):
         self.assertTrue(microscopy_image.in_zstack(s=0, c=1, t=3))
         self.assertFalse(microscopy_image.in_zstack(s=5, c=1, t=3))
 
-    def test_str(self):
-        from jicimagelib.image import MicroscopyImage
-        microscopy_image = MicroscopyImage('dummy.tif',
-            dict(series=0, channel=1, zslice=2, timepoint=3))
-        self.assertEqual(str(microscopy_image), '<MicroscopyImage(s=0, c=1, z=2, t=3)>') 
-
     def test_repr(self):
         from jicimagelib.image import MicroscopyImage
         microscopy_image = MicroscopyImage('dummy.tif',

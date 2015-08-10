@@ -144,11 +144,11 @@ snippet below.
     >>> for i in microscopy_collection.zstack_proxy_iterator():  # doctest: +ELLIPSIS
     ...     print(i)
     ...
-    <MicroscopyImage(s=0, c=0, z=0, t=0)>
-    <MicroscopyImage(s=0, c=0, z=1, t=0)>
-    <MicroscopyImage(s=0, c=0, z=2, t=0)>
-    <MicroscopyImage(s=0, c=0, z=3, t=0)>
-    <MicroscopyImage(s=0, c=0, z=4, t=0)>
+    <MicroscopyImage(s=0, c=0, z=0, t=0) object at ...>
+    <MicroscopyImage(s=0, c=0, z=1, t=0) object at ...>
+    <MicroscopyImage(s=0, c=0, z=2, t=0) object at ...>
+    <MicroscopyImage(s=0, c=0, z=3, t=0) object at ...>
+    <MicroscopyImage(s=0, c=0, z=4, t=0) object at ...>
 
 
 Finally, one can also access the z-stack as a :class:`numpy.ndarray`.
