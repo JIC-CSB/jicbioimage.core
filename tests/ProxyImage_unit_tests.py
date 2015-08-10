@@ -9,6 +9,14 @@ class ProxyImage(unittest.TestCase):
         proxy_image = ProxyImage('dummy.tif')
         self.assertEqual(proxy_image.fpath, 'dummy.tif')
 
+    def test_repr(self):
+        from jicimagelib.image import ProxyImage
+        proxy_image = ProxyImage('dummy.tif')
+        self.assertEqual(repr(proxy_image),
+            '<ProxyImage object at {}>'.format(
+                hex(id(proxy_image)))
+        ) 
+
 if __name__ == '__main__':
     unittest.main()
 

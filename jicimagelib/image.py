@@ -108,6 +108,9 @@ class ProxyImage(object):
         for key, value in metadata.items():
             self.__setattr__(key, value)
 
+    def __repr__(self):
+        return "<ProxyImage object at {}>".format(hex(id(self)))
+
     @property
     def image(self):
         """Underlying :class:`jicimagelib.image.Image` instance."""

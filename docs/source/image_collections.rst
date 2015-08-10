@@ -73,9 +73,9 @@ Which contains a number of :class:`jicimagelib.image.ProxyImage` instances.
 .. code-block:: python
 
     >>> image_collection  # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
-    [<jicimagelib.image.ProxyImage object at ...>,
-     <jicimagelib.image.ProxyImage object at ...>,
-     <jicimagelib.image.ProxyImage object at ...>]
+    [<ProxyImage object at ...>,
+     <ProxyImage object at ...>,
+     <ProxyImage object at ...>]
 
 
 .. _accessing-data-from-microscopy-collections:
