@@ -269,7 +269,7 @@ class ImageCollection(list):
             b64_png = base64.b64encode(proxy_image.image.png(thumbnail=True))
             l = DIV_HTML.format(
                     CONTENT_HTML.format(
-                        proxy_image.__info_html_table__(0),
+                        proxy_image.__info_html_table__(i),
                         b64_png
                     )
                 )
