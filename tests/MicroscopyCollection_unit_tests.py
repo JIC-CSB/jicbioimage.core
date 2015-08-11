@@ -1,6 +1,7 @@
 """Tests for the :class:`jicimagelib.image.MicroscopyCollection` class."""
 
 import unittest
+from mock import MagicMock, patch
 
 class MicroscopyCollectionTests(unittest.TestCase):
     
@@ -51,6 +52,40 @@ class MicroscopyCollectionTests(unittest.TestCase):
         from jicimagelib.image import MicroscopyCollection
         microscopy_collection = MicroscopyCollection()
         self.assertTrue(callable(microscopy_collection.image))
+
+    def test_repr_html(self):
+        from jicimagelib.image import MicroscopyCollection, MicroscopyImage, Image
+        microscopy_collection = MicroscopyCollection()
+        image = Image((50,50))
+        image.png = MagicMock(return_value='image')
+        with patch('jicimagelib.image.Image.from_file', return_value=image) as patched_image:
+            microscopy_collection.append(MicroscopyImage('test0.tif',
+                dict(series=1, channel=2, zslice=3, timepoint=4)))
+            html = microscopy_collection._repr_html_()
+            self.assertEqual(html.strip().replace(' ', '').replace('\n', ''),
+'''
+<div style="float: left; padding: 2px;" >
+    <p>
+        <table>
+            <tr>
+                <th>Index</th>
+                <th>Series</th>
+                <th>Channel</th>
+                <th>Z-slice</th>
+                <th>Time point</th>
+            </tr>
+            <tr>
+                <td>0</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+            </tr>
+        </table>
+    </p>
+    <img style="margin-left: auto; margin-right: auto;" src="data:image/png;base64,aW1hZ2U=" />
+</div>
+'''.strip().replace(' ', '').replace('\n', ''))
         
 if __name__ == '__main__':
     unittest.main()

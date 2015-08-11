@@ -3,6 +3,7 @@
 import os
 import os.path
 import json
+import base64
 
 import numpy as np
 import scipy.ndimage
@@ -251,6 +252,29 @@ class ImageCollection(list):
                 else:
                     proxy_image = ProxyImage(filename, entry)
                 self.append(proxy_image)
+
+    def _repr_html_(self):
+        """Return image collection as html.
+
+        Used by IPython notebook to display the image collection.
+        """
+        DIV_HTML = '''<div style="float: left; padding: 2px;" >{}</div>'''
+        CONTENT_HTML = '''<p>{}</p>
+            <img style="margin-left: auto; margin-right: auto;"
+            src="data:image/png;base64,{}" />
+            '''
+        
+        lines = []
+        for i, proxy_image in enumerate(self):
+            b64_png = base64.b64encode(proxy_image.image.png(thumbnail=True))
+            l = DIV_HTML.format(
+                    CONTENT_HTML.format(
+                        proxy_image.__info_html_table__(0),
+                        b64_png
+                    )
+                )
+            lines.append(l)
+        return '\n'.join(lines)
 
 class MicroscopyCollection(ImageCollection):
     """Class for storing related :class:`jicimagelib.image.MicroscopyImage` instances."""
