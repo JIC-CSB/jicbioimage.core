@@ -17,6 +17,13 @@ class ProxyImage(unittest.TestCase):
                 hex(id(proxy_image)))
         ) 
 
+    def test_info_html_table(self):
+        from jicimagelib.image import ProxyImage
+        proxy_image = ProxyImage('dummy.tif')
+        self.assertEqual(proxy_image.__info_html_table__(30),
+            '<table><tr><th>Index</th><td>30</td></tr></table>'
+        ) 
+        
 if __name__ == '__main__':
     unittest.main()
 

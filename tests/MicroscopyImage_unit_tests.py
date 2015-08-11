@@ -37,6 +37,32 @@ class MicroscopyImage(unittest.TestCase):
                 hex(id(microscopy_image)))
         ) 
 
+    def test_info_html_table(self):
+        from jicimagelib.image import MicroscopyImage
+        microscopy_image = MicroscopyImage('dummy.tif',
+            dict(series=0, channel=1, zslice=2, timepoint=3))
+        self.assertEqual(
+            microscopy_image.__info_html_table__(30).strip().replace(' ', ''),
+'''
+<table>
+    <tr>
+        <th>Index</th>
+        <th>Series</th>
+        <th>Channel</th>
+        <th>Z-slice</th>
+        <th>Time point</th>
+    </tr>
+    <tr>
+        <td>30</td>
+        <td>0</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+    </tr>
+</table>
+'''.strip().replace(' ', '')
+        ) 
+
 
 if __name__ == '__main__':
     unittest.main()

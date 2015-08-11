@@ -128,6 +128,9 @@ class ProxyImage(object):
     def __repr__(self):
         return "<ProxyImage object at {}>".format(hex(id(self)))
 
+    def __info_html_table__(self, index):
+        return "<table><tr><th>Index</th><td>{}</td></tr></table>".format(index)
+
     @property
     def image(self):
         """Underlying :class:`jicimagelib.image.Image` instance."""
@@ -150,6 +153,31 @@ class MicroscopyImage(ProxyImage):
             self.zslice,
             self.timepoint,
             hex(id(self)))
+
+    def __info_html_table__(self, index):
+        return """
+            <table>
+                <tr>
+                    <th>Index</th>
+                    <th>Series</th>
+                    <th>Channel</th>
+                    <th>Z-slice</th>
+                    <th>Time point</th>
+                </tr>
+                <tr>
+                    <td>{}</td>
+                    <td>{}</td>
+                    <td>{}</td>
+                    <td>{}</td>
+                    <td>{}</td>
+                </tr>
+            </table>
+            """.format(
+                index, 
+                self.series,
+                self.channel,
+                self.zslice,
+                self.timepoint)
 
     def is_me(self, s, c, z, t):
         """Return True if arguments match my meta data.

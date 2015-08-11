@@ -27,6 +27,6 @@ class ImageUserStory(unittest.TestCase):
             dict(series=0, channel=0, zslice=0, timepoint=0))
         self.assertEqual(type(microscopy_image._repr_png_()), bytes)
         
-
+        
 if __name__ == '__main__':
     unittest.main()
