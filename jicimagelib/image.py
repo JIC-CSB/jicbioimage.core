@@ -3,7 +3,9 @@
 import os
 import os.path
 import json
+
 import numpy as np
+import scipy.ndimage
 from skimage.io import imread, imsave, use_plugin
 
 from jicimagelib.io import (
@@ -82,7 +84,6 @@ class Image(np.ndarray):
         self.name = getattr(obj, 'name', None)
         self.history = getattr(obj, 'history', [])
 
-    @property
     def png(self):
         """Return png string of image."""
         use_plugin('freeimage')
@@ -98,7 +99,7 @@ class Image(np.ndarray):
 
         Used by IPython qtconsole/notebook to display images.
         """
-        return self.png
+        return self.png()
 
 class ProxyImage(object):
     """Lightweight image class."""
@@ -121,7 +122,7 @@ class ProxyImage(object):
 
         Used by IPython qtconsole/notebook to display images.
         """
-        return self.image.png
+        return self.image.png()
 
 class MicroscopyImage(ProxyImage):
     """Lightweight image class with microscopy meta data."""

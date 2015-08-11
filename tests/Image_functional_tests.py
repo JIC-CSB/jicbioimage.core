@@ -71,7 +71,7 @@ class ImageUserStory(unittest.TestCase):
         from jicimagelib.image import Image
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
         image = Image.from_file(fpath)
-        self.assertEqual(type(image.png), bytes)
+        self.assertEqual(type(image.png()), bytes)
         
 if __name__ == '__main__':
     unittest.main()
