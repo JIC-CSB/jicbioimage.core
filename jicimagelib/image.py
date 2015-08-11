@@ -84,11 +84,27 @@ class Image(np.ndarray):
         self.name = getattr(obj, 'name', None)
         self.history = getattr(obj, 'history', [])
 
-    def png(self):
-        """Return png string of image."""
+    def png(self, thumbnail=False):
+        """Return png string of image.
+
+        :param thumbnail: bool or int the latter specifying the desired width
+        :returns: png as a string
+        """
         use_plugin('freeimage')
+
+        def resize(im, width):
+            x, y = im.shape
+            scale_factor = float(width) / float(x)
+            ar = scipy.ndimage.zoom(im, scale_factor, order=0)
+            return Image.from_array(ar, log_in_history=False)
+
+        safe_range_im = 255 * normalise(self)
+        if thumbnail:
+            if type(thumbnail) is bool:
+                thumbnail = 100
+            safe_range_im = resize(safe_range_im, thumbnail)
+
         with TemporaryFilePath(suffix='.png') as tmp:
-            safe_range_im = 255 * normalise(self)
             imsave(tmp.fpath, safe_range_im.astype(np.uint8))
             with open(tmp.fpath, 'rb') as fh:
                 return fh.read()

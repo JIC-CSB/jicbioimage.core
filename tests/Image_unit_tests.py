@@ -1,7 +1,11 @@
 """Tests for the :class:`jicimagelib.image.Image` class."""
 
+import io
+
 import unittest
 import numpy as np
+
+import PIL
 
 class ImageTests(unittest.TestCase):
 
@@ -56,6 +60,16 @@ class ImageTests(unittest.TestCase):
         image = Image((50, 50))
         self.assertTrue(hasattr(image, 'png'))
         
+    def test_png(self):
+        from jicimagelib.image import Image
+        image = Image((600, 500), dtype=np.uint64)
+        png = image.png()
+
+        ar = np.asarray(PIL.Image.open(io.BytesIO(png)))
+
+        self.assertEqual(ar.shape[0], 600)
+        self.assertEqual(ar.shape[1], 500)
+
     def test_png_converts_to_uint8(self):
         from jicimagelib.image import Image
         image = Image((50, 50), dtype=np.uint64)
@@ -63,6 +77,27 @@ class ImageTests(unittest.TestCase):
         # before returning the png string.
         png = image.png
 
+    def test_png_thumbnail(self):
+        from jicimagelib.image import Image
+        image = Image((400, 800), dtype=np.uint64)
+        thumbnail = image.png(thumbnail=True)
+
+        ar = np.asarray(PIL.Image.open(io.BytesIO(thumbnail)))
+
+        self.assertEqual(ar.shape[0], 100)
+        self.assertEqual(ar.shape[1], 200)
+        
+    def test_png_thumbnail_with_width(self):
+        from jicimagelib.image import Image
+        image = Image((600, 800), dtype=np.uint64)
+        thumbnail = image.png(thumbnail=300)
+
+        ar = np.asarray(PIL.Image.open(io.BytesIO(thumbnail)))
+
+        self.assertEqual(ar.shape[0], 300)
+        self.assertEqual(ar.shape[1], 400)
+        
+        
     def test_from_array(self):
         from jicimagelib.image import Image
         ar = np.zeros((50,50), dtype=np.uint8)
