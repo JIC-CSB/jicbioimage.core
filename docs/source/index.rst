@@ -12,6 +12,7 @@ Table of contents
    readme
    installation_notes
    microscopy_data
+   ipython_integration
    quickstart
    images
    image_collections
