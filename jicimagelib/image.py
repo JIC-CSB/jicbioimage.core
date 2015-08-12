@@ -85,7 +85,7 @@ class Image(np.ndarray):
         self.name = getattr(obj, 'name', None)
         self.history = getattr(obj, 'history', [])
 
-    def png(self, thumbnail=False):
+    def png(self, width=None):
         """Return png string of image.
 
         :param thumbnail: bool or int the latter specifying the desired width
@@ -100,10 +100,8 @@ class Image(np.ndarray):
             return Image.from_array(ar, log_in_history=False)
 
         safe_range_im = 255 * normalise(self)
-        if thumbnail:
-            if type(thumbnail) is bool:
-                thumbnail = 100
-            safe_range_im = resize(safe_range_im, thumbnail)
+        if width is not None:
+            safe_range_im = resize(safe_range_im, width)
 
         with TemporaryFilePath(suffix='.png') as tmp:
             imsave(tmp.fpath, safe_range_im.astype(np.uint8))
@@ -266,7 +264,7 @@ class ImageCollection(list):
         
         lines = []
         for i, proxy_image in enumerate(self):
-            b64_png = base64.b64encode(proxy_image.image.png(thumbnail=True))
+            b64_png = base64.b64encode(proxy_image.image.png(width=300))
             l = DIV_HTML.format(
                     CONTENT_HTML.format(
                         proxy_image.__info_html_table__(i),

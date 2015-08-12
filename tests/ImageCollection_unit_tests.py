@@ -44,6 +44,8 @@ class ImageCollectionTests(unittest.TestCase):
     <img style="margin-left: auto; margin-right: auto;" src="data:image/png;base64,aW1hZ2U=" />
 </div>
 '''.strip().replace(' ', '').replace('\n', ''))
+
+        image.png.assert_called_once_with(width=300)
         
 if __name__ == '__main__':
     unittest.main()
