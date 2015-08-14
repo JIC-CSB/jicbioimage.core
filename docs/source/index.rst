@@ -11,6 +11,7 @@ Table of contents
 
    readme
    installation_notes
+   quickstart
    microscopy_data
    ipython_integration
    indepth
