@@ -1,5 +1,5 @@
-Quick start guide
-=================
+In depth guide
+==============
 
 
 Introdcution

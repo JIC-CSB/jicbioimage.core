@@ -13,7 +13,7 @@ Table of contents
    installation_notes
    microscopy_data
    ipython_integration
-   quickstart
+   indepth
    images
    image_collections
    api
