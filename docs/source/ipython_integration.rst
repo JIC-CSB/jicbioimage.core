@@ -27,7 +27,7 @@ it.
 
 .. code-block:: python
 
-    >>> im
+    >>> im  # doctest: +SKIP
 
 .. image:: images/rgb_squares.png
    :alt: RGB image with some coloured squares.
