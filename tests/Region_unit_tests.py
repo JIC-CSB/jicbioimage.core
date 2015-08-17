@@ -5,6 +5,16 @@ import numpy as np
 
 class RegionTestCase(unittest.TestCase):
 
+    def test_force_dtype(self):
+        from jicimagelib.region import Region
+
+        test_array = np.array([[0, 1, 1],
+                               [0, 0, 1],
+                               [0, 0, 0]])
+
+        region = Region(test_array)
+        self.assertEqual(region.dtype, bool)
+
     def test_region(self):
         from jicimagelib.region import Region
 
@@ -14,11 +24,9 @@ class RegionTestCase(unittest.TestCase):
 
         region = Region(test_array)
 
-        bitmap = region.bitmap
-
-        self.assertFalse(bitmap[0, 0])
-        self.assertTrue(bitmap[0, 1])
-        self.assertEqual(bitmap.shape, (3, 3))
+        self.assertFalse(region[0, 0])
+        self.assertTrue(region[0, 1])
+        self.assertEqual(region.shape, (3, 3))
 
     def test_region_select_from_array(self):
         from jicimagelib.region import Region
@@ -29,9 +37,9 @@ class RegionTestCase(unittest.TestCase):
 
         region_1 = Region.select_from_array(id_array, 1)
 
-        self.assertFalse(region_1.bitmap[0, 0])
-        self.assertTrue(region_1.bitmap[1, 0])
-        self.assertFalse(region_1.bitmap[2, 0])
+        self.assertFalse(region_1[0, 0])
+        self.assertTrue(region_1[1, 0])
+        self.assertFalse(region_1[2, 0])
 
         self.assertEqual(region_1.area, 3)
 
@@ -78,8 +86,8 @@ class RegionTestCase(unittest.TestCase):
 
         border_region = Region(border_array)
 
-        self.assertTrue( np.array_equal(region.border.bitmap,
-            border_region.bitmap))
+        self.assertTrue( np.array_equal(region.border,
+            border_region))
 
     def test_region_inner(self):
         from jicimagelib.region import Region
@@ -100,18 +108,21 @@ class RegionTestCase(unittest.TestCase):
 
         inner_region = Region(inner_array)
 
-        self.assertTrue(np.array_equal(region.inner.bitmap,
-            inner_region.bitmap))
+        self.assertTrue(np.array_equal(region.inner,
+            inner_region))
 
-    def test_region_constructor(self):
+    def test_force_binary(self):
         from jicimagelib.region import Region
 
         test_array = np.array([[0, 1, 2],
                                [0, 0, 1],
                                [0, 0, 0]])
 
-        with self.assertRaises(ValueError):
-            Region(test_array)
+        binary = np.array(test_array, dtype=bool)
+
+        region = Region(test_array)
+
+        self.assertTrue(np.array_equal(region, binary))
 
     def test_region_convex_hull(self):
         from jicimagelib.region import Region
@@ -130,7 +141,7 @@ class RegionTestCase(unittest.TestCase):
                                       [0, 1, 0, 0, 0],
                                       [0, 0, 0, 0, 0]], dtype=bool)
 
-        self.assertTrue(np.array_equal(region.convex_hull.bitmap,
+        self.assertTrue(np.array_equal(region.convex_hull,
             convex_hull_array))
 
     def test_index_arrays(self):
@@ -176,7 +187,7 @@ class RegionTestCase(unittest.TestCase):
 
 
         print region.dilate()
-        self.assertTrue(np.array_equal(region.dilate().bitmap,
+        self.assertTrue(np.array_equal(region.dilate(),
             dilate_array))
 
     def test_repr(self):
@@ -185,7 +196,7 @@ class RegionTestCase(unittest.TestCase):
                                [0, 0, 1],
                                [0, 0, 0]])
         region = Region(test_array)
-        self.assertEqual(repr(region), repr(region.bitmap))
+        self.assertEqual(repr(region), repr(region))
 
     def test_str(self):
         from jicimagelib.region import Region
@@ -193,4 +204,4 @@ class RegionTestCase(unittest.TestCase):
                                [0, 0, 1],
                                [0, 0, 0]])
         region = Region(test_array)
-        self.assertEqual(str(region), str(region.bitmap))
+        self.assertEqual(str(region), str(region))

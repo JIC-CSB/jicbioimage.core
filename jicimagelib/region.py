@@ -17,7 +17,7 @@ to select a region from a numeric array.
 ...     [0, 0, 2, 2, 2, 2, 2]], dtype=np.uint8)
 ...
 >>> Region.select_from_array(im, 2)
-array([[False, False, False, False, False, False, False],
+Region([[False, False, False, False, False, False, False],
        [False, False, False, False, False, False, False],
        [False, False, False, False,  True,  True,  True],
        [False, False, False, False,  True,  True,  True],
@@ -49,7 +49,7 @@ A region has several handy properties.
 The latter is calculated from the border.
 
 >>> roi.border
-array([[False, False, False, False, False, False, False],
+Region([[False, False, False, False, False, False, False],
        [False,  True, False, False, False,  True, False],
        [False,  True,  True, False,  True,  True, False],
        [False,  True, False,  True, False,  True, False],
@@ -60,7 +60,7 @@ array([[False, False, False, False, False, False, False],
 Another handy property is the convex hull.
 
 >>> roi.convex_hull
-array([[False, False, False, False, False, False, False],
+Region([[False, False, False, False, False, False, False],
        [False,  True,  True,  True,  True,  True, False],
        [False,  True,  True,  True,  True,  True, False],
        [False,  True,  True,  True,  True,  True, False],
@@ -75,18 +75,30 @@ import numpy as np
 import skimage
 import skimage.morphology
 
-class Region(object):
+class Region(np.ndarray):
     """Class representing a region of interest in an image.
 
-    Represented as a bitmask with True indicating the region of interest.
+    The :class:`jicimagelib.region.Region` class is a subclass of
+    numpy.ndarray.
+
+    However, note that it will compress any data given to it to boolean.
+
+    >>> import numpy as np
+    >>> ar = np.array([-1, 0, 1, 2])
+    >>> Region(ar)
+    Region([ True, False,  True,  True], dtype=bool)
+
+    To select an particular element use the
+    :func:`jicimagelib.region.Region.select_from_array` class method.
+
+    >>> Region.select_from_array(ar, identifier=2)
+    Region([False, False, False,  True], dtype=bool)
+
     """
 
-    def __init__(self, bitmap):
-        bitmap_values = set(np.unique(bitmap))
-        if len(bitmap_values - set([0, 1])):
-            raise(ValueError('Region bitmap must have only 0 and 1 values'))
-
-        self.bitmap = bitmap.astype(bool)
+    def __new__(cls, input_array):
+        obj = np.asarray(input_array).view(cls)
+        return obj.astype(bool)
 
     @classmethod
     def select_from_array(cls, array, identifier):
@@ -110,7 +122,7 @@ class Region(object):
         :returns: :class:`jicimagelib.region.Region`
         """
 
-        inner_array = nd.morphology.binary_erosion(self.bitmap)
+        inner_array = nd.morphology.binary_erosion(self)
         return Region(inner_array)
 
     @property
@@ -120,7 +132,7 @@ class Region(object):
         :returns: :class:`jicimagelib.region.Region`
         """
 
-        border_array = self.bitmap - self.inner.bitmap
+        border_array = self - self.inner
         return Region(border_array)
 
     @property
@@ -129,7 +141,7 @@ class Region(object):
 
         :returns: :class:`jicimagelib.region.Region`
         """
-        hull_array = skimage.morphology.convex_hull_image(self.bitmap)
+        hull_array = skimage.morphology.convex_hull_image(self)
         return Region(hull_array)
 
     @property
@@ -138,12 +150,12 @@ class Region(object):
 
         :returns: int
         """
-        return np.count_nonzero(self.bitmap)
+        return np.count_nonzero(self)
 
     @property
     def index_arrays(self):
         """All nonzero elements as a pair of arrays."""
-        return np.where(self.bitmap == True)
+        return np.where(self == True)
 
     @property
     def points(self):
@@ -165,12 +177,6 @@ class Region(object):
         :param iterations: number of iterations to use in dilation
         :returns: :class:`jicimagelib.region.Region`
         """
-        dilated_array = nd.morphology.binary_dilation(self.bitmap, 
+        dilated_array = nd.morphology.binary_dilation(self, 
                                                       iterations=iterations)
         return Region(dilated_array)
-
-    def __repr__(self):
-        return self.bitmap.__repr__()
-
-    def __str__(self):
-        return self.bitmap.__str__()
