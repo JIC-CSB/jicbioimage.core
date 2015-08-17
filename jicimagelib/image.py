@@ -88,7 +88,7 @@ class Image(np.ndarray):
     def png(self, width=None):
         """Return png string of image.
 
-        :param thumbnail: bool or int the latter specifying the desired width
+        :param width: integer specifying the desired width
         :returns: png as a string
         """
         use_plugin('freeimage')
