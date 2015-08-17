@@ -9,3 +9,4 @@ API documentation
    api/transform
    api/region
    api/geometry
+   api/util_array

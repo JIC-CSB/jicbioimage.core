@@ -64,7 +64,12 @@ def check_dtype(array, allowed):
             "Invalid dtype {}. Allowed dtype(s): {}".format(array.dtype, allowed)))
 
 def dtype_contract(input_dtype=None, output_dtype=None):
-    """Function decorator for specifying input and/or output array dtypes."""
+    """Function decorator for specifying input and/or output array dtypes.
+
+    :param input_dtype: dtype of input array
+    :param output_dtype: dtype of output array
+    :returns: function decorator
+    """
     def wrap(function):
         @wraps(function)
         def wrapped_function(*args, **kwargs):
