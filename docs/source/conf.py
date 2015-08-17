@@ -28,6 +28,12 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
         return Mock()
 
+class DummyClass(object):
+    pass
+
+class uint8(type):
+    pass
+     
 MOCK_MODULES = [
     'numpy',
     'scipy',
@@ -39,6 +45,9 @@ MOCK_MODULES = [
     'skimage.exposure',
 ]
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+sys.modules['numpy'].ndarray = DummyClass
+sys.modules['numpy'].uint8 = "<type 'numpy.uint8'>"
+
  
 
 # If extensions (or modules to document with autodoc) are in another directory,
