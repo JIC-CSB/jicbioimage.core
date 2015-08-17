@@ -24,10 +24,10 @@ them.
 from functools import wraps
 
 import numpy as np
-import PIL.Image
 
 import scipy.ndimage.filters
 
+import skimage.io
 import skimage.morphology
 import skimage.exposure
 
@@ -68,17 +68,16 @@ def transformation(func):
         image.history.append('Applied {} transform'.format(func.__name__))
         if AutoWrite.on:
             fpath = AutoName.name(func)
+            im_to_save = np.copy(image)
+            if AutoWrite.auto_safe_dtype:
+                im_to_save = 255 * normalise(im_to_save)
+                im_to_save = im_to_save.astype(np.uint8)
             try:
-                if AutoWrite.auto_safe_dtype:
-                    safe_range_im = 255 * normalise(image)
-                    pil_im = PIL.Image.fromarray(safe_range_im.astype(np.uint8))
-                else:
-                    pil_im = PIL.Image.fromarray(image)
-            except TypeError:
+                skimage.io.imsave(fpath, im_to_save, 'freeimage')
+            except ValueError:
                 # Give a more meaningful error message.
                 raise(TypeError(
                     "Cannot handle this data type: {}".format(image.dtype)))
-            pil_im.save(fpath)
         return image
     return func_as_transformation
 
