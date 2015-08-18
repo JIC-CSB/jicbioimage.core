@@ -10,6 +10,7 @@ import scipy.ndimage
 from skimage.io import imread, imsave, use_plugin
 
 from jicimagelib.io import (
+    FileBackend,
     TemporaryFilePath,
     BFConvertWrapper,
 )
@@ -326,7 +327,10 @@ class MicroscopyCollection(ImageCollection):
 class DataManager(list):
     """Class for managing :class:`jicimagelib.image.ImageCollection` instances."""
 
-    def __init__(self, backend):
+    def __init__(self, backend=None):
+        if backend is None:
+            dirpath = os.path.join(os.getcwd(), 'jicimagelib_backend')
+            backend = FileBackend(directory=dirpath)
         self.backend = backend
         self.convert = BFConvertWrapper(self.backend)
 

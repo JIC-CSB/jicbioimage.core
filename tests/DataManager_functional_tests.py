@@ -227,5 +227,20 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertFalse(isinstance(collection[0], MicroscopyImage))
         self.assertTrue(isinstance(collection[0], ProxyImage))
 
+    def test_initialisation_without_explicit_backend(self):
+        from jicimagelib.image import DataManager
+
+        real_working_dir = os.getcwd()
+
+        try:
+            os.chdir(TMP_DIR)
+            data_manager = DataManager()
+            
+            file_backend_path = os.path.join(os.getcwd(), 'jicimagelib_backend')
+
+            self.assertEqual(data_manager.backend.directory, file_backend_path)
+        finally:
+            os.chdir(real_working_dir)
+        
 if __name__ == '__main__':
     unittest.main()
