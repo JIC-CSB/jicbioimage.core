@@ -14,7 +14,6 @@
 
 import sys
 import os
-import jicimagelib
 
 
 # Mock out numpy, scipy and scikit-image for building the docs on readthedocs.
@@ -50,6 +49,7 @@ sys.modules['numpy'].ndarray = DummyClass
 sys.modules['numpy'].uint8 = "<type 'numpy.uint8'>"
 
  
+import jicimagelib
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
