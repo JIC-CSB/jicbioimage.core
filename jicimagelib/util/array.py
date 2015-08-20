@@ -2,6 +2,8 @@
 
 from functools import wraps
 
+import random
+
 import numpy as np
 
 def normalise(array):
@@ -81,3 +83,64 @@ def dtype_contract(input_dtype=None, output_dtype=None):
             return array
         return wrapped_function
     return wrap
+
+def false_color(array, color_dict=None, keep_zero_black=True):
+    """Return a RGB false color array.
+    
+    Assigning a unique RGB color value to each unique element of the input
+    array and return an array of shape (array.shape, 3).
+
+    :param array: input numpy.array
+    :param color_dict: dictionary with keys/values corresponding to identifiers and
+                       RGB tuples respectively
+    :param keep_zero_black: whether or not the background should be black
+    :returns: numpy.array
+    """
+
+    output_array = np.zeros(array.shape + (3,), np.uint8)
+
+    unique_identifiers = set(np.unique(array))
+
+    if color_dict is None:
+        color_dict = _pretty_color_palette(
+            unique_identifiers, keep_zero_black)
+
+    for identifier in unique_identifiers:
+        output_array[np.where(array == identifier)] = color_dict[identifier]
+
+    return output_array
+
+def _pretty_color():
+    """Return aesthetically pleasing RGB tuple.
+    
+    :returns: RGB tuple
+    """
+
+    c1 = random.randint(127, 255)
+    c2 = random.randint(0, 127)
+    c3 = random.randint(0, 255)
+
+    return tuple(random.sample([c1, c2, c3], 3))
+
+def _pretty_color_palette(identifiers, keep_zero_black=True):
+    """Return dictionary with pretty colors.
+    
+    :param identifiers: set of unique identifiers
+    :param keep_zero_black: whether or not the background should be black
+    :returns: dictionary
+    """
+
+    before_state = random.getstate()
+    try:
+        random.seed(0)
+        color_dict = {}
+        for i in identifiers:
+            if keep_zero_black and i == 0:
+                color_dict[0] = (0, 0, 0)
+                continue
+            value = _pretty_color()
+            color_dict[i] = value
+    finally:
+        random.setstate(before_state)
+
+    return color_dict

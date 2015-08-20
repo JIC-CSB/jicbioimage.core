@@ -173,3 +173,168 @@ class DTypeContract(unittest.TestCase):
             return ar.astype(np.uint64)
         
         self.assertEqual(working_func.__name__, "working_func")
+
+class FalseColorTests(unittest.TestCase):
+
+
+    def test_import_false_color(self):
+
+        from jicimagelib.util.array import false_color
+
+    def test_false_color_dimensions(self):
+
+        from jicimagelib.util.array import false_color
+
+        input_array = np.zeros((10,))
+        self.assertEqual(false_color(input_array).shape, (10, 3))
+
+        input_array = np.zeros((10, 20))
+        self.assertEqual(false_color(input_array).shape, (10, 20, 3))
+
+        input_array = np.zeros((10, 20, 30))
+        self.assertEqual(false_color(input_array).shape, (10, 20, 30, 3))
+
+    def test_false_color_dtype(self):
+
+        from jicimagelib.util.array import false_color
+
+        input_array = np.zeros((10, 20))
+        self.assertEqual(false_color(input_array).dtype, np.uint8)
+
+    def test_false_color_with_custom_palette(self):
+
+        from jicimagelib.util.array import false_color
+
+        input_array = np.array([[0, 0, 0],
+                                [1, 1, 1],
+                                [2, 2, 2]])
+
+        c1 = [255, 0, 0]
+        c2 = [0, 255, 0]
+        c3 = [0, 0, 255]
+
+        color_dict = {0 : c1, 1 : c2, 2 : c3}
+
+        expected_output = np.array([[c1, c1, c1],
+                                    [c2, c2, c2],
+                                    [c3, c3, c3]], dtype=np.uint8)
+                                   
+        actual_output = false_color(input_array, color_dict)
+
+        print expected_output
+        print actual_output
+        self.assertTrue(np.array_equal(actual_output, expected_output))
+
+    def test_false_color_with_default_palette_with_background_colored(self):
+
+        from jicimagelib.util.array import false_color
+
+        input_array = np.array([[0, 0, 0],
+                                [1, 1, 1],
+                                [2, 2, 2]])
+
+        c1 = [235, 97, 107]
+        c2 = [38, 122, 228]
+        c3 = [163, 96, 158]
+
+        expected_output = np.array([[c1, c1, c1],
+                                    [c2, c2, c2],
+                                    [c3, c3, c3]], dtype=np.uint8)
+                                   
+        actual_output = false_color(input_array, keep_zero_black=False)
+
+        print actual_output
+        self.assertTrue(np.array_equal(actual_output, expected_output))
+
+    def test_false_color_with_default_palette(self):
+
+        from jicimagelib.util.array import false_color
+
+        input_array = np.array([[0, 0, 0],
+                                [1, 1, 1],
+                                [2, 2, 2]])
+
+        c1 = [0, 0, 0]
+        c2 = [235, 97, 107]
+        c3 = [38, 122, 228]
+
+        expected_output = np.array([[c1, c1, c1],
+                                    [c2, c2, c2],
+                                    [c3, c3, c3]], dtype=np.uint8)
+                                   
+        actual_output = false_color(input_array)
+
+        self.assertTrue(np.array_equal(actual_output, expected_output))
+
+class PrettyColorUnitTests(unittest.TestCase):
+
+    def test_import_pretty_color(self):
+
+        from jicimagelib.util.array import _pretty_color
+
+    def test_generate_pretty_color(self):
+
+        from jicimagelib.util.array import _pretty_color
+
+        generated_color = _pretty_color()
+
+        self.assertEqual(len(generated_color), 3)
+        self.assertTrue(isinstance(generated_color, tuple))
+
+        for _ in range(1000):
+            generated_color = _pretty_color()
+            self.assertTrue(all(0 <= c <= 255 for c in generated_color))
+    
+    def test_pretty_with_seeds(self):
+
+        from jicimagelib.util.array import _pretty_color
+        import random
+
+        for _ in range(1000):
+            random.seed(0)
+            generated_color = _pretty_color()
+            self.assertEqual(generated_color, (235, 97, 107))
+
+    def test_import_pretty_color_palette(self):
+        
+        from jicimagelib.util.array import _pretty_color_palette
+
+    def test_pretty_color_palette(self):
+
+        from jicimagelib.util.array import _pretty_color_palette
+
+        color_key = _pretty_color_palette([0,1], keep_zero_black=False)
+        self.assertEqual(len(color_key), 2)
+        self.assertEqual(color_key[0], (235, 97, 107))
+            
+    def test_pretty_color_palette_consistent(self):
+
+        from jicimagelib.util.array import _pretty_color_palette
+        
+        identifiers = range(1000)
+        color_dict1 = _pretty_color_palette(identifiers)
+        color_dict2 = _pretty_color_palette(identifiers)
+        for i in identifiers:
+            key = i
+            self.assertEqual(color_dict1[key], color_dict2[key])
+
+    def test_pretty_color_palette_exclude_zero(self):
+        from jicimagelib.util.array import _pretty_color_palette
+
+        color_key = _pretty_color_palette([0,1], keep_zero_black=True)
+        self.assertEqual(len(color_key), 2)
+        self.assertEqual(color_key[0], (0, 0, 0))
+        self.assertEqual(color_key[1], (235, 97, 107))
+        
+    def test_pretty_color_palette_does_not_mess_up_random_state(self):
+        from jicimagelib.util.array import _pretty_color_palette
+        import random
+        for i in range(100):
+            _ = random.randint(0, 100)
+        before_state = random.getstate()
+        identifiers = range(1000)
+        color_dict1 = _pretty_color_palette(identifiers)
+        color_dict2 = _pretty_color_palette(identifiers)
+        after_state = random.getstate()
+        self.assertEqual(before_state, after_state)
+
