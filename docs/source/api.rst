@@ -8,5 +8,4 @@ API documentation
    api/io
    api/transform
    api/region
-   api/geometry
    api/util_array
