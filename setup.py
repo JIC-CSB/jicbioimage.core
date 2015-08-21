@@ -7,8 +7,6 @@ try:
 except ImportError:
     pass
 
-import jicbioimage.core
-
 # Define the test runner.
 # See also:
 # http://fgimian.github.io/blog/2014/04/27/running-nose-tests-with-plugins-using-the-python-setuptools-test-command/
@@ -23,17 +21,18 @@ class NoseTestCommand(TestCommand):
         import nose
         nose.run_exit(argv=['nosetests'])
 
+version = "0.4.1"
 readme = open('README.rst').read()
 
 setup(name='jicbioimage.core',
       packages=['jicbioimage.core', 'jicbioimage.core.util'],
-      version=jicbioimage.core.__version__,
+      version=version,
       description='Python package designed to make it easy to work with microscopy images.',
       long_description=readme,
       author='Tjelvar Olsson',
       author_email = 'tjelvar.olsson@jic.ac.uk',
       url = 'https://github.com/JIC-CSB/jicimagelib',
-      download_url = 'https://github.com/JIC-CSB/jicimagelib/tarball/{}'.format(jicbioimage.core.__version__),
+      download_url = 'https://github.com/JIC-CSB/jicimagelib/tarball/{}'.format(version),
       license='MIT',
       classifiers=[
         "Development Status :: 3 - Alpha",
