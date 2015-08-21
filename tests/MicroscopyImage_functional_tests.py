@@ -21,7 +21,7 @@ class ImageUserStory(unittest.TestCase):
         shutil.rmtree(TMP_DIR)
 
     def test_repr_png_return_type(self):
-        from jicimagelib.image import MicroscopyImage
+        from jicbioimage.core.image import MicroscopyImage
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
         microscopy_image = MicroscopyImage(fpath,
             dict(series=0, channel=0, zslice=0, timepoint=0))

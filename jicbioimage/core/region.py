@@ -1,10 +1,10 @@
 """Module for working with regions of interest.
 
-This module contains the :class:`jicimagelib.region.Region` class,
+This module contains the :class:`jicbioimage.core.region.Region` class,
 which can be used to represent regions of interest.
 
 One can use the
-:func:`jicimagelib.region.Region.select_from_array` class method
+:func:`jicbioimage.core.region.Region.select_from_array` class method
 to select a region from a numeric array.
 
 >>> im = np.array([
@@ -78,7 +78,7 @@ import skimage.morphology
 class Region(np.ndarray):
     """Class representing a region of interest in an image.
 
-    The :class:`jicimagelib.region.Region` class is a subclass of
+    The :class:`jicbioimage.core.region.Region` class is a subclass of
     numpy.ndarray.
 
     However, note that it will compress any data given to it to boolean.
@@ -89,7 +89,7 @@ class Region(np.ndarray):
     Region([ True, False,  True,  True], dtype=bool)
 
     To select an particular element use the
-    :func:`jicimagelib.region.Region.select_from_array` class method.
+    :func:`jicbioimage.core.region.Region.select_from_array` class method.
 
     >>> Region.select_from_array(ar, identifier=2)
     Region([False, False, False,  True], dtype=bool)
@@ -106,7 +106,7 @@ class Region(np.ndarray):
         
         :param array: :class:`numpy.ndarray`
         :param identifier: value representing the region to select in the array
-        :returns: :class:`jicimagelib.region.Region`
+        :returns: :class:`jicbioimage.core.region.Region`
         """
 
         base_array = np.zeros(array.shape)
@@ -119,7 +119,7 @@ class Region(np.ndarray):
     def inner(self):
         """Region formed by taking non-border elements.
 
-        :returns: :class:`jicimagelib.region.Region`
+        :returns: :class:`jicbioimage.core.region.Region`
         """
 
         inner_array = nd.morphology.binary_erosion(self)
@@ -129,7 +129,7 @@ class Region(np.ndarray):
     def border(self):
         """Region formed by taking border elements.
 
-        :returns: :class:`jicimagelib.region.Region`
+        :returns: :class:`jicbioimage.core.region.Region`
         """
 
         border_array = self - self.inner
@@ -139,7 +139,7 @@ class Region(np.ndarray):
     def convex_hull(self):
         """Region representing the convex hull.
 
-        :returns: :class:`jicimagelib.region.Region`
+        :returns: :class:`jicbioimage.core.region.Region`
         """
         hull_array = skimage.morphology.convex_hull_image(self)
         return Region(hull_array)
@@ -175,7 +175,7 @@ class Region(np.ndarray):
         """Return a dilated region.
 
         :param iterations: number of iterations to use in dilation
-        :returns: :class:`jicimagelib.region.Region`
+        :returns: :class:`jicbioimage.core.region.Region`
         """
         dilated_array = nd.morphology.binary_dilation(self, 
                                                       iterations=iterations)

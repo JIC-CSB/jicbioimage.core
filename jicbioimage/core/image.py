@@ -9,28 +9,28 @@ import numpy as np
 import scipy.ndimage
 from skimage.io import imread, imsave, use_plugin
 
-from jicimagelib.io import (
+from jicbioimage.core.io import (
     FileBackend,
     TemporaryFilePath,
     BFConvertWrapper,
 )
 
-from jicimagelib.util.array import normalise, false_color
+from jicbioimage.core.util.array import normalise, false_color
 
-from jicimagelib.region import Region
+from jicbioimage.core.region import Region
 
 class Image(np.ndarray):
     """Image class."""
 
     @classmethod
     def from_array(cls, array, name=None, log_in_history=True):
-        """Return :class:`jicimagelib.image.Image` instance from an array.
+        """Return :class:`jicbioimage.core.image.Image` instance from an array.
         
         :param array: :class:`numpy.ndarray`
         :param name: name of the image
         :param log_in_history: whether or not to log the creation event
                                in the image's history
-        :returns: :class:`jicimagelib.image.Image`
+        :returns: :class:`jicbioimage.core.image.Image`
         """
         image = array.view(cls)
         event = 'Created image from array'
@@ -42,18 +42,18 @@ class Image(np.ndarray):
         
     @classmethod
     def from_file(cls, fpath, name=None, log_in_history=True):
-        """Return :class:`jicimagelib.image.Image` instance from a file.
+        """Return :class:`jicbioimage.core.image.Image` instance from a file.
         
         :param fpath: path to the image file
         :param name: name of the image
         :param log_in_history: whether or not to log the creation event
                                in the image's history
-        :returns: :class:`jicimagelib.image.Image`
+        :returns: :class:`jicbioimage.core.image.Image`
         """
         use_plugin('freeimage')
         ar = imread(fpath)
 
-        # Create a :class:`jicimagelib.image.Image` instance.
+        # Create a :class:`jicbioimage.core.image.Image` instance.
         image = Image.from_array(ar, name)
 
         # Reset history, as image is created from file not array.
@@ -139,7 +139,7 @@ class ProxyImage(object):
 
     @property
     def image(self):
-        """Underlying :class:`jicimagelib.image.Image` instance."""
+        """Underlying :class:`jicbioimage.core.image.Image` instance."""
         return Image.from_file(self.fpath)
 
     def _repr_png_(self):
@@ -219,18 +219,18 @@ class ImageCollection(list):
     """Class for storing related images."""
 
     def proxy_image(self, index=0):
-        """Return a :class:`jicimagelib.image.ProxyImage` instance.
+        """Return a :class:`jicbioimage.core.image.ProxyImage` instance.
         
         :param index: list index
-        :returns: :class:`jicimagelib.image.ProxyImage`
+        :returns: :class:`jicbioimage.core.image.ProxyImage`
         """
         return self[index]
 
     def image(self, index=0):
-        """Return image as a :class:`jicimagelib.image.Image`.
+        """Return image as a :class:`jicbioimage.core.image.Image`.
         
         :param index: list index
-        :returns: :class:`jicimagelib.image.Image`
+        :returns: :class:`jicbioimage.core.image.Image`
         """
         return self.proxy_image(index=index).image
 
@@ -282,28 +282,28 @@ class ImageCollection(list):
         return '\n'.join(lines)
 
 class MicroscopyCollection(ImageCollection):
-    """Class for storing related :class:`jicimagelib.image.MicroscopyImage` instances."""
+    """Class for storing related :class:`jicbioimage.core.image.MicroscopyImage` instances."""
 
     def proxy_image(self, s=0, c=0, z=0, t=0):
-        """Return a :class:`jicimagelib.image.MicroscopyImage` instance.
+        """Return a :class:`jicbioimage.core.image.MicroscopyImage` instance.
         
         :param s: series
         :param c: channel
         :param z: zslice
         :param t: timepoint
-        :returns: :class:`jicimagelib.image.MicroscopyImage`
+        :returns: :class:`jicbioimage.core.image.MicroscopyImage`
         """
         for proxy_image in self:
             if proxy_image.is_me(s=s, c=c, z=z, t=t):
                 return proxy_image
 
     def zstack_proxy_iterator(self, s=0, c=0, t=0):
-        """Return iterator of :class:`jicimagelib.image.ProxyImage` instances in the zstack.
+        """Return iterator of :class:`jicbioimage.core.image.ProxyImage` instances in the zstack.
         
         :param s: series
         :param c: channel
         :param t: timepoint
-        :returns: zstack :class:`jicimagelib.image.ProxyImage` iterator
+        :returns: zstack :class:`jicbioimage.core.image.ProxyImage` iterator
         """
         for proxy_image in self:
             if proxy_image.in_zstack(s=s, c=c, t=t):
@@ -320,22 +320,22 @@ class MicroscopyCollection(ImageCollection):
         return np.dstack([x.image for x in self.zstack_proxy_iterator(s=s, c=c, t=t)])
 
     def image(self, s=0, c=0, z=0, t=0):
-        """Return image as a :class:`jicimagelib.image.Image`.
+        """Return image as a :class:`jicbioimage.core.image.Image`.
         
         :param s: series
         :param c: channel
         :param z: zslice
         :param t: timepoint
-        :returns: :class:`jicimagelib.image.Image`
+        :returns: :class:`jicbioimage.core.image.Image`
         """
         return self.proxy_image(s=s, c=c, z=z, t=t).image
 
 class DataManager(list):
-    """Class for managing :class:`jicimagelib.image.ImageCollection` instances."""
+    """Class for managing :class:`jicbioimage.core.image.ImageCollection` instances."""
 
     def __init__(self, backend=None):
         if backend is None:
-            dirpath = os.path.join(os.getcwd(), 'jicimagelib_backend')
+            dirpath = os.path.join(os.getcwd(), 'jicbioimage.core_backend')
             backend = FileBackend(directory=dirpath)
         self.backend = backend
         self.convert = BFConvertWrapper(self.backend)
@@ -401,7 +401,7 @@ class SegmentedImage(Image):
         """Return region of interest corresponding to the supplied identifier.
        
         :param identifier: integer corresponding to the segment of interest 
-        :returns: `jicimagelib.region.Region`
+        :returns: `jicbioimage.core.region.Region`
         """
 
         if identifier < 0:
@@ -421,7 +421,7 @@ class SegmentedImage(Image):
         
         In other words the region with pixel values 0.
 
-        :returns: `jicimagelib.region.Region`
+        :returns: `jicbioimage.core.region.Region`
         """
 
         return Region.select_from_array(self, 0)
@@ -430,7 +430,7 @@ class SegmentedImage(Image):
     def false_color_image(self):
         """Return segmentation as a false color image.
         
-        :returns: `jicimagelib.image.Image`
+        :returns: `jicbioimage.core.image.Image`
         """
         return Image.from_array( false_color(self) ) 
 
@@ -438,7 +438,7 @@ class SegmentedImage(Image):
     def grayscale_image(self):
         """Return segmentation using raw identifiers.
         
-        :returns: `jicimagelib.image.Image`
+        :returns: `jicbioimage.core.image.Image`
         """
         return Image.from_array( self ) 
 

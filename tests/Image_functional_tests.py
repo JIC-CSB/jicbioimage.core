@@ -22,7 +22,7 @@ class ImageUserStory(unittest.TestCase):
 
     def test_manual_image_creation_from_file(self):
 
-        from jicimagelib.image import Image
+        from jicbioimage.core.image import Image
 
         # Preamble: let us define the path to a TIFF file and create a numpy
         # array from it.
@@ -56,19 +56,19 @@ class ImageUserStory(unittest.TestCase):
         
         
     def test_16bit_tiff_file(self):
-        from jicimagelib.image import Image
+        from jicbioimage.core.image import Image
         im = Image.from_file(os.path.join(DATA_DIR, 'white-16bit.tiff'))
         self.assertEqual(im.dtype, np.uint16)
         self.assertEqual(np.max(im), np.iinfo(np.uint16).max)
 
     def test_repr_png_return_type(self):
-        from jicimagelib.image import Image
+        from jicbioimage.core.image import Image
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
         image = Image.from_file(fpath)
         self.assertEqual(type(image._repr_png_()), bytes)
         
     def test_png_type(self):
-        from jicimagelib.image import Image
+        from jicbioimage.core.image import Image
         fpath = os.path.join(DATA_DIR, 'tjelvar.png')
         image = Image.from_file(fpath)
         self.assertEqual(type(image.png()), bytes)

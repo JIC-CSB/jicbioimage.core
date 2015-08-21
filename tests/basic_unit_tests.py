@@ -7,47 +7,47 @@ class TestBasics(unittest.TestCase):
 
     def test_import_package(self):
         # This throws an error if the module cannot be imported.
-        import jicimagelib
+        import jicbioimage.core
 
     def test_version(self):
-        import jicimagelib
-        self.assertTrue(isinstance(jicimagelib.__version__, str))
+        import jicbioimage.core
+        self.assertTrue(isinstance(jicbioimage.core.__version__, str))
 
     def test_import_image_module(self):
         # This throws an error if the module cannot be imported.
-        import jicimagelib.image
+        import jicbioimage.core.image
 
     def test_import_io_module(self):
         # This throws an error if the module cannot be imported.
-        import jicimagelib.io
+        import jicbioimage.core.io
 
     def test_import_transform_module(self):
         # This throws an error if the module cannot be imported.
-        import jicimagelib.transform
+        import jicbioimage.core.transform
 
     def test_import_region_module(self):
         # This throws an error if the module cannot be imported.
-        import jicimagelib.region
+        import jicbioimage.core.region
 
     def test_import_DataManager_class(self):
         # This throws an error if the class cannot be imported.
-        from jicimagelib.image import DataManager
+        from jicbioimage.core.image import DataManager
 
     def test_import_ImageCollection_class(self):
         # This throws an error if the class cannot be imported.
-        from jicimagelib.image import ImageCollection
+        from jicbioimage.core.image import ImageCollection
 
     def test_import_ProxyImage_class(self):
         # This throws an error if the class cannot be imported.
-        from jicimagelib.image import ProxyImage
+        from jicbioimage.core.image import ProxyImage
 
     def test_import_util_module(self):
         # This throws an error if the module cannot be imported.
-        import jicimagelib.util
+        import jicbioimage.core.util
 
     def test_import_util_array_module(self):
         # This throws an error if the module cannot be imported.
-        import jicimagelib.util.array
+        import jicbioimage.core.util.array
 
 if __name__ == '__main__':
     unittest.main()

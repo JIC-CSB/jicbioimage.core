@@ -25,7 +25,7 @@ class ImageCollectionUserStory(unittest.TestCase):
         with open(manifest_fp, 'w') as fh:
             json.dump({"nofpath": "/tmp"}, fh)
 
-        from jicimagelib.image import ImageCollection
+        from jicbioimage.core.image import ImageCollection
         image_collection = ImageCollection()
         with self.assertRaises(RuntimeError):
             image_collection.parse_manifest(manifest_fp)

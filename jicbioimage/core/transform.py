@@ -1,7 +1,7 @@
 """Module containing image transformation functions.
 
 This module contains the function decorator
-:func:`jicimagelib.transform.transformation` that can be used
+:func:`jicbioimage.core.transform.transformation` that can be used
 to turn functions into image transformations.
 
 Below is an example of how to create a transformation that inverts an image.
@@ -15,9 +15,9 @@ Below is an example of how to create a transformation that inverts an image.
 ...     return maximum_array - image
 ...
 
-The :mod:`jicimagelib.transform` module also contains a number of built-in
+The :mod:`jicbioimage.core.transform` module also contains a number of built-in
 general purpose transformations that have already had the
-:func:`jicimagelib.transform.transformation` function decorator applied to
+:func:`jicbioimage.core.transform.transformation` function decorator applied to
 them.
 """
 
@@ -31,9 +31,9 @@ import skimage.io
 import skimage.morphology
 import skimage.exposure
 
-from jicimagelib.io import AutoName, AutoWrite
-from jicimagelib.image import Image
-from jicimagelib.util.array import (
+from jicbioimage.core.io import AutoName, AutoWrite
+from jicbioimage.core.image import Image
+from jicbioimage.core.util.array import (
     normalise,
     reduce_stack,
     dtype_contract,
@@ -49,14 +49,14 @@ def transformation(func):
     def func_as_transformation(*args, **kwargs):
         
         # When using transforms that return new ndarrays we lose the
-        # jicimagelib.image.Image type and the history of the image.
+        # jicbioimage.core.image.Image type and the history of the image.
         # One therefore needs to:
-        #  - Extract the history from the input jicimagelib.image.Image.
+        #  - Extract the history from the input jicbioimage.core.image.Image.
         #  - Apply the transformation, which may return a numpy ndarray.
-        #  - Force the image to the jicimagelib.image.Image type.
+        #  - Force the image to the jicbioimage.core.image.Image type.
         #  - Re-attach the extracted history
         if hasattr(args[0], 'history'):
-            # Working on jicimagelib.Image.
+            # Working on jicbioimage.core.Image.
             history = args[0].history
         else:
             # Working on something without a history, e.g. a ndarray stack.
@@ -90,7 +90,7 @@ def max_intensity_projection(stack):
     """Return maximum intensity projection of a stack.
     
     :param stack: 3D array from which to project third dimension 
-    :returns: :class:`jicimagelib.image.Image`
+    :returns: :class:`jicbioimage.core.image.Image`
     """
     return reduce_stack(stack, max)
 
@@ -99,7 +99,7 @@ def min_intensity_projection(stack):
     """Return minimum intensity projection of a stack.
     
     :param stack: 3D array from which to project third dimension 
-    :returns: :class:`jicimagelib.image.Image`
+    :returns: :class:`jicbioimage.core.image.Image`
     """
     return reduce_stack(stack, min)
 
@@ -108,9 +108,9 @@ def min_intensity_projection(stack):
 def smooth_gaussian(image, sigma=1):
     """Returns Gaussian smoothed image.
 
-    :param image: numpy array or :class:`jicimagelib.image.Image`
+    :param image: numpy array or :class:`jicbioimage.core.image.Image`
     :param sigma: standard deviation
-    :returns: :class:`jicimagelib.image.Image`
+    :returns: :class:`jicbioimage.core.image.Image`
     """
     return scipy.ndimage.filters.gaussian_filter(image, sigma=sigma, mode="nearest")
 
@@ -121,7 +121,7 @@ def equalize_adaptive_clahe(image, ntiles=8, clip_limit=0.01):
     
     The return value is normalised to the range 0 to 1.
 
-    :param image: numpy array or :class:`jicimagelib.image.Image` of dtype float
+    :param image: numpy array or :class:`jicbioimage.core.image.Image` of dtype float
     :param ntiles: number of tile regions
     :param clip_limit: clipping limit in range 0 to 1,
                        higher values give more contrast
@@ -153,7 +153,7 @@ def threshold_otsu(image, multiplier=1.0):
 def remove_small_objects(image, min_size=50):
     """Remove small objects from an boolean image.
 
-    :param image: boolean numpy array or :class:`jicimagelib.image.Image`
-    :returns: boolean :class:`jicimagelib.image.Image`
+    :param image: boolean numpy array or :class:`jicbioimage.core.image.Image`
+    :returns: boolean :class:`jicbioimage.core.image.Image`
     """ 
     return skimage.morphology.remove_small_objects(image, min_size=min_size)

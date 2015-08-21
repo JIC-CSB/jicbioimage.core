@@ -6,7 +6,7 @@ import numpy as np
 class RegionTestCase(unittest.TestCase):
 
     def test_force_dtype(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 1, 1],
                                [0, 0, 1],
@@ -16,7 +16,7 @@ class RegionTestCase(unittest.TestCase):
         self.assertEqual(region.dtype, bool)
 
     def test_region(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 1, 1],
                                [0, 0, 1],
@@ -29,7 +29,7 @@ class RegionTestCase(unittest.TestCase):
         self.assertEqual(region.shape, (3, 3))
 
     def test_region_select_from_array(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         id_array = np.array([[0, 0, 0],
                              [1, 1, 1],
@@ -44,7 +44,7 @@ class RegionTestCase(unittest.TestCase):
         self.assertEqual(region_1.area, 3)
 
     def test_region_area(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 1, 1],
                                [0, 0, 1],
@@ -55,7 +55,7 @@ class RegionTestCase(unittest.TestCase):
         self.assertEqual(region.area, 3)
 
     def test_region_perimeter(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 0, 0, 0, 0],
                                [0, 1, 1, 1, 0],
@@ -68,7 +68,7 @@ class RegionTestCase(unittest.TestCase):
         self.assertEqual(region.perimeter, 8)
 
     def test_region_border(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 0, 0, 0, 0],
                                [0, 1, 1, 1, 0],
@@ -90,7 +90,7 @@ class RegionTestCase(unittest.TestCase):
             border_region))
 
     def test_region_inner(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 0, 0, 0, 0],
                                [0, 1, 1, 1, 0],
@@ -112,7 +112,7 @@ class RegionTestCase(unittest.TestCase):
             inner_region))
 
     def test_force_binary(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 1, 2],
                                [0, 0, 1],
@@ -125,7 +125,7 @@ class RegionTestCase(unittest.TestCase):
         self.assertTrue(np.array_equal(region, binary))
 
     def test_region_convex_hull(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 0, 0, 0, 0],
                                [0, 1, 1, 1, 0],
@@ -145,7 +145,7 @@ class RegionTestCase(unittest.TestCase):
             convex_hull_array))
 
     def test_index_arrays(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 1, 1],
                                [0, 0, 1],
@@ -157,7 +157,7 @@ class RegionTestCase(unittest.TestCase):
         self.assertTrue(np.array_equal(y_array, np.array([1, 2, 2])))
 
     def test_points(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 1, 1],
                                [0, 0, 1],
@@ -169,7 +169,7 @@ class RegionTestCase(unittest.TestCase):
             [(0,1), (0,2), (1,2)])
 
     def test_dilate(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
 
         test_array = np.array([[0, 0, 0, 0, 0],
                                [0, 0, 1, 1, 0],
@@ -191,7 +191,7 @@ class RegionTestCase(unittest.TestCase):
             dilate_array))
 
     def test_repr(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
         test_array = np.array([[0, 1, 1],
                                [0, 0, 1],
                                [0, 0, 0]])
@@ -199,7 +199,7 @@ class RegionTestCase(unittest.TestCase):
         self.assertEqual(repr(region), repr(region))
 
     def test_str(self):
-        from jicimagelib.region import Region
+        from jicbioimage.core.region import Region
         test_array = np.array([[0, 1, 1],
                                [0, 0, 1],
                                [0, 0, 0]])

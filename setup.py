@@ -7,7 +7,7 @@ try:
 except ImportError:
     pass
 
-import jicimagelib
+import jicbioimage.core
 
 # Define the test runner.
 # See also:
@@ -25,15 +25,15 @@ class NoseTestCommand(TestCommand):
 
 readme = open('README.rst').read()
 
-setup(name='jicimagelib',
-      packages=['jicimagelib', 'jicimagelib.util'],
-      version=jicimagelib.__version__,
+setup(name='jicbioimage.core',
+      packages=['jicbioimage.core', 'jicbioimage.core.util'],
+      version=jicbioimage.core.__version__,
       description='Python package designed to make it easy to work with microscopy images.',
       long_description=readme,
       author='Tjelvar Olsson',
       author_email = 'tjelvar.olsson@jic.ac.uk',
       url = 'https://github.com/JIC-CSB/jicimagelib',
-      download_url = 'https://github.com/JIC-CSB/jicimagelib/tarball/{}'.format(jicimagelib.__version__),
+      download_url = 'https://github.com/JIC-CSB/jicimagelib/tarball/{}'.format(jicbioimage.core.__version__),
       license='MIT',
       classifiers=[
         "Development Status :: 3 - Alpha",

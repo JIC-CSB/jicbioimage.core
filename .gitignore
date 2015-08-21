@@ -1,6 +1,6 @@
 .DS_Store
 .coverage
-jicimagelib.egg-info
+jicbioimage.core.egg-info
 
 build/*
 dist/*

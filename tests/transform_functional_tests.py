@@ -15,13 +15,13 @@ TMP_DIR = os.path.join(HERE, 'tmp')
 class TransformationUserStory(unittest.TestCase):
 
     def setUp(self):
-        from jicimagelib.io import AutoName
+        from jicbioimage.core.io import AutoName
         AutoName.count = 0
         if not os.path.isdir(TMP_DIR):
             os.mkdir(TMP_DIR)
 
     def tearDown(self):
-        from jicimagelib.io import AutoName
+        from jicbioimage.core.io import AutoName
         AutoName.count = 0
         shutil.rmtree(TMP_DIR)
 
@@ -38,9 +38,9 @@ class TransformationUserStory(unittest.TestCase):
         # object. The AutoName object could also store the output directory
         # as a class variable.
 
-        from jicimagelib.image import Image
-        from jicimagelib.transform import transformation
-        from jicimagelib.io import AutoName
+        from jicbioimage.core.image import Image
+        from jicbioimage.core.transform import transformation
+        from jicbioimage.core.io import AutoName
         AutoName.directory = TMP_DIR
 
         @transformation
@@ -58,9 +58,9 @@ class TransformationUserStory(unittest.TestCase):
     def test_BZ2(self):
         from skimage.filters import gaussian_filter
 
-        from jicimagelib.image import Image
-        from jicimagelib.transform import transformation
-        from jicimagelib.io import AutoName
+        from jicbioimage.core.image import Image
+        from jicbioimage.core.transform import transformation
+        from jicbioimage.core.io import AutoName
         AutoName.directory = TMP_DIR
 
         @transformation
@@ -77,7 +77,7 @@ class TransformationUserStory(unittest.TestCase):
         image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
         image = blur(image)
 
-        # Image returned is of jicimagelib.image.Image type.
+        # Image returned is of jicbioimage.core.image.Image type.
         self.assertTrue(isinstance(image, Image))
 
         # Image returned contains the history.
@@ -88,13 +88,13 @@ class TransformationUserStory(unittest.TestCase):
             'No such file: {}'.format(created_fpath))
 
     def test_stack_to_image_transform(self):
-        from jicimagelib.image import DataManager
-        from jicimagelib.io import FileBackend
+        from jicbioimage.core.image import DataManager
+        from jicbioimage.core.io import FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
 
-        from jicimagelib.transform import transformation
-        from jicimagelib.io import AutoName
+        from jicbioimage.core.transform import transformation
+        from jicbioimage.core.io import AutoName
         AutoName.directory = TMP_DIR
 
         @transformation
@@ -111,8 +111,8 @@ class TransformationUserStory(unittest.TestCase):
 
     def test_auto_safe_dtype(self):
         # AutoSave.auto_safe_type is True by default
-        from jicimagelib.transform import transformation
-        from jicimagelib.io import AutoName
+        from jicbioimage.core.transform import transformation
+        from jicbioimage.core.io import AutoName
         import numpy as np
 
         AutoName.directory = TMP_DIR
@@ -131,20 +131,20 @@ class TransformationUserStory(unittest.TestCase):
 class GeneralPurposeTransoformTests(unittest.TestCase):
 
     def setUp(self):
-        from jicimagelib.io import AutoName
+        from jicbioimage.core.io import AutoName
         AutoName.count = 0
         AutoName.directory = TMP_DIR
         if not os.path.isdir(TMP_DIR):
             os.mkdir(TMP_DIR)
 
     def tearDown(self):
-        from jicimagelib.io import AutoName
+        from jicbioimage.core.io import AutoName
         AutoName.count = 0
         shutil.rmtree(TMP_DIR)
 
     def test_max_intensity_projection(self):
-        from jicimagelib.transform import max_intensity_projection
-        from jicimagelib.image import Image
+        from jicbioimage.core.transform import max_intensity_projection
+        from jicbioimage.core.image import Image
         slice0 = np.array(
             [[ 0, 1, 2],
              [ 0, 1, 2],
@@ -163,8 +163,8 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
         self.assertTrue( isinstance(max_projection, Image) )
         
     def test_min_intensity_projection(self):
-        from jicimagelib.transform import min_intensity_projection
-        from jicimagelib.image import Image
+        from jicbioimage.core.transform import min_intensity_projection
+        from jicbioimage.core.image import Image
         slice0 = np.array(
             [[ 0, 1, 2],
              [ 0, 1, 2],
@@ -183,8 +183,8 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
         self.assertTrue( isinstance(min_projection, Image) )
         
     def test_smooth_gaussian(self):
-        from jicimagelib.transform import smooth_gaussian
-        from jicimagelib.image import Image
+        from jicbioimage.core.transform import smooth_gaussian
+        from jicbioimage.core.image import Image
         array = np.array(
             [[ 0.,  0.,  0.],
              [ 0.,  1.,  0.],
@@ -202,8 +202,8 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
             smoothed = smooth_gaussian(array.astype(np.uint8))
 
     def test_equalize_adaptive(self):
-        from jicimagelib.transform import equalize_adaptive_clahe
-        from jicimagelib.image import Image
+        from jicbioimage.core.transform import equalize_adaptive_clahe
+        from jicbioimage.core.image import Image
         array = np.array(
             [[ 2., 2., 1., 1., 4., 4.],
              [ 2., 1., 1., 1., 1., 4.],
@@ -229,8 +229,8 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
             equalised = equalize_adaptive_clahe(array, ntiles=2)
 
     def test_threshold_otsu(self):
-        from jicimagelib.transform import threshold_otsu
-        from jicimagelib.image import Image
+        from jicbioimage.core.transform import threshold_otsu
+        from jicbioimage.core.image import Image
 
         # Test with uint8.
         array = np.array(
@@ -255,7 +255,7 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
         self.assertTrue( isinstance(thresholded, Image) )
 
     def test_threshold_otsu_multiplier(self):
-        from jicimagelib.transform import threshold_otsu
+        from jicbioimage.core.transform import threshold_otsu
         array = np.array(
             [[ 1,  2,  3],
              [ 7,  8,  9]], dtype=np.uint8)
@@ -267,8 +267,8 @@ class GeneralPurposeTransoformTests(unittest.TestCase):
         self.assertTrue( np.array_equal(expected, thresholded) )
 
     def test_remove_small_objects(self):
-        from jicimagelib.transform import remove_small_objects
-        from jicimagelib.image import Image
+        from jicbioimage.core.transform import remove_small_objects
+        from jicbioimage.core.image import Image
         array = np.array(
             [[ 0,  0,  0, 0, 1],
              [ 0,  1,  1, 0, 0],

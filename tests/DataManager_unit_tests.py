@@ -1,4 +1,4 @@
-"""Tests for the :class:`jicimagelib.image.DataManager` class."""
+"""Tests for the :class:`jicbioimage.core.image.DataManager` class."""
 
 import unittest
 import os
@@ -18,19 +18,19 @@ class DataManagerTests(unittest.TestCase):
         shutil.rmtree(TMP_DIR)
 
     def test_load_function_exists(self):
-        from jicimagelib.image import DataManager
+        from jicbioimage.core.image import DataManager
         data_manager = DataManager(os.path.join(TMP_DIR, 'dummy'))
         self.assertTrue(callable(data_manager.load))
         
     def test_backend(self):
-        from jicimagelib.image import DataManager
-        from jicimagelib.io import FileBackend
+        from jicbioimage.core.image import DataManager
+        from jicbioimage.core.io import FileBackend
         backend = FileBackend(os.path.join(TMP_DIR, 'dummy'))
         data_manager = DataManager(backend)
         self.assertTrue(isinstance(data_manager.backend, FileBackend))
          
     def test_default_convert(self):
-        from jicimagelib.image import DataManager, BFConvertWrapper
+        from jicbioimage.core.image import DataManager, BFConvertWrapper
         data_manager = DataManager(os.path.join(TMP_DIR, 'dummy'))
         self.assertTrue(isinstance(data_manager.convert, BFConvertWrapper))
          

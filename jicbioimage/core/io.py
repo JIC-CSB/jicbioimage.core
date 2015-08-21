@@ -129,7 +129,7 @@ class BFConvertWrapper(object):
     def manifest(self, entry):
         """Returns manifest as a list.
         
-        :param entry: :class:`jicimagelib.image.FileBackend.Entry`
+        :param entry: :class:`jicbioimage.core.image.FileBackend.Entry`
         :returns: list
         """
         entries = []
