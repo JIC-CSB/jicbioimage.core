@@ -8,6 +8,6 @@
 The ``jicbioimage.core`` Python package provides the core functionality of the
 ``jicbioimage`` namespace package.
 
-- GitHub: https://github.com/JIC-CSB/jicimagelib
+- GitHub: https://github.com/JIC-CSB/jicbioimage.core
 - PyPI: https://pypi.python.org/pypi/jicbioimage.core
 - Free software: MIT License
