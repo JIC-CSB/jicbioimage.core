@@ -5,3 +5,4 @@ Table of contents
    :maxdepth: 2
 
    readme
+   api
