@@ -1,5 +1,5 @@
-``jicbioimage.core``
-====================
+The ``jicbioimage.core`` Python package
+=======================================
 
 .. image:: https://badge.fury.io/py/jicbioimage.core.svg
    :target: http://badge.fury.io/py/jicbioimage.core
