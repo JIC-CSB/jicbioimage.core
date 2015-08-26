@@ -25,7 +25,7 @@ version = "0.4.1"
 readme = open('README.rst').read()
 
 setup(name='jicbioimage.core',
-      packages=['jicbioimage.core', 'jicbioimage.core.util'],
+      packages=['jicbioimage', 'jicbioimage.core', 'jicbioimage.core.util'],
       version=version,
       description='Python package designed to make it easy to work with microscopy images.',
       long_description=readme,
