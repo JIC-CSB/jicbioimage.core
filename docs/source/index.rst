@@ -1,3 +1,5 @@
+`jicimagelib documentation <http://jicbioimage.readthedocs.org>`_
+
 Table of contents
 =================
 
