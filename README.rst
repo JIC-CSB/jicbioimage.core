@@ -5,6 +5,14 @@ The ``jicbioimage.core`` Python package
    :target: http://badge.fury.io/py/jicbioimage.core
    :alt: PyPi package
 
+.. image:: https://travis-ci.org/JIC-CSB/jicbioimage.core.svg?branch=master
+   :target: https://travis-ci.org/JIC-CSB/jicbioimage.core
+   :alt: Travis CI build status (Linux)
+
+.. image:: https://codecov.io/github/JIC-CSB/jicbioimage.core/coverage.svg?branch=master
+   :target: https://codecov.io/github/JIC-CSB/jicbioimage.core?branch=master
+   :alt: Code Coverage
+
 .. image:: https://readthedocs.org/projects/jicbioimagecore/badge/?version=latest
    :target: https://readthedocs.org/projects/jicbioimagecore?badge=latest
    :alt: Documentation Status
