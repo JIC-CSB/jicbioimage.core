@@ -1,18 +1,33 @@
+# For more information on using conda with travis see:
+# http://conda.pydata.org/docs/travis.html#using-conda-with-travis-ci
+# https://gist.github.com/dan-blanchard/7045057
+
 language: python
 python:
+  # We don't actually use the Travis Python, but this keeps it organized.
   - "2.6"
   - "2.7"
-  - "3.2"
   - "3.3"
   - "3.4"
-  - "nightly"
-# command to install dependencies
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get -qq install build-essential python-dev swig gfortran libblas-dev liblapack-dev
 install:
-  - pip install scipy
-  - pip install scikit-image
+  - sudo apt-get update
+  # We do this conditionally because it saves us some downloading if the
+  # version is the same.
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  # Useful for debugging any issues with conda
+  - conda info -a
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy scikit-image nose
+  - source activate test-environment
+  - python setup.py install
 before_script:
   - "wget http://downloads.openmicroscopy.org/latest/bio-formats5.1/artifacts/bftools.zip -O /tmp/bftools.zip"
   - "unzip /tmp/bftools.zip"
