@@ -132,7 +132,12 @@ def _pretty_color_palette(identifiers, keep_zero_black=True):
 
     before_state = random.getstate()
     try:
-        random.seed(0)
+        try:
+            # Python version 3.
+            random.seed(0, version=1)
+        except TypeError:
+            # Python version 2.
+            random.seed(0)
         color_dict = {}
         for i in identifiers:
             if keep_zero_black and i == 0:
