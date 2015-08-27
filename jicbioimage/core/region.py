@@ -160,7 +160,7 @@ class Region(np.ndarray):
     @property
     def points(self):
         """Region as a list of points."""
-        return zip(*self.index_arrays)
+        return list(zip(*self.index_arrays))
 
 
     @property
