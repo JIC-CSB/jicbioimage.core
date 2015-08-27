@@ -61,7 +61,7 @@ class MicroscopyCollectionTests(unittest.TestCase):
         from jicbioimage.core.image import MicroscopyCollection, MicroscopyImage, Image
         microscopy_collection = MicroscopyCollection()
         image = Image((50,50))
-        image.png = MagicMock(return_value='image')
+        image.png = MagicMock(return_value=bytearray('image', encoding='utf-8'))
         with patch('jicbioimage.core.image.Image.from_file', return_value=image) as patched_image:
             microscopy_collection.append(MicroscopyImage('test0.tif',
                 dict(series=1, channel=2, zslice=3, timepoint=4)))

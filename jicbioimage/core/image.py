@@ -271,7 +271,7 @@ class ImageCollection(list):
         
         lines = []
         for i, proxy_image in enumerate(self):
-            b64_png = base64.b64encode(proxy_image.image.png(width=300))
+            b64_png = base64.b64encode(proxy_image.image.png(width=300)).decode('utf-8')
             l = DIV_HTML.format(
                     CONTENT_HTML.format(
                         proxy_image.__info_html_table__(i),

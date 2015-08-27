@@ -35,7 +35,7 @@ class ImageCollectionTests(unittest.TestCase):
         from jicbioimage.core.image import ImageCollection, ProxyImage, Image
         image_collection = ImageCollection()
         image = Image((50,50))
-        image.png = MagicMock(return_value='image')
+        image.png = MagicMock(return_value=bytearray('image', encoding='utf-8'))
         with patch('jicbioimage.core.image.Image.from_file', return_value=image) as patched_image:
             image_collection.append(ProxyImage('test0.tif'))
             html = image_collection._repr_html_()
