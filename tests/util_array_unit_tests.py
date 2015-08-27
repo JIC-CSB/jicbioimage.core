@@ -1,6 +1,7 @@
 """Tests for the :mod:`jicbioimage.core.util.array` module."""
 
 import unittest
+import sys
 import numpy as np
 
 class NormaliseTests(unittest.TestCase):
@@ -231,15 +232,23 @@ class FalseColorTests(unittest.TestCase):
                                 [1, 1, 1],
                                 [2, 2, 2]])
 
+        # Python 2 random numbers.
         c1 = [235, 97, 107]
         c2 = [38, 122, 228]
         c3 = [163, 96, 158]
+
+        if sys.version_info[0] == 3:
+            # Python 3 random numbers.
+            c1 = [107, 20, 225]
+            c2 = [183, 204, 122]
+            c3 = [48, 35, 199]
 
         expected_output = np.array([[c1, c1, c1],
                                     [c2, c2, c2],
                                     [c3, c3, c3]], dtype=np.uint8)
                                    
         actual_output = false_color(input_array, keep_zero_black=False)
+        print(actual_output)
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
@@ -251,9 +260,15 @@ class FalseColorTests(unittest.TestCase):
                                 [1, 1, 1],
                                 [2, 2, 2]])
 
+        # Python 2 random numbers.
         c1 = [0, 0, 0]
         c2 = [235, 97, 107]
         c3 = [38, 122, 228]
+        if sys.version_info[0] == 3:
+            # Python 3 random numbers.
+            c1 = [0, 0, 0]
+            c2 = [107, 20, 225]
+            c3 = [183, 204, 122]
 
         expected_output = np.array([[c1, c1, c1],
                                     [c2, c2, c2],
@@ -287,10 +302,16 @@ class PrettyColorUnitTests(unittest.TestCase):
         from jicbioimage.core.util.array import _pretty_color
         import random
 
+        # Python 2 random numbers.
+        expected = (235, 97, 107)
+        if sys.version_info[0] == 3:
+            # Python 3 random numbers.
+            expected = (107, 20, 225)
+
         for _ in range(1000):
             random.seed(0)
             generated_color = _pretty_color()
-            self.assertEqual(generated_color, (235, 97, 107))
+            self.assertEqual(generated_color, expected)
 
     def test_import_pretty_color_palette(self):
         
@@ -302,7 +323,14 @@ class PrettyColorUnitTests(unittest.TestCase):
 
         color_key = _pretty_color_palette([0,1], keep_zero_black=False)
         self.assertEqual(len(color_key), 2)
-        self.assertEqual(color_key[0], (235, 97, 107))
+
+        # Python 2 random numbers.
+        expected = (235, 97, 107)
+        if sys.version_info[0] == 3:
+            # Python 3 random numbers.
+            expected = (107, 20, 225)
+
+        self.assertEqual(color_key[0], expected)
             
     def test_pretty_color_palette_consistent(self):
 
@@ -321,7 +349,14 @@ class PrettyColorUnitTests(unittest.TestCase):
         color_key = _pretty_color_palette([0,1], keep_zero_black=True)
         self.assertEqual(len(color_key), 2)
         self.assertEqual(color_key[0], (0, 0, 0))
-        self.assertEqual(color_key[1], (235, 97, 107))
+
+        # Python 2 random numbers.
+        expected = (235, 97, 107)
+        if sys.version_info[0] == 3:
+            # Python 3 random numbers.
+            expected = (107, 20, 225)
+
+        self.assertEqual(color_key[1], expected)
         
     def test_pretty_color_palette_does_not_mess_up_random_state(self):
         from jicbioimage.core.util.array import _pretty_color_palette
