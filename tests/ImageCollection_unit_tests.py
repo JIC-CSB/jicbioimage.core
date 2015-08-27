@@ -5,7 +5,7 @@ import unittest
 try:
     from mock import MagicMock, patch
 except ImportError:
-    from unittest.mock import Mock, patch
+    from unittest.mock import MagicMock, patch
 
 class ImageCollectionTests(unittest.TestCase):
     
