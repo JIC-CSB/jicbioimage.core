@@ -1,8 +1,12 @@
 """Tests for the :class:`jicbioimage.core.image.BFConvertWrapper` class."""
 
 import unittest
-from mock import Mock, patch
 import os.path
+
+try:
+    from mock import Mock, patch
+except ImportError:
+    from unittest.mock import Mock, patch
 
 HERE = os.path.dirname(__file__)
 

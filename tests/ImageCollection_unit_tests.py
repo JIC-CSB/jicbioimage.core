@@ -1,7 +1,11 @@
 """Tests for the :class:`jicbioimage.core.image.ImageCollection` class."""
 
 import unittest
-from mock import MagicMock, patch
+
+try:
+    from mock import MagicMock, patch
+except ImportError:
+    from unittest.mock import Mock, patch
 
 class ImageCollectionTests(unittest.TestCase):
     
