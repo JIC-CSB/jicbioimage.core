@@ -186,7 +186,6 @@ class RegionTestCase(unittest.TestCase):
                                  [0, 1, 0, 0, 0]], dtype=bool)
 
 
-        print region.dilate()
         self.assertTrue(np.array_equal(region.dilate(),
             dilate_array))
 
