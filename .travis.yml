@@ -27,7 +27,7 @@ install:
   - conda info -a
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy scikit-image nose
   - source activate test-environment
-  - pip install rednose
+  - pip install coverage rednose
   - python setup.py install
 before_script:
   - "wget http://downloads.openmicroscopy.org/latest/bio-formats5.1/artifacts/bftools.zip -O /tmp/bftools.zip"
