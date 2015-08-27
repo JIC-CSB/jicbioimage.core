@@ -221,8 +221,6 @@ class FalseColorTests(unittest.TestCase):
                                    
         actual_output = false_color(input_array, color_dict)
 
-        print expected_output
-        print actual_output
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
     def test_false_color_with_default_palette_with_background_colored(self):
@@ -243,7 +241,6 @@ class FalseColorTests(unittest.TestCase):
                                    
         actual_output = false_color(input_array, keep_zero_black=False)
 
-        print actual_output
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
     def test_false_color_with_default_palette(self):
