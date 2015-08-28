@@ -17,7 +17,7 @@ function InstallBFTools () {
     if (-not(Test-Path $BFCONVERT_PATH)) {
         Write-Host "Installing bftools..."
         $webclient = New-Object System.Net.WebClient
-        $webclient.DownloadFile($BFTOOLS_URL, $BFTOOL_ZIP_PATH)
+        $webclient.DownloadFile($BFTOOLS_URL, $BFTOOLS_ZIP_PATH)
         Expand-ZIPFile -File $BFTOOLS_ZIP_PATH -Destination $BFTOOLS_DIR
     } else {
         Write-Host "bftools already installed."
