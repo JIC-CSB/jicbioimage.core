@@ -14,7 +14,7 @@ function Expand-ZIPFile($file, $destination) {
 if (-not(Test-Path $BFCONVERT_PATH)) {
     Write-Host "Installing bftools..."
     $webclient = New-Object System.Net.WebClient
-    $webclient.DownloadFile($BFTOOLS_URL $BFTOOL_ZIP_PATH)
+    $webclient.DownloadFile($BFTOOLS_URL, $BFTOOL_ZIP_PATH)
     Write-Host "Executing:" unzip $BFTOOLS_ZIP_PATH
     Expand-ZIPFile -File "$BFTOOLS_ZIP_PATH" -Destination "$BFTOOLS_DIR"
 } else {
