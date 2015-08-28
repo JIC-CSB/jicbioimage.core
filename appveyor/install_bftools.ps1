@@ -6,7 +6,10 @@ $BFTOOLS_DIR = "C:\bftools"
 $BFCONVERT_PATH = "C:\bftools\bfconvert.bat"
 
 function Expand-ZIPFile($file, $destination) {
-    $shell = new-object -com shell.application
+    if(!(Test-Path -Path $destination )){
+        New-Item -ItemType directory -Path $destination
+    }
+    $shell = New-Object -ComObject Shell.Application
     $zip = $shell.NameSpace($file)
     foreach($item in $zip.items()) {
         $shell.Namespace($destination).copyhere($item)
