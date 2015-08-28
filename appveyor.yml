@@ -11,6 +11,8 @@ init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
 
 install:
+  - "powershell appveyor/install_bftools.ps1"
+  - "set PATH=C:\\bftools;%PATH%"
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
