@@ -19,8 +19,11 @@ install:
   - activate test-environment
   - pip install coverage rednose mock
   - "python appveyor\\install.py"
+  - "dir C:\\bftools"
+  - "dir C:\\FreeImage\\Dist\\x32"
   - "set PATH=C:\\bftools;%PATH%"
   - "set PATH=C:\\FreeImage\\Dist\\x32;%PATH%"
+  - "ECHO %PATH%"
   - python setup.py install
 
 
