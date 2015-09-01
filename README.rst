@@ -9,6 +9,10 @@ The ``jicbioimage.core`` Python package
    :target: https://travis-ci.org/JIC-CSB/jicbioimage.core
    :alt: Travis CI build status (Linux)
 
+.. image:: https://ci.appveyor.com/api/projects/status/xe9a8alhmhrm0qi7/branch/master?svg=true
+   :target: https://ci.appveyor.com/project/tjelvar-olsson/jicbioimage-core
+   :alt: AppVeyor CI build status (Windows)
+
 .. image:: https://codecov.io/github/JIC-CSB/jicbioimage.core/coverage.svg?branch=master
    :target: https://codecov.io/github/JIC-CSB/jicbioimage.core?branch=master
    :alt: Code Coverage
@@ -31,6 +35,7 @@ Features
 - Built in functionality for working with microscopy data
 - Automatic generation of audit trails
 - IPython integration
+- Cross-platform: Linux, Mac and Windows are all supported
 - Works with Python 2.7, 3.3 and 3.4
 
 Related packages
