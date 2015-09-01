@@ -174,12 +174,8 @@ class BFConvertWrapper(object):
         """
         MetaData = namedtuple('MetaData', self.split_order)
         base_name = os.path.basename(fname)              # e.g. 'test_S1_C2_Z3_T4.tif'
-        print('base_name: {}'.format(base_name))
         name, suffix = base_name.split('.')              # e.g. 'test_S1_C2_Z3_T4', 'tif'
-        print('name: {}'.format(name))
-        print('split_order: {}'.format(self.split_order))
         data = name.split('_')[-len(self.split_order):]  # e.g. ['S1', 'C2', 'Z3', 'T4']
-        print('data: {}'.format(data))
         args = [ int(x[1:]) for x in data ]               # e.g. [1, 2, 3, 4]
         return MetaData(*args)
 
