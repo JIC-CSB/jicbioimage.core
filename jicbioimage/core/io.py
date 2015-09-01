@@ -1,5 +1,6 @@
 """Module for reading and writing images."""
 
+import sys
 import os
 import os.path
 import re
@@ -157,7 +158,10 @@ class BFConvertWrapper(object):
         output_file = '{}{}.tif'.format(name, self.split_pattern)
         if output_dir:
             output_file = os.path.join(output_dir, output_file)
-        return ['bfconvert', input_file, output_file]
+        bfconvert = 'bfconvert'
+        if sys.platform == 'win32':
+            bfconvert = 'bfconvert.bat'
+        return [bfconvert, input_file, output_file]
 
     def metadata_from_fname(self, fname):
         """Return meta data extracted from file name.

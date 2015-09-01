@@ -1,5 +1,6 @@
 """Tests for the :class:`jicbioimage.core.image.BFConvertWrapper` class."""
 
+import sys
 import unittest
 import os.path
 
@@ -11,6 +12,12 @@ except ImportError:
 HERE = os.path.dirname(__file__)
 
 class BFConvertWrapperTests(unittest.TestCase):
+
+    def setUp(self):
+        self.org_sys_platform = sys.platform
+    
+    def tearDown(self):
+        sys.platform = self.org_sys_platform
     
     def test_backend_attribute(self):
         from jicbioimage.core.io import BFConvertWrapper
@@ -31,18 +38,39 @@ class BFConvertWrapperTests(unittest.TestCase):
         wrapper.split_order = ['z', 'c']
         self.assertEqual(wrapper.split_pattern, '_Z%z_C%c')
 
-    def test_run_command(self):
+    def test_run_command_linux(self):
         """Test the run_command function."""
         from jicbioimage.core.io import BFConvertWrapper
         wrapper = BFConvertWrapper('backend')
+
+        sys.platform = 'linux2'
+
         cmd = wrapper.run_command('test.lif')
         self.assertEqual(cmd, ['bfconvert',
                                'test.lif',
                                'test_S%s_C%c_Z%z_T%t.tif'])
-        cmd = wrapper.run_command('test.lif', output_dir='/tmp')
+
+        cmd = wrapper.run_command('test.lif', output_dir=os.path.join('/', 'tmp'))
         self.assertEqual(cmd, ['bfconvert',
                                'test.lif',
-                               '/tmp/test_S%s_C%c_Z%z_T%t.tif'])
+                               os.path.join('/', 'tmp', 'test_S%s_C%c_Z%z_T%t.tif')])
+
+    def test_run_command_windows(self):
+        """Test the run_command function."""
+        from jicbioimage.core.io import BFConvertWrapper
+        wrapper = BFConvertWrapper('backend')
+
+        sys.platform = 'win32'
+
+        cmd = wrapper.run_command('test.lif')
+        self.assertEqual(cmd, ['bfconvert.bat',
+                               'test.lif',
+                               'test_S%s_C%c_Z%z_T%t.tif'])
+
+        cmd = wrapper.run_command('test.lif', output_dir=os.path.join('/', 'tmp'))
+        self.assertEqual(cmd, ['bfconvert.bat',
+                               'test.lif',
+                               os.path.join('/', 'tmp', 'test_S%s_C%c_Z%z_T%t.tif')])
 
     def test_metadata_from_fname(self):
         """Test the metadata_from_fname function."""
