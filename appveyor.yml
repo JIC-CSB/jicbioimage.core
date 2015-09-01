@@ -11,8 +11,6 @@ init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
 
 install:
-  - "powershell appveyor/install_bftools.ps1"
-  - "set PATH=C:\\bftools;%PATH%"
   - "set PATH=%MINICONDA%;%MINICONDA%\\Scripts;%PATH%"
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
@@ -20,6 +18,9 @@ install:
   - "conda create -q -n test-environment python=%PYTHON_VERSION% numpy scipy scikit-image nose"
   - activate test-environment
   - pip install coverage rednose mock
+  - "python appveyor\\install.py"
+  - "set PATH=C:\\bftools;%PATH%"
+  - "set PATH=C:\\FreeImage\\Dist\\x32;%PATH%"
   - python setup.py install
 
 
