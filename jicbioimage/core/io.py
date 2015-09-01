@@ -196,8 +196,8 @@ class BFConvertWrapper(object):
         try:
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             stderr = p.stderr.read()
-        except OSError:
-            raise(RuntimeError('bfconvert tool not found in PATH'))
+        except OSError as e:
+            raise(RuntimeError('bfconvert tool not found in PATH\n{}'.format(e)))
         if len(stderr) > 0:
             raise(RuntimeError(stderr))
         manifest_fpath = os.path.join(entry.directory, 'manifest.json')
