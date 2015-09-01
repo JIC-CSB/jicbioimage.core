@@ -109,12 +109,14 @@ class BFConvertWrapper(object):
         self.backend = backend
         self.split_order = ['s', 'c', 'z', 't']
 
-    @property
-    def split_pattern(self):
+    def split_pattern(self, win32=False):
         """Pattern used to split the input file."""
         patterns = []
         for p in self.split_order:
-            patterns.append('_{}%{}'.format(p.capitalize(), p))
+            if win32:
+                patterns.append('_{}%%{}'.format(p.capitalize(), p))
+            else:
+                patterns.append('_{}%{}'.format(p.capitalize(), p))
         return ''.join(patterns)
 
     def _sorted_nicely(self, l):
@@ -155,12 +157,13 @@ class BFConvertWrapper(object):
         """
         base_name = os.path.basename(input_file)
         name, suffix = base_name.split('.', 1)
-        output_file = '{}{}.tif'.format(name, self.split_pattern)
-        if output_dir:
-            output_file = os.path.join(output_dir, output_file)
+        output_file = '{}{}.tif'.format(name, self.split_pattern())
         bfconvert = 'bfconvert'
         if sys.platform == 'win32':
             bfconvert = 'bfconvert.bat'
+            output_file = '{}{}.tif'.format(name, self.split_pattern(win32=True))
+        if output_dir:
+            output_file = os.path.join(output_dir, output_file)
         return [bfconvert, input_file, output_file]
 
     def metadata_from_fname(self, fname):

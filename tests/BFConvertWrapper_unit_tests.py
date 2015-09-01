@@ -34,9 +34,11 @@ class BFConvertWrapperTests(unittest.TestCase):
         """Test the split_pattern property."""
         from jicbioimage.core.io import BFConvertWrapper
         wrapper = BFConvertWrapper('backend')
-        self.assertEqual(wrapper.split_pattern, '_S%s_C%c_Z%z_T%t')
+        self.assertEqual(wrapper.split_pattern(), '_S%s_C%c_Z%z_T%t')
+        self.assertEqual(wrapper.split_pattern(win32=True), '_S%%s_C%%c_Z%%z_T%%t')
         wrapper.split_order = ['z', 'c']
-        self.assertEqual(wrapper.split_pattern, '_Z%z_C%c')
+        self.assertEqual(wrapper.split_pattern(), '_Z%z_C%c')
+        self.assertEqual(wrapper.split_pattern(win32=True), '_Z%%z_C%%c')
 
     def test_run_command_linux(self):
         """Test the run_command function."""
@@ -65,12 +67,12 @@ class BFConvertWrapperTests(unittest.TestCase):
         cmd = wrapper.run_command('test.lif')
         self.assertEqual(cmd, ['bfconvert.bat',
                                'test.lif',
-                               'test_S%s_C%c_Z%z_T%t.tif'])
+                               'test_S%%s_C%%c_Z%%z_T%%t.tif'])
 
         cmd = wrapper.run_command('test.lif', output_dir=os.path.join('/', 'tmp'))
         self.assertEqual(cmd, ['bfconvert.bat',
                                'test.lif',
-                               os.path.join('/', 'tmp', 'test_S%s_C%c_Z%z_T%t.tif')])
+                               os.path.join('/', 'tmp', 'test_S%%s_C%%c_Z%%z_T%%t.tif')])
 
     def test_metadata_from_fname(self):
         """Test the metadata_from_fname function."""
