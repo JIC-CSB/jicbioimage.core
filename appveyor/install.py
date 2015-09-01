@@ -28,7 +28,8 @@ def install_from_zip(url):
 
 def install_bftools():
     print("Installing bftools.")
-    url = 'http://downloads.openmicroscopy.org/latest/bio-formats5.1/artifacts/bftools.zip'
+#   url = 'http://downloads.openmicroscopy.org/latest/bio-formats5.1/artifacts/bftools.zip'
+    url = 'http://downloads.openmicroscopy.org/bio-formats/5.0.8/artifacts/bftools.zip'
     install_from_zip(url)
 
 def install_freeimage():
