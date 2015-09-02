@@ -87,6 +87,17 @@ class ImageTests(unittest.TestCase):
         self.assertEqual(ar.shape[0], 300)
         self.assertEqual(ar.shape[1], 400)
         
+    def test_rgb_thumbnail(self):
+        from jicbioimage.core.image import Image
+        image = Image((600, 800, 3), dtype=np.uint64)
+        thumbnail = image.png(width=300)
+
+        ar = np.asarray(PIL.Image.open(io.BytesIO(thumbnail)))
+
+        self.assertEqual(ar.shape[0], 300)
+        self.assertEqual(ar.shape[1], 400)
+        self.assertEqual(ar.shape[2], 3)
+        
         
     def test_from_array(self):
         from jicbioimage.core.image import Image

@@ -97,9 +97,12 @@ class Image(np.ndarray):
         use_plugin('freeimage')
 
         def resize(im, width):
-            x, y = im.shape
-            scale_factor = float(width) / float(x)
-            ar = scipy.ndimage.zoom(im, scale_factor, order=0)
+            x, y = im.shape[:2]
+            f = float(width) / float(x)
+            scale_factors = [1.0 for i in range(len(im.shape))]
+            scale_factors[0] = f
+            scale_factors[1] = f
+            ar = scipy.ndimage.zoom(im, scale_factors, order=0)
             return Image.from_array(ar, log_in_history=False)
 
         safe_range_im = self
