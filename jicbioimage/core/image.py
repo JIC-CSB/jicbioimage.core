@@ -410,7 +410,7 @@ class SegmentedImage(Image):
         if identifier < 0:
             raise(ValueError("Identifier must be a positive integer."))
 
-        if not isinstance(identifier, int):
+        if not np.equal(np.mod(identifier, 1), 0):
             raise(ValueError("Identifier must be a positive integer."))
 
         if identifier == 0:
