@@ -54,7 +54,7 @@ Related packages
 - GitHub: https://github.com/JIC-CSB/jicbioimage.transform
 
 ``jicbioimage.illustrate``
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 - Documentation: http://jicbioimageillustrate.readthedocs.org
 - GitHub: https://github.com/JIC-CSB/jicbioimage.illustrate
