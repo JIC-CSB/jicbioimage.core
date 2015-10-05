@@ -128,5 +128,22 @@ class TransformationUserStory(unittest.TestCase):
         self.assertTrue(os.path.isfile(created_fpath),
             'No such file: {}'.format(created_fpath))
 
+    def test_can_return_segmented_image(self):
+        from jicbioimage.core.image import Image, SegmentedImage
+        from jicbioimage.core.transform import transformation
+        from jicbioimage.core.io import AutoName
+        AutoName.directory = TMP_DIR
+
+        @transformation
+        def test_segmentation(image):
+            return image.view(SegmentedImage)
+
+        image = Image.from_array(np.zeros((50, 50), dtype=np.uint8))
+        self.assertTrue(isinstance(image, Image))
+        segmentation = test_segmentation(image)
+        self.assertTrue(isinstance(segmentation, SegmentedImage))
+        self.assertEqual(len(segmentation.history), 2)
+        self.assertEqual(segmentation.history[-1], "Applied test_segmentation transform")
+
 if __name__ == '__main__':
     unittest.main()
