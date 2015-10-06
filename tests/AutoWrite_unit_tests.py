@@ -11,10 +11,6 @@ class AutoWriteTests(unittest.TestCase):
     def test_on(self):
         from jicbioimage.core.io import AutoWrite
         self.assertTrue(AutoWrite.on)
-
-    def test_auto_safe_dtype(self):
-        from jicbioimage.core.io import AutoWrite
-        self.assertTrue(AutoWrite.auto_safe_dtype)
         
         
 if __name__ == '__main__':

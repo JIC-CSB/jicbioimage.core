@@ -44,9 +44,6 @@ class AutoWrite(object):
     #: Whether or not auto writing of images is enabled.
     on = True
 
-    #: Ensure image to be written has a safe dtype for writing to file.
-    auto_safe_dtype = True
-
     
 #############################################################################
 # Back ends classes for storing/caching unpacked microscopy images.
