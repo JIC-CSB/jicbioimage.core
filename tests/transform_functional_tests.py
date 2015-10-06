@@ -5,7 +5,6 @@ import os
 import os.path
 import shutil
 import numpy as np
-from skimage.io import imread, use_plugin
 
 HERE = os.path.dirname(__file__)
 DATA_DIR = os.path.join(HERE, 'data')
@@ -25,9 +24,8 @@ class TransformationUserStory(unittest.TestCase):
         AutoName.count = 0
         shutil.rmtree(TMP_DIR)
 
-
     def test_creating_transformations_from_scratch(self):
-        
+
         # What if the default names of images was just the order in which they
         # were created?
         # Or perhaps the order + the function name, e.g.
@@ -53,7 +51,22 @@ class TransformationUserStory(unittest.TestCase):
         self.assertEqual(image.history[-1], 'Applied identity transform')
         created_fpath = os.path.join(TMP_DIR, '1_identity.png')
         self.assertTrue(os.path.isfile(created_fpath),
-            'No such file: {}'.format(created_fpath))
+                        'No such file: {}'.format(created_fpath))
+
+    def test_transform_can_take_named_argument(self):
+        from jicbioimage.core.image import Image
+        from jicbioimage.core.transform import transformation
+        from jicbioimage.core.io import AutoName
+        AutoName.directory = TMP_DIR
+
+        @transformation
+        def identity(image):
+            return image
+
+        image = Image((50, 50))
+
+        # The command below should not raise an IndexError.
+        image = identity(image=image)
 
     def test_BZ2(self):
         from skimage.filters import gaussian_filter
@@ -85,10 +98,10 @@ class TransformationUserStory(unittest.TestCase):
 
         created_fpath = os.path.join(TMP_DIR, '1_blur.png')
         self.assertTrue(os.path.isfile(created_fpath),
-            'No such file: {}'.format(created_fpath))
+                        'No such file: {}'.format(created_fpath))
 
     def test_stack_to_image_transform(self):
-        from jicbioimage.core.image import DataManager
+        from jicbioimage.core.image import DataManager, Image
         from jicbioimage.core.io import FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
@@ -108,6 +121,7 @@ class TransformationUserStory(unittest.TestCase):
         stack = microscopy_collection.zstack_array()
 
         image = average_projection(stack)
+        self.assertTrue(isinstance(image, Image))
 
     def test_auto_safe_dtype(self):
         # AutoSave.auto_safe_type is True by default
@@ -121,12 +135,12 @@ class TransformationUserStory(unittest.TestCase):
             return image
 
         decorated = transformation(some_transform)
-        im = np.zeros((50,50), dtype=np.uint64)
+        im = np.zeros((50, 50), dtype=np.uint64)
 
         decorated(im)
         created_fpath = os.path.join(TMP_DIR, '1_some_transform.png')
         self.assertTrue(os.path.isfile(created_fpath),
-            'No such file: {}'.format(created_fpath))
+                        'No such file: {}'.format(created_fpath))
 
     def test_can_return_segmented_image(self):
         from jicbioimage.core.image import Image, SegmentedImage
@@ -143,7 +157,8 @@ class TransformationUserStory(unittest.TestCase):
         segmentation = test_segmentation(image)
         self.assertTrue(isinstance(segmentation, SegmentedImage))
         self.assertEqual(len(segmentation.history), 2)
-        self.assertEqual(segmentation.history[-1], "Applied test_segmentation transform")
+        self.assertEqual(segmentation.history[-1],
+                         "Applied test_segmentation transform")
 
 if __name__ == '__main__':
     unittest.main()
