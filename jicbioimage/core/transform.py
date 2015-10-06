@@ -42,15 +42,7 @@ def transformation(func):
 
         if AutoWrite.on:
             fpath = AutoName.name(func)
-            im_to_save = np.copy(image)
-            if AutoWrite.auto_safe_dtype:
-                im_to_save = 255 * normalise(im_to_save)
-                im_to_save = im_to_save.astype(np.uint8)
-            try:
-                skimage.io.imsave(fpath, im_to_save, 'freeimage')
-            except ValueError:
-                # Give a more meaningful error message.
-                raise(TypeError(
-                    "Cannot handle this data type: {}".format(image.dtype)))
+            with open(fpath, "wb") as fh:
+                fh.write(image.png())
         return image
     return func_as_transformation

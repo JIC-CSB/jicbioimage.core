@@ -7,7 +7,7 @@ import base64
 
 import numpy as np
 import scipy.ndimage
-from skimage.io import imread, imsave, use_plugin
+import skimage.io
 
 from jicbioimage.core.io import (
     FileBackend,
@@ -50,8 +50,8 @@ class Image(np.ndarray):
                                in the image's history
         :returns: :class:`jicbioimage.core.image.Image`
         """
-        use_plugin('freeimage')
-        ar = imread(fpath)
+        skimage.io.use_plugin('freeimage')
+        ar = skimage.io.imread(fpath)
 
         # Create a :class:`jicbioimage.core.image.Image` instance.
         image = Image.from_array(ar, name)
@@ -94,7 +94,7 @@ class Image(np.ndarray):
         :param width: integer specifying the desired width
         :returns: png as a string
         """
-        use_plugin('freeimage')
+        skimage.io.use_plugin('freeimage')
 
         def resize(im, width):
             x, y = im.shape[:2]
@@ -114,10 +114,9 @@ class Image(np.ndarray):
             safe_range_im = resize(safe_range_im, width)
 
         with TemporaryFilePath(suffix='.png') as tmp:
-            imsave(tmp.fpath, safe_range_im.astype(np.uint8))
+            skimage.io.imsave(tmp.fpath, safe_range_im.astype(np.uint8), "freeimage")
             with open(tmp.fpath, 'rb') as fh:
                 return fh.read()
-
 
     def _repr_png_(self):
         """Return image as png string.
