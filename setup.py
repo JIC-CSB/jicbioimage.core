@@ -21,7 +21,7 @@ class NoseTestCommand(TestCommand):
         import nose
         nose.run_exit(argv=['nosetests'])
 
-version = "0.5.2"
+version = "0.5.3"
 readme = open('README.rst').read()
 
 setup(name='jicbioimage.core',
