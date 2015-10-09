@@ -19,7 +19,55 @@ from jicbioimage.core.util.array import normalise, false_color
 
 from jicbioimage.core.region import Region
 
-class Image(np.ndarray):
+class _BaseImage(np.ndarray):
+    """Private image base class with png repr functionality.
+    
+    Needed to split out the png functionality from the
+    :class:`jicbioimage.core.image.Image` class in order to be able to re-use it
+    in :class:`jicbioimage.illustrate.Canvas`.
+
+    This base class will remain private until we can find a suitable name for it.
+    """
+
+    def png(self, width=None):
+        """Return png string of image.
+
+        :param width: integer specifying the desired width
+        :returns: png as a string
+        """
+        skimage.io.use_plugin('freeimage')
+
+        def resize(im, width):
+            x, y = im.shape[:2]
+            f = float(width) / float(x)
+            scale_factors = [1.0 for i in range(len(im.shape))]
+            scale_factors[0] = f
+            scale_factors[1] = f
+            ar = scipy.ndimage.zoom(im, scale_factors, order=0)
+            return Image.from_array(ar, log_in_history=False)
+
+        safe_range_im = self
+
+        if self.dtype != np.uint8:
+            safe_range_im = 255 * normalise(self)
+
+        if width is not None:
+            safe_range_im = resize(safe_range_im, width)
+
+        with TemporaryFilePath(suffix='.png') as tmp:
+            skimage.io.imsave(tmp.fpath, safe_range_im.astype(np.uint8), "freeimage")
+            with open(tmp.fpath, 'rb') as fh:
+                return fh.read()
+
+    def _repr_png_(self):
+        """Return image as png string.
+
+        Used by IPython qtconsole/notebook to display images.
+        """
+        return self.png()
+
+
+class Image(_BaseImage):
     """Image class."""
 
     @classmethod
@@ -88,42 +136,6 @@ class Image(np.ndarray):
         self.name = getattr(obj, 'name', None)
         self.history = getattr(obj, 'history', [])
 
-    def png(self, width=None):
-        """Return png string of image.
-
-        :param width: integer specifying the desired width
-        :returns: png as a string
-        """
-        skimage.io.use_plugin('freeimage')
-
-        def resize(im, width):
-            x, y = im.shape[:2]
-            f = float(width) / float(x)
-            scale_factors = [1.0 for i in range(len(im.shape))]
-            scale_factors[0] = f
-            scale_factors[1] = f
-            ar = scipy.ndimage.zoom(im, scale_factors, order=0)
-            return Image.from_array(ar, log_in_history=False)
-
-        safe_range_im = self
-
-        if self.dtype != np.uint8:
-            safe_range_im = 255 * normalise(self)
-
-        if width is not None:
-            safe_range_im = resize(safe_range_im, width)
-
-        with TemporaryFilePath(suffix='.png') as tmp:
-            skimage.io.imsave(tmp.fpath, safe_range_im.astype(np.uint8), "freeimage")
-            with open(tmp.fpath, 'rb') as fh:
-                return fh.read()
-
-    def _repr_png_(self):
-        """Return image as png string.
-
-        Used by IPython qtconsole/notebook to display images.
-        """
-        return self.png()
 
 class ProxyImage(object):
     """Lightweight image class."""
