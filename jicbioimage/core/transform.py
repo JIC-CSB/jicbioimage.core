@@ -19,15 +19,8 @@ Below is an example of how to create a transformation that inverts an image.
 
 from functools import wraps
 
-import numpy as np
-
-import skimage.io
-import skimage.morphology
-import skimage.exposure
-
 from jicbioimage.core.io import AutoName, AutoWrite
 from jicbioimage.core.image import Image
-from jicbioimage.core.util.array import normalise
 
 
 def transformation(func):
