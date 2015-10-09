@@ -75,6 +75,7 @@ import numpy as np
 import skimage
 import skimage.morphology
 
+
 class Region(np.ndarray):
     """Class representing a region of interest in an image.
 
@@ -103,7 +104,7 @@ class Region(np.ndarray):
     @classmethod
     def select_from_array(cls, array, identifier):
         """Return a region from a numpy array.
-        
+
         :param array: :class:`numpy.ndarray`
         :param identifier: value representing the region to select in the array
         :returns: :class:`jicbioimage.core.region.Region`
@@ -162,7 +163,6 @@ class Region(np.ndarray):
         """Region as a list of points."""
         return list(zip(*self.index_arrays))
 
-
     @property
     def perimeter(self):
         """Return the perimiter.
@@ -177,6 +177,6 @@ class Region(np.ndarray):
         :param iterations: number of iterations to use in dilation
         :returns: :class:`jicbioimage.core.region.Region`
         """
-        dilated_array = nd.morphology.binary_dilation(self, 
+        dilated_array = nd.morphology.binary_dilation(self,
                                                       iterations=iterations)
         return Region(dilated_array)
