@@ -19,14 +19,16 @@ from jicbioimage.core.util.array import normalise, false_color
 
 from jicbioimage.core.region import Region
 
+
 class _BaseImage(np.ndarray):
     """Private image base class with png repr functionality.
-    
-    Needed to split out the png functionality from the
-    :class:`jicbioimage.core.image.Image` class in order to be able to re-use it
-    in :class:`jicbioimage.illustrate.Canvas`.
 
-    This base class will remain private until we can find a suitable name for it.
+    Needed to split out the png functionality from the
+    :class:`jicbioimage.core.image.Image` class in order to be able to re-use
+    it in :class:`jicbioimage.illustrate.Canvas`.
+
+    This base class will remain private until we can find a suitable name for
+    it.
     """
 
     def png(self, width=None):
@@ -55,7 +57,8 @@ class _BaseImage(np.ndarray):
             safe_range_im = resize(safe_range_im, width)
 
         with TemporaryFilePath(suffix='.png') as tmp:
-            skimage.io.imsave(tmp.fpath, safe_range_im.astype(np.uint8), "freeimage")
+            safe_range_im_uint8 = safe_range_im.astype(np.uint8)
+            skimage.io.imsave(tmp.fpath, safe_range_im_uint8, "freeimage")
             with open(tmp.fpath, 'rb') as fh:
                 return fh.read()
 
@@ -73,7 +76,7 @@ class Image(_BaseImage):
     @classmethod
     def from_array(cls, array, name=None, log_in_history=True):
         """Return :class:`jicbioimage.core.image.Image` instance from an array.
-        
+
         :param array: :class:`numpy.ndarray`
         :param name: name of the image
         :param log_in_history: whether or not to log the creation event
@@ -87,11 +90,11 @@ class Image(_BaseImage):
         if log_in_history:
             image.history.append(event)
         return image
-        
+
     @classmethod
     def from_file(cls, fpath, name=None, log_in_history=True):
         """Return :class:`jicbioimage.core.image.Image` instance from a file.
-        
+
         :param fpath: path to the image file
         :param name: name of the image
         :param log_in_history: whether or not to log the creation event
@@ -115,7 +118,7 @@ class Image(_BaseImage):
         return image
 
     def __new__(subtype, shape, dtype=np.uint8, buffer=None, offset=0,
-                 strides=None, order=None, name=None, log_in_history=True):
+                strides=None, order=None, name=None, log_in_history=True):
         obj = np.ndarray.__new__(subtype, shape, dtype, buffer, offset,
                                  strides, order)
         obj.name = name
@@ -129,7 +132,7 @@ class Image(_BaseImage):
             event = '{} as {}'.format(event, name)
         if log_in_history:
             self.history.append(event)
-        
+
     def __array_finalize__(self, obj):
         if obj is None:
             return
@@ -149,7 +152,8 @@ class ProxyImage(object):
         return "<ProxyImage object at {}>".format(hex(id(self)))
 
     def __info_html_table__(self, index):
-        return "<table><tr><th>Index</th><td>{}</td></tr></table>".format(index)
+        table = "<table><tr><th>Index</th><td>{}</td></tr></table>"
+        return table.format(index)
 
     @property
     def image(self):
@@ -162,6 +166,7 @@ class ProxyImage(object):
         Used by IPython qtconsole/notebook to display images.
         """
         return self.image.png()
+
 
 class MicroscopyImage(ProxyImage):
     """Lightweight image class with microscopy meta data."""
@@ -192,12 +197,11 @@ class MicroscopyImage(ProxyImage):
                     <td>{}</td>
                 </tr>
             </table>
-            """.format(
-                index, 
-                self.series,
-                self.channel,
-                self.zslice,
-                self.timepoint)
+            """.format(index,
+                       self.series,
+                       self.channel,
+                       self.zslice,
+                       self.timepoint)
 
     def is_me(self, s, c, z, t):
         """Return True if arguments match my meta data.
@@ -209,9 +213,9 @@ class MicroscopyImage(ProxyImage):
         :returns: :class:`bool`
         """
         if (self.series == s
-            and self.channel == c
-            and self.zslice == z
-            and self.timepoint == t):
+           and self.channel == c
+           and self.zslice == z
+           and self.timepoint == t):
             return True
         return False
 
@@ -224,17 +228,18 @@ class MicroscopyImage(ProxyImage):
         :returns: :class:`bool`
         """
         if (self.series == s
-            and self.channel == c
-            and self.timepoint == t):
+           and self.channel == c
+           and self.timepoint == t):
             return True
         return False
+
 
 class ImageCollection(list):
     """Class for storing related images."""
 
     def proxy_image(self, index=0):
         """Return a :class:`jicbioimage.core.image.ProxyImage` instance.
-        
+
         :param index: list index
         :returns: :class:`jicbioimage.core.image.ProxyImage`
         """
@@ -242,7 +247,7 @@ class ImageCollection(list):
 
     def image(self, index=0):
         """Return image as a :class:`jicbioimage.core.image.Image`.
-        
+
         :param index: list index
         :returns: :class:`jicbioimage.core.image.Image`
         """
@@ -250,7 +255,7 @@ class ImageCollection(list):
 
     def parse_manifest(self, fpath):
         """Parse manifest file to build up the collection of images.
-        
+
         :param fpath: path to the manifest file
         """
         with open(fpath, 'r') as fh:
@@ -282,25 +287,29 @@ class ImageCollection(list):
             <img style="margin-left: auto; margin-right: auto;"
             src="data:image/png;base64,{}" />
             '''
-        
+
         lines = []
         for i, proxy_image in enumerate(self):
-            b64_png = base64.b64encode(proxy_image.image.png(width=300)).decode('utf-8')
+            png = proxy_image.image.png(width=300)
+            b64_png = base64.b64encode(png).decode('utf-8')
             l = DIV_HTML.format(
-                    CONTENT_HTML.format(
-                        proxy_image.__info_html_table__(i),
-                        b64_png
-                    )
+                CONTENT_HTML.format(
+                    proxy_image.__info_html_table__(i),
+                    b64_png
                 )
+            )
             lines.append(l)
         return '\n'.join(lines)
 
+
 class MicroscopyCollection(ImageCollection):
-    """Class for storing related :class:`jicbioimage.core.image.MicroscopyImage` instances."""
+    """
+    Collection of :class:`jicbioimage.core.image.MicroscopyImage` instances.
+    """
 
     def proxy_image(self, s=0, c=0, z=0, t=0):
         """Return a :class:`jicbioimage.core.image.MicroscopyImage` instance.
-        
+
         :param s: series
         :param c: channel
         :param z: zslice
@@ -312,8 +321,9 @@ class MicroscopyCollection(ImageCollection):
                 return proxy_image
 
     def zstack_proxy_iterator(self, s=0, c=0, t=0):
-        """Return iterator of :class:`jicbioimage.core.image.ProxyImage` instances in the zstack.
-        
+        """
+        Return zstack :class:`jicbioimage.core.image.ProxyImage` iterator.
+
         :param s: series
         :param c: channel
         :param t: timepoint
@@ -325,17 +335,18 @@ class MicroscopyCollection(ImageCollection):
 
     def zstack_array(self, s=0, c=0, t=0):
         """Return zstack as a :class:`numpy.ndarray`.
-        
+
         :param s: series
         :param c: channel
         :param t: timepoint
         :returns: zstack as a :class:`numpy.ndarray`
         """
-        return np.dstack([x.image for x in self.zstack_proxy_iterator(s=s, c=c, t=t)])
+        zstack = [x.image for x in self.zstack_proxy_iterator(s=s, c=c, t=t)]
+        return np.dstack(zstack)
 
     def image(self, s=0, c=0, z=0, t=0):
         """Return image as a :class:`jicbioimage.core.image.Image`.
-        
+
         :param s: series
         :param c: channel
         :param z: zslice
@@ -344,8 +355,9 @@ class MicroscopyCollection(ImageCollection):
         """
         return self.proxy_image(s=s, c=c, z=z, t=t).image
 
+
 class DataManager(list):
-    """Class for managing :class:`jicbioimage.core.image.ImageCollection` instances."""
+    """Manage :class:`jicbioimage.core.image.ImageCollection` instances."""
 
     def __init__(self, backend=None):
         if backend is None:
@@ -356,7 +368,7 @@ class DataManager(list):
 
     def load(self, fpath):
         """Load a microscopy file.
-        
+
         :param fpath: path to microscopy file
         """
         def is_microscopy_item(fpath):
@@ -368,8 +380,8 @@ class DataManager(list):
             l = fpath.split('.')
             ext = l[-1]
             pre_ext = l[-2]
-            if ( (ext == 'tif' or ext == 'tiff')
-                and pre_ext != 'ome' ):
+            if ((ext == 'tif' or ext == 'tiff')
+               and pre_ext != 'ome'):
                 return False
             return True
 
@@ -380,7 +392,6 @@ class DataManager(list):
                                             os.path.basename(fpath),
                                             'manifest.json')
 
-        
         collection = None
         if is_microscopy_item(fpath):
             collection = MicroscopyCollection()
@@ -390,6 +401,7 @@ class DataManager(list):
         self.append(collection)
 
         return collection
+
 
 class SegmentedImage(Image):
     """Class representing the results of applying a segmentation to an image.
@@ -413,8 +425,8 @@ class SegmentedImage(Image):
 
     def region_by_identifier(self, identifier):
         """Return region of interest corresponding to the supplied identifier.
-       
-        :param identifier: integer corresponding to the segment of interest 
+
+        :param identifier: integer corresponding to the segment of interest
         :returns: `jicbioimage.core.region.Region`
         """
 
@@ -432,7 +444,7 @@ class SegmentedImage(Image):
     @property
     def background(self):
         """Return the segmented image background.
-        
+
         In other words the region with pixel values 0.
 
         :returns: `jicbioimage.core.region.Region`
@@ -443,18 +455,18 @@ class SegmentedImage(Image):
     @property
     def false_color_image(self):
         """Return segmentation as a false color image.
-        
+
         :returns: `jicbioimage.core.image.Image`
         """
-        return Image.from_array( false_color(self) ) 
+        return Image.from_array(false_color(self))
 
     @property
     def grayscale_image(self):
         """Return segmentation using raw identifiers.
-        
+
         :returns: `jicbioimage.core.image.Image`
         """
-        return Image.from_array( self ) 
+        return Image.from_array(self)
 
     def png(self, width=None):
         """Return png string of image.
@@ -462,4 +474,4 @@ class SegmentedImage(Image):
         :param width: integer specifying the desired width
         :returns: png as a string
         """
-        return self.false_color_image.png(width) 
+        return self.false_color_image.png(width)
