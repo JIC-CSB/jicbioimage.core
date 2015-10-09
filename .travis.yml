@@ -2,15 +2,18 @@
 # http://conda.pydata.org/docs/travis.html#using-conda-with-travis-ci
 # https://gist.github.com/dan-blanchard/7045057
 
+sudo: false
 language: python
 python:
   # We don't actually use the Travis Python, but this keeps it organized.
   - "2.7"
   - "3.3"
   - "3.4"
+addons:
+  apt:
+    packages:
+      - libfreeimage-dev
 install:
-  - sudo apt-get update
-  - sudo apt-get install libfreeimage-dev
   # We do this conditionally because it saves us some downloading if the
   # version is the same.
   - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
