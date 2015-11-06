@@ -311,6 +311,26 @@ class MicroscopyCollection(ImageCollection):
     Collection of :class:`jicbioimage.core.image.MicroscopyImage` instances.
     """
 
+    @property
+    def series(self):
+        """Return set of series in the collection."""
+        return set([mi.series for mi in self])
+
+    @property
+    def channels(self):
+        """Return set of channels in the collection."""
+        return set([mi.channel for mi in self])
+
+    @property
+    def zslices(self):
+        """Return set of z-slices in the collection."""
+        return set([mi.zslice for mi in self])
+
+    @property
+    def timepoints(self):
+        """Return set of time points in the collection."""
+        return set([mi.timepoint for mi in self])
+
     def proxy_image(self, s=0, c=0, z=0, t=0):
         """Return a :class:`jicbioimage.core.image.MicroscopyImage` instance.
 

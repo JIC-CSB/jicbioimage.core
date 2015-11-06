@@ -33,6 +33,20 @@ class MicroscopyCollectionTests(unittest.TestCase):
         proxy_image = microscopy_collection.proxy_image(s=1, c=1, z=1, t=1)
         self.assertEqual(proxy_image.fpath, 'test1.tif')
 
+    def test_manifest_data(self):
+        from jicbioimage.core.image import MicroscopyCollection, MicroscopyImage
+        microscopy_collection = MicroscopyCollection()
+        microscopy_collection.append(MicroscopyImage('test0.tif',
+            dict(series=0, channel=0, zslice=0, timepoint=0)))
+        microscopy_collection.append(MicroscopyImage('test1.tif',
+            dict(series=1, channel=2, zslice=3, timepoint=4)))
+
+        self.assertEqual(microscopy_collection.series, set([0, 1]))
+        self.assertEqual(microscopy_collection.channels, set([0, 2]))
+        self.assertEqual(microscopy_collection.zslices, set([0, 3]))
+        self.assertEqual(microscopy_collection.timepoints, set([0, 4]))
+
+
     def test_zstack_proxy_iterator(self):
         from jicbioimage.core.image import MicroscopyCollection
         microscopy_collection = MicroscopyCollection()
