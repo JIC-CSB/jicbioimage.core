@@ -237,6 +237,10 @@ class MicroscopyImage(ProxyImage):
 class ImageCollection(list):
     """Class for storing related images."""
 
+    def __init__(self, fpath=None):
+        if fpath is not None:
+            self.parse_manifest(fpath)
+
     def proxy_image(self, index=0):
         """Return a :class:`jicbioimage.core.image.ProxyImage` instance.
 
@@ -394,10 +398,9 @@ class DataManager(list):
 
         collection = None
         if is_microscopy_item(fpath):
-            collection = MicroscopyCollection()
+            collection = MicroscopyCollection(path_to_manifest)
         else:
-            collection = ImageCollection()
-        collection.parse_manifest(path_to_manifest)
+            collection = ImageCollection(path_to_manifest)
         self.append(collection)
 
         return collection
