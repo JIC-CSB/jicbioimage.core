@@ -297,21 +297,15 @@ class PrettyColorUnitTests(unittest.TestCase):
             generated_color = _pretty_color()
             self.assertTrue(all(0 <= c <= 255 for c in generated_color))
     
-    def test_pretty_with_seeds(self):
+    def test_pretty_with_identifier(self):
 
         from jicbioimage.core.util.array import _pretty_color
         import random
 
-        # Python 2 random numbers.
-        expected = (235, 97, 107)
-        if sys.version_info[0] == 3:
-            # Python 3 random numbers.
-            expected = (107, 20, 225)
+        expected = (255, 30, 120)
 
-        for _ in range(1000):
-            random.seed(0)
-            generated_color = _pretty_color()
-            self.assertEqual(generated_color, expected)
+        generated_color = _pretty_color(0)
+        self.assertEqual(generated_color, expected)
 
     def test_import_pretty_color_palette(self):
         
@@ -324,13 +318,11 @@ class PrettyColorUnitTests(unittest.TestCase):
         color_key = _pretty_color_palette([0,1], keep_zero_black=False)
         self.assertEqual(len(color_key), 2)
 
-        # Python 2 random numbers.
-        expected = (235, 97, 107)
-        if sys.version_info[0] == 3:
-            # Python 3 random numbers.
-            expected = (107, 20, 225)
+        expected0 = (255, 30, 120)
+        expected1 = (59, 96, 171)
 
-        self.assertEqual(color_key[0], expected)
+        self.assertEqual(color_key[0], expected0)
+        self.assertEqual(color_key[1], expected1)
             
     def test_pretty_color_palette_consistent(self):
 
@@ -350,23 +342,7 @@ class PrettyColorUnitTests(unittest.TestCase):
         self.assertEqual(len(color_key), 2)
         self.assertEqual(color_key[0], (0, 0, 0))
 
-        # Python 2 random numbers.
-        expected = (235, 97, 107)
-        if sys.version_info[0] == 3:
-            # Python 3 random numbers.
-            expected = (107, 20, 225)
+        expected = (59, 96, 171)
 
+        self.assertEqual(color_key[0], (0, 0, 0))
         self.assertEqual(color_key[1], expected)
-        
-    def test_pretty_color_palette_does_not_mess_up_random_state(self):
-        from jicbioimage.core.util.array import _pretty_color_palette
-        import random
-        for i in range(100):
-            _ = random.randint(0, 100)
-        before_state = random.getstate()
-        identifiers = range(1000)
-        color_dict1 = _pretty_color_palette(identifiers)
-        color_dict2 = _pretty_color_palette(identifiers)
-        after_state = random.getstate()
-        self.assertEqual(before_state, after_state)
-

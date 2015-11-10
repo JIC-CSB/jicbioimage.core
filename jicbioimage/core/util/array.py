@@ -1,5 +1,6 @@
 """Module containing utility functions for manipulating numpy arrays."""
 
+import sys
 from functools import wraps
 
 import random
@@ -116,17 +117,89 @@ def false_color(array, color_dict=None, keep_zero_black=True):
     return output_array
 
 
-def _pretty_color():
+def _pretty_color(identifier=None):
     """Return aesthetically pleasing RGB tuple.
 
     :returns: RGB tuple
     """
+    class Color(dict):
+        def swap(self, i, j):
+            """Swap two color channels around."""
+            tmp = self[i]
+            self[i] = self[j]
+            self[j] = tmp
 
-    c1 = random.randint(127, 255)
-    c2 = random.randint(0, 127)
-    c3 = random.randint(0, 255)
+        @property
+        def rgb_tuple(self):
+            """Return RGB tuple."""
+            return (self[0].intenisty, self[1].intenisty, self[2].intenisty)
 
-    return tuple(random.sample([c1, c2, c3], 3))
+    class Channel(object):
+        def __init__(self, seed, start, end, step=1):
+            self.seed = seed
+            self.choices = range(start, end, step)
+
+        def cut(self, divisor):
+            """Return a deck of integers cut at the divisor."""
+            split = len(self.choices) // divisor
+            start = self.choices[split:]
+            end = self.choices[:split]
+            self.choices = start + end
+
+        def reverse(self):
+            """Return reversed deck."""
+            self.choices = list(reversed(self.choices))
+
+        @property
+        def intenisty(self):
+            """Return the channel intensity value."""
+            pick = self.seed % len(self.choices)
+            return self.choices[pick]
+
+    # Create a seed for each channel.
+    seed1 = identifier
+    if seed1 is None:
+        seed1 = random.randint(0, sys.maxint)
+    seed1 = abs(int(seed1))
+    seed2 = seed1 + 30
+    seed3 = seed2 ** 2  # Make the seeds non-linear.
+
+    # Create a color object with channels.
+    color = Color()
+    color[0] = Channel(seed1, 128, 256)
+    color[1] = Channel(seed2, 0, 128)
+    color[2] = Channel(seed3, 255, 0, -1)
+
+    # Introduce some "randomness" into the first channel
+    # using first prime number.
+    if seed1 % 2:
+        color[0].cut(3)
+
+    # Introduce some "randomness" into one of the channels
+    # using second prime number.
+    color[seed1 % 3].reverse()
+
+    # Add some more "randomness" using the third prime number.
+    order = seed1 % 7
+    if order == 0:
+        pass
+    elif order == 1:
+        color.swap(0, 2)
+    elif order == 2:
+        color.swap(0, 1)
+    elif order == 3:
+        color.swap(0, 2)
+        color.swap(0, 1)
+    elif order == 4:
+        color.swap(0, 1)
+        color.swap(0, 2)
+    elif order == 5:
+        color.swap(1, 2)
+    elif order == 6:
+        color[2].cut(2)
+        color[2].reverse()
+
+    return color.rgb_tuple
 
 
 def _pretty_color_palette(identifiers, keep_zero_black=True):
@@ -137,17 +210,12 @@ def _pretty_color_palette(identifiers, keep_zero_black=True):
     :returns: dictionary
     """
 
-    before_state = random.getstate()
-    try:
-        random.seed(0)
-        color_dict = {}
-        for i in identifiers:
-            if keep_zero_black and i == 0:
-                color_dict[0] = (0, 0, 0)
-                continue
-            value = _pretty_color()
-            color_dict[i] = value
-    finally:
-        random.setstate(before_state)
+    color_dict = {}
+    for i in identifiers:
+        if keep_zero_black and i == 0:
+            color_dict[0] = (0, 0, 0)
+            continue
+        value = _pretty_color(i)
+        color_dict[i] = value
 
     return color_dict
