@@ -241,7 +241,6 @@ class FalseColorTests(unittest.TestCase):
                                     [c3, c3, c3]], dtype=np.uint8)
                                    
         actual_output = false_color(input_array, keep_zero_black=False)
-        print(actual_output)
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
@@ -262,7 +261,6 @@ class FalseColorTests(unittest.TestCase):
                                     [c3, c3, c3]], dtype=np.uint8)
                                    
         actual_output = false_color(input_array)
-        print actual_output
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 

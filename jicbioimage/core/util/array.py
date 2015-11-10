@@ -142,8 +142,8 @@ def _pretty_color(identifier=None):
         def cut(self, divisor):
             """Return a deck of integers cut at the divisor."""
             split = len(self.choices) // divisor
-            start = self.choices[split:]
-            end = self.choices[:split]
+            start = list(self.choices[split:])
+            end = list(self.choices[:split])
             self.choices = start + end
 
         def reverse(self):
@@ -159,7 +159,11 @@ def _pretty_color(identifier=None):
     # Create a seed for each channel.
     seed1 = identifier
     if seed1 is None:
-        seed1 = random.randint(0, sys.maxint)
+        try:
+            seed1 = random.randint(0, sys.maxint)
+        except AttributeError:
+            # Python3 has no sys.maxint
+            seed1 = random.randint(0, sys.maxsize)
     seed1 = abs(int(seed1))
     seed2 = seed1 + 30
     seed3 = seed2 ** 2  # Make the seeds non-linear.
