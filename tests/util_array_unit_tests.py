@@ -232,16 +232,9 @@ class FalseColorTests(unittest.TestCase):
                                 [1, 1, 1],
                                 [2, 2, 2]])
 
-        # Python 2 random numbers.
-        c1 = [235, 97, 107]
-        c2 = [38, 122, 228]
-        c3 = [163, 96, 158]
-
-        if sys.version_info[0] == 3:
-            # Python 3 random numbers.
-            c1 = [107, 20, 225]
-            c2 = [183, 204, 122]
-            c3 = [48, 35, 199]
+        c1 = [255, 30, 120]
+        c2 = [59, 96, 171]
+        c3 = [32, 130, 5]
 
         expected_output = np.array([[c1, c1, c1],
                                     [c2, c2, c2],
@@ -260,21 +253,16 @@ class FalseColorTests(unittest.TestCase):
                                 [1, 1, 1],
                                 [2, 2, 2]])
 
-        # Python 2 random numbers.
         c1 = [0, 0, 0]
-        c2 = [235, 97, 107]
-        c3 = [38, 122, 228]
-        if sys.version_info[0] == 3:
-            # Python 3 random numbers.
-            c1 = [0, 0, 0]
-            c2 = [107, 20, 225]
-            c3 = [183, 204, 122]
+        c2 = [59, 96, 171]
+        c3 = [32, 130, 5]
 
         expected_output = np.array([[c1, c1, c1],
                                     [c2, c2, c2],
                                     [c3, c3, c3]], dtype=np.uint8)
                                    
         actual_output = false_color(input_array)
+        print actual_output
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
