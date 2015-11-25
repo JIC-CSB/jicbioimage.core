@@ -313,23 +313,33 @@ class MicroscopyCollection(ImageCollection):
 
     @property
     def series(self):
-        """Return set of series in the collection."""
-        return set([mi.series for mi in self])
+        """Return list of series in the collection."""
+        return sorted(list(set([mi.series for mi in self])))
 
-    @property
-    def channels(self):
-        """Return set of channels in the collection."""
-        return set([mi.channel for mi in self])
+    def channels(self, s=0):
+        """Return list of channels in the collection.
 
-    @property
-    def zslices(self):
-        """Return set of z-slices in the collection."""
-        return set([mi.zslice for mi in self])
+        :param s: series
+        :returns: list of channel identifiers
+        """
+        return sorted(list(set([mi.channel for mi in self if mi.series == s])))
 
-    @property
-    def timepoints(self):
-        """Return set of time points in the collection."""
-        return set([mi.timepoint for mi in self])
+    def zslices(self, s=0):
+        """Return list of z-slices in the collection.
+
+        :param s: series
+        :returns: list of zslice identifiers
+        """
+        return sorted(list(set([mi.zslice for mi in self if mi.series == s])))
+
+    def timepoints(self, s=0):
+        """Return list of time points in the collection.
+
+        :param s: series
+        :returns: list of time point identifiers
+        """
+        return sorted(list(set([mi.timepoint for mi in self
+                                if mi.series == s])))
 
     def proxy_image(self, s=0, c=0, z=0, t=0):
         """Return a :class:`jicbioimage.core.image.MicroscopyImage` instance.

@@ -38,13 +38,18 @@ class MicroscopyCollectionTests(unittest.TestCase):
         microscopy_collection = MicroscopyCollection()
         microscopy_collection.append(MicroscopyImage('test0.tif',
             dict(series=0, channel=0, zslice=0, timepoint=0)))
+        microscopy_collection.append(MicroscopyImage('test0.tif',
+            dict(series=0, channel=1, zslice=2, timepoint=3)))
         microscopy_collection.append(MicroscopyImage('test1.tif',
             dict(series=1, channel=2, zslice=3, timepoint=4)))
 
-        self.assertEqual(microscopy_collection.series, set([0, 1]))
-        self.assertEqual(microscopy_collection.channels, set([0, 2]))
-        self.assertEqual(microscopy_collection.zslices, set([0, 3]))
-        self.assertEqual(microscopy_collection.timepoints, set([0, 4]))
+        self.assertEqual(microscopy_collection.series, [0, 1])
+        self.assertEqual(microscopy_collection.channels(), [0, 1])
+        self.assertEqual(microscopy_collection.channels(s=1), [2])
+        self.assertEqual(microscopy_collection.zslices(), [0, 2])
+        self.assertEqual(microscopy_collection.zslices(s=1), [3])
+        self.assertEqual(microscopy_collection.timepoints(), [0, 3])
+        self.assertEqual(microscopy_collection.timepoints(s=1), [4])
 
 
     def test_zstack_proxy_iterator(self):
