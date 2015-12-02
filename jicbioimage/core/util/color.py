@@ -17,7 +17,7 @@ def _extract_8_bits(long_value, shift=1):
 def _md5_hash_as_long(input_value):
     """Return the hash of the input value converted to a long."""
 
-    hex_hash = hashlib.md5(str(input_value)).hexdigest()
+    hex_hash = hashlib.md5(str(input_value).encode('utf-8')).hexdigest()
 
     return int(hex_hash, 16)
 
