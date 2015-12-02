@@ -18,7 +18,7 @@ class ColorTests(unittest.TestCase):
         from jicbioimage.core.util.color import _md5_hash_as_long
 
         assert( _md5_hash_as_long(1) == \
-                261578874264819908609102035485573088411L )
+                261578874264819908609102035485573088411 )
 
     def test_generate_rgb_tuple(self):
 
