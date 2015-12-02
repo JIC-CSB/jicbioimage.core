@@ -232,9 +232,9 @@ class FalseColorTests(unittest.TestCase):
                                 [1, 1, 1],
                                 [2, 2, 2]])
 
-        c1 = [255, 30, 120]
-        c2 = [59, 96, 171]
-        c3 = [32, 130, 5]
+        c1 = [228, 90, 135]
+        c2 = [132, 27, 117]
+        c3 = [20, 134, 44]
 
         expected_output = np.array([[c1, c1, c1],
                                     [c2, c2, c2],
@@ -253,8 +253,8 @@ class FalseColorTests(unittest.TestCase):
                                 [2, 2, 2]])
 
         c1 = [0, 0, 0]
-        c2 = [59, 96, 171]
-        c3 = [32, 130, 5]
+        c2 = [132, 27, 117]
+        c3 = [20, 134, 44]
 
         expected_output = np.array([[c1, c1, c1],
                                     [c2, c2, c2],
@@ -264,71 +264,7 @@ class FalseColorTests(unittest.TestCase):
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
-class PrettyColorUnitTests(unittest.TestCase):
 
-    def test_import_pretty_color(self):
 
-        from jicbioimage.core.util.array import _pretty_color
-
-    def test_generate_pretty_color(self):
-
-        from jicbioimage.core.util.array import _pretty_color
-
-        generated_color = _pretty_color()
-
-        self.assertEqual(len(generated_color), 3)
-        self.assertTrue(isinstance(generated_color, tuple))
-
-        for _ in range(1000):
-            generated_color = _pretty_color()
-            self.assertTrue(all(0 <= c <= 255 for c in generated_color))
-    
-    def test_pretty_with_identifier(self):
-
-        from jicbioimage.core.util.array import _pretty_color
-        import random
-
-        expected = (255, 30, 120)
-
-        generated_color = _pretty_color(0)
-        self.assertEqual(generated_color, expected)
-
-    def test_import_pretty_color_palette(self):
-        
-        from jicbioimage.core.util.array import _pretty_color_palette
-
-    def test_pretty_color_palette(self):
-
-        from jicbioimage.core.util.array import _pretty_color_palette
-
-        color_key = _pretty_color_palette([0,1], keep_zero_black=False)
-        self.assertEqual(len(color_key), 2)
-
-        expected0 = (255, 30, 120)
-        expected1 = (59, 96, 171)
-
-        self.assertEqual(color_key[0], expected0)
-        self.assertEqual(color_key[1], expected1)
-            
-    def test_pretty_color_palette_consistent(self):
-
-        from jicbioimage.core.util.array import _pretty_color_palette
-        
-        identifiers = range(1000)
-        color_dict1 = _pretty_color_palette(identifiers)
-        color_dict2 = _pretty_color_palette(identifiers)
-        for i in identifiers:
-            key = i
-            self.assertEqual(color_dict1[key], color_dict2[key])
-
-    def test_pretty_color_palette_exclude_zero(self):
-        from jicbioimage.core.util.array import _pretty_color_palette
-
-        color_key = _pretty_color_palette([0,1], keep_zero_black=True)
-        self.assertEqual(len(color_key), 2)
-        self.assertEqual(color_key[0], (0, 0, 0))
-
-        expected = (59, 96, 171)
-
-        self.assertEqual(color_key[0], (0, 0, 0))
-        self.assertEqual(color_key[1], expected)
+if __name__ == '__main__':
+    unittest.main()
