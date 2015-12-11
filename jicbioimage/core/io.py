@@ -30,13 +30,19 @@ class AutoName(object):
     """Class for generating output file names automatically."""
     count = 0
     directory = None  #: Output directory to save images to.
-    suffix = '.png'   #: Image file suffix.
+    suffix = ".png"   #: Image file suffix.
+    prefix_format = "{:d}_"  #: Image file prefix format.
+
+    @classmethod
+    def prefix(cls):
+        """Return auto generated file prefix."""
+        return cls.prefix_format.format(cls.count)
 
     @classmethod
     def name(cls, func):
         """Return auto generated file name."""
         cls.count = cls.count + 1
-        fpath = '{}_{}{}'.format(cls.count, func.__name__, cls.suffix)
+        fpath = '{}{}{}'.format(cls.prefix(), func.__name__, cls.suffix)
         if cls.directory:
             fpath = os.path.join(cls.directory, fpath)
         return fpath
