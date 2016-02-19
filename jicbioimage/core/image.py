@@ -17,8 +17,6 @@ from jicbioimage.core.io import (
 
 from jicbioimage.core.util.array import normalise, false_color
 
-from jicbioimage.core.region import Region
-
 
 class _BaseImage(np.ndarray):
     """Private image base class with png repr functionality.
@@ -434,77 +432,3 @@ class DataManager(list):
         self.append(collection)
 
         return collection
-
-
-class SegmentedImage(Image):
-    """Class representing the results of applying a segmentation to an image.
-
-    Each unique pixel value represents a different region of the segmentation.
-    0 represents background and positive integers represent the different
-    regions.
-    """
-
-    @property
-    def identifiers(self):
-        """Return a set of unique identifiers in the segmented image."""
-
-        return set(np.unique(self)) - set([0])
-
-    @property
-    def number_of_segments(self):
-        """Return the number of segments present in the segmented image."""
-
-        return len(self.identifiers)
-
-    def region_by_identifier(self, identifier):
-        """Return region of interest corresponding to the supplied identifier.
-
-        :param identifier: integer corresponding to the segment of interest
-        :returns: `jicbioimage.core.region.Region`
-        """
-
-        if identifier < 0:
-            raise(ValueError("Identifier must be a positive integer."))
-
-        if not np.equal(np.mod(identifier, 1), 0):
-            raise(ValueError("Identifier must be a positive integer."))
-
-        if identifier == 0:
-            raise(ValueError("0 represents the background."))
-
-        return Region.select_from_array(self, identifier)
-
-    @property
-    def background(self):
-        """Return the segmented image background.
-
-        In other words the region with pixel values 0.
-
-        :returns: `jicbioimage.core.region.Region`
-        """
-
-        return Region.select_from_array(self, 0)
-
-    @property
-    def false_color_image(self):
-        """Return segmentation as a false color image.
-
-        :returns: `jicbioimage.core.image.Image`
-        """
-        return Image.from_array(false_color(self))
-
-    @property
-    def grayscale_image(self):
-        """Return segmentation using raw identifiers.
-
-        :returns: `jicbioimage.core.image.Image`
-        """
-        return Image.from_array(self)
-
-    def png(self, width=None):
-        """Return png string of image.
-
-        :param width: integer specifying the desired width
-        :returns: png as a string
-        """
-        return self.false_color_image.png(width)

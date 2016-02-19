@@ -25,10 +25,6 @@ class TestBasics(unittest.TestCase):
         # This throws an error if the module cannot be imported.
         import jicbioimage.core.transform
 
-    def test_import_region_module(self):
-        # This throws an error if the module cannot be imported.
-        import jicbioimage.core.region
-
     def test_import_DataManager_class(self):
         # This throws an error if the class cannot be imported.
         from jicbioimage.core.image import DataManager
