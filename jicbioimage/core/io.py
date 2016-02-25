@@ -135,10 +135,10 @@ class BFConvertWrapper(object):
         patterns = []
         for p in self.split_order:
             if win32:
-                patterns.append('_{}%%{}'.format(p.capitalize(), p))
+                patterns.append('{}%%{}'.format(p.capitalize(), p))
             else:
-                patterns.append('_{}%{}'.format(p.capitalize(), p))
-        return ''.join(patterns)
+                patterns.append('{}%{}'.format(p.capitalize(), p))
+        return '_'.join(patterns)
 
     def _sorted_nicely(self, l):
         """Return list sorted in the way that humans expect.
@@ -178,12 +178,11 @@ class BFConvertWrapper(object):
         """
         base_name = os.path.basename(input_file)
         name, suffix = base_name.split('.', 1)
-        output_file = '{}{}.tif'.format(name, self.split_pattern())
+        output_file = '{}.tif'.format(self.split_pattern())
         bfconvert = 'bfconvert'
         if sys.platform == 'win32':
             bfconvert = 'bfconvert.bat'
-            output_file = '{}{}.tif'.format(name,
-                                            self.split_pattern(win32=True))
+            output_file = '{}.tif'.format(self.split_pattern(win32=True))
         if output_dir:
             output_file = os.path.join(output_dir, output_file)
         return [bfconvert, input_file, output_file]
@@ -197,10 +196,10 @@ class BFConvertWrapper(object):
         MetaData = namedtuple('MetaData', self.split_order)
 
         base_name = os.path.basename(fname)
-        # e.g. 'test_S1_C2_Z3_T4.tif'
+        # e.g. 'S1_C2_Z3_T4.tif'
 
         name, suffix = base_name.split('.')
-        # e.g. 'test_S1_C2_Z3_T4', 'tif'
+        # e.g. 'S1_C2_Z3_T4', 'tif'
 
         data = name.split('_')[-len(self.split_order):]
         # e.g. ['S1', 'C2', 'Z3', 'T4']
