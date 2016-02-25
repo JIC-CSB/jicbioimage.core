@@ -89,7 +89,9 @@ class FileBackend(object):
             :param fpath: path to the microscopy image of interest
             """
             fname = os.path.basename(fpath)
-            self._directory = os.path.join(base_dir, fname)
+            md5 = _md5_hexdigest_from_file(fpath)
+#           self._directory = os.path.join(base_dir, fname)
+            self._directory = os.path.join(base_dir, md5)
             if not os.path.isdir(self.directory):
                 os.mkdir(self.directory)
 
@@ -216,7 +218,7 @@ class BFConvertWrapper(object):
         :returns: bool
         """
         manifest_fpath = os.path.join(self.backend.directory,
-                                      os.path.basename(fpath),
+                                      _md5_hexdigest_from_file(fpath),
                                       'manifest.json')
         return os.path.isfile(manifest_fpath)
 

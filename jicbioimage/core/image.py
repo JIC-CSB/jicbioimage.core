@@ -13,6 +13,7 @@ from jicbioimage.core.io import (
     FileBackend,
     TemporaryFilePath,
     BFConvertWrapper,
+    _md5_hexdigest_from_file
 )
 
 from jicbioimage.core.util.array import normalise, false_color
@@ -421,7 +422,7 @@ class DataManager(list):
             path_to_manifest = self.convert(fpath)
         else:
             path_to_manifest = os.path.join(self.backend.directory,
-                                            os.path.basename(fpath),
+                                            _md5_hexdigest_from_file(fpath),
                                             'manifest.json')
 
         collection = None

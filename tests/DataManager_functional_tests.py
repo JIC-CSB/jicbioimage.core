@@ -33,7 +33,7 @@ class DataManagerUserStory(unittest.TestCase):
         # The :func:`jicbioimage.core.image.DataManager.conver` function is be
         # default an instance of the callable
         # :class:`jicbioimage.core.io.BFConvertWrapper` class.
-        from jicbioimage.core.io import BFConvertWrapper
+        from jicbioimage.core.io import BFConvertWrapper, _md5_hexdigest_from_file
         self.assertTrue(isinstance(data_manager.convert, BFConvertWrapper))
 
         # We also need to import an ImageCollection
@@ -45,7 +45,7 @@ class DataManagerUserStory(unittest.TestCase):
         if not data_manager.convert.already_converted(fpath):
             path_to_manifest = data_manager.convert(fpath) # unpacks and creates manifests
             self.assertEqual(path_to_manifest, os.path.join(TMP_DIR,
-                                                            'z-series.ome.tif',
+                                                            _md5_hexdigest_from_file(fpath),
                                                             'manifest.json'))
             image_collection = ImageCollection()
             image_collection.parse_manifest(path_to_manifest)
@@ -93,8 +93,8 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(len(zseries_collection), 5)
  
         # File format conversion trouble (for example using non existing input
-        # file) raises RuntimeError.
-        with self.assertRaises(RuntimeError):
+        # file) raises IOError.
+        with self.assertRaises(IOError):
             data_manager.load(os.path.join(DATA_DIR, 'nonsese.ome.tif'))
 
     def test_data_manager_already_unpacked(self):
