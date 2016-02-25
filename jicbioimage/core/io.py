@@ -10,6 +10,8 @@ import json
 from collections import namedtuple
 import hashlib
 
+from jicbioimage.core.image import ImageCollection, MicroscopyCollection
+
 
 def _md5_hexdigest_from_file(fpath, blocksize=65536):
     """Return md5 hex digest of a file."""
@@ -20,22 +22,6 @@ def _md5_hexdigest_from_file(fpath, blocksize=65536):
             md5_hash.update(buf)
             buf = fh.read(blocksize)
         return md5_hash.hexdigest()
-
-
-class TemporaryFilePath(object):
-    """Temporary file path context manager."""
-    def __init__(self, suffix):
-        self.suffix = suffix
-
-    def __enter__(self):
-        tmp_file = tempfile.NamedTemporaryFile(suffix=self.suffix,
-                                               delete=False)
-        self.fpath = tmp_file.name
-        tmp_file.close()
-        return self
-
-    def __exit__(self, type, value, tb):
-        os.unlink(self.fpath)
 
 
 class AutoName(object):
@@ -88,9 +74,7 @@ class FileBackend(object):
             :param base_dir: backend directory
             :param fpath: path to the microscopy image of interest
             """
-            fname = os.path.basename(fpath)
             md5 = _md5_hexdigest_from_file(fpath)
-#           self._directory = os.path.join(base_dir, fname)
             self._directory = os.path.join(base_dir, md5)
             if not os.path.isdir(self.directory):
                 os.mkdir(self.directory)
@@ -245,3 +229,49 @@ class BFConvertWrapper(object):
         with open(manifest_fpath, 'w') as fh:
             json.dump(self.manifest(entry), fh)
         return manifest_fpath
+
+
+class DataManager(list):
+    """Manage :class:`jicbioimage.core.image.ImageCollection` instances."""
+
+    def __init__(self, backend=None):
+        if backend is None:
+            dirpath = os.path.join(os.getcwd(), 'jicbioimage.core_backend')
+            backend = FileBackend(directory=dirpath)
+        self.backend = backend
+        self.convert = BFConvertWrapper(self.backend)
+
+    def load(self, fpath):
+        """Load a microscopy file.
+
+        :param fpath: path to microscopy file
+        """
+        def is_microscopy_item(fpath):
+            """Return True if the fpath is likely to be microscopy data.
+
+            :param fpath: file path to image
+            :returns: :class:`bool`
+            """
+            l = fpath.split('.')
+            ext = l[-1]
+            pre_ext = l[-2]
+            if ((ext == 'tif' or ext == 'tiff')
+               and pre_ext != 'ome'):
+                return False
+            return True
+
+        if not self.convert.already_converted(fpath):
+            path_to_manifest = self.convert(fpath)
+        else:
+            path_to_manifest = os.path.join(self.backend.directory,
+                                            _md5_hexdigest_from_file(fpath),
+                                            'manifest.json')
+
+        collection = None
+        if is_microscopy_item(fpath):
+            collection = MicroscopyCollection(path_to_manifest)
+        else:
+            collection = ImageCollection(path_to_manifest)
+        self.append(collection)
+
+        return collection

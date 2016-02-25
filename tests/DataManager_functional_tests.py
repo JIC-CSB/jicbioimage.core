@@ -22,11 +22,10 @@ class DataManagerUserStory(unittest.TestCase):
 
 
     def test_manual_addition_of_ImageCollection_to_DataManager(self):
-        # We start off by creating a :class:`jicbioimage.core.image.DataManager`.
+        # We start off by creating a :class:`jicbioimage.core.io.DataManager`.
         # This takes a backend argument. The backend provides a means to store
         # unpacked image files.
-        from jicbioimage.core.io import FileBackend
-        from jicbioimage.core.image import DataManager
+        from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(directory=TMP_DIR)
         data_manager = DataManager(backend=backend)
 
@@ -57,8 +56,7 @@ class DataManagerUserStory(unittest.TestCase):
     def test_data_manager(self):
         # Alice wants to analyse her microscopy data.  To access the raw image
         # data within the microscopy files she uses a DataManager.
-        from jicbioimage.core.image import DataManager
-        from jicbioimage.core.io import FileBackend
+        from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
 
@@ -101,8 +99,7 @@ class DataManagerUserStory(unittest.TestCase):
         # The second time the data manager is loaded, it should contain data
         # without unpacking.
 
-        from jicbioimage.core.image import DataManager
-        from jicbioimage.core.io import FileBackend
+        from jicbioimage.core.io import DataManager, FileBackend
 
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
@@ -117,8 +114,7 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(len(data_manager_reload), 1)
 
     def test_error_message_when_bfconvert_not_in_path(self):
-        from jicbioimage.core.image import DataManager
-        from jicbioimage.core.io import FileBackend
+        from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
         tmp_path = os.environ['PATH']
@@ -128,8 +124,7 @@ class DataManagerUserStory(unittest.TestCase):
         os.environ['PATH'] = tmp_path
 
     def test_proxy_image(self):
-        from jicbioimage.core.image import DataManager
-        from jicbioimage.core.io import FileBackend
+        from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
         data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
@@ -141,8 +136,7 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(proxy_image.image.shape, (167, 439))
 
     def test_image_collection(self):
-        from jicbioimage.core.image import DataManager
-        from jicbioimage.core.io import FileBackend
+        from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
         data_manager.load(os.path.join(DATA_DIR, 'multi-channel-4D-series.ome.tif'))
@@ -186,9 +180,8 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(image.shape, (167, 439))
          
     def test_multipage_tiff(self):
-        from jicbioimage.core.image import DataManager
         from jicbioimage.core.image import MicroscopyCollection, ImageCollection
-        from jicbioimage.core.io import FileBackend
+        from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(directory=TMP_DIR)
         data_manager = DataManager(backend)
         data_manager.load(os.path.join(DATA_DIR, 'multipage.tif'))
@@ -216,10 +209,9 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(np.max(third_image), 120)
 
     def test_load_returns_collection(self):
-        from jicbioimage.core.image import DataManager
         from jicbioimage.core.image import ImageCollection
         from jicbioimage.core.image import MicroscopyImage, ProxyImage
-        from jicbioimage.core.io import FileBackend
+        from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(directory=TMP_DIR)
         data_manager = DataManager(backend)
         collection = data_manager.load(os.path.join(DATA_DIR, 'multipage.tif'))
@@ -228,7 +220,7 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertTrue(isinstance(collection[0], ProxyImage))
 
     def test_initialisation_without_explicit_backend(self):
-        from jicbioimage.core.image import DataManager
+        from jicbioimage.core.io import DataManager
 
         real_working_dir = os.getcwd()
 

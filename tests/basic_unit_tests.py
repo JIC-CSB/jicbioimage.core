@@ -27,7 +27,7 @@ class TestBasics(unittest.TestCase):
 
     def test_import_DataManager_class(self):
         # This throws an error if the class cannot be imported.
-        from jicbioimage.core.image import DataManager
+        from jicbioimage.core.io import DataManager
 
     def test_import_ImageCollection_class(self):
         # This throws an error if the class cannot be imported.

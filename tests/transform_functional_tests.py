@@ -101,8 +101,8 @@ class TransformationUserStory(unittest.TestCase):
                         'No such file: {}'.format(created_fpath))
 
     def test_stack_to_image_transform(self):
-        from jicbioimage.core.image import DataManager, Image
-        from jicbioimage.core.io import FileBackend
+        from jicbioimage.core.image import Image
+        from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
 

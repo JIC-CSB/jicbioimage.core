@@ -26,8 +26,7 @@ class FileBackendBugs(unittest.TestCase):
         unpack fails because the directory already exists, and:
         os.mkdir(self.directory) throws an error.
         """
-        from jicbioimage.core.io import FileBackend
-        from jicbioimage.core.image import DataManager
+        from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(directory=TMP_DIR)
         data_manager = DataManager(backend=backend)
         fname = 'single-channel.ome.tif'
