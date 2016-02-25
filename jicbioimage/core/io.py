@@ -8,6 +8,18 @@ import tempfile
 import subprocess
 import json
 from collections import namedtuple
+import hashlib
+
+
+def _md5_hexdigest_from_file(fpath, blocksize=65536):
+    """Return md5 hex digest of a file."""
+    md5_hash = hashlib.md5()
+    with open(fpath, "rb") as fh:
+        buf = fh.read(blocksize)
+        while len(buf) > 0:
+            md5_hash.update(buf)
+            buf = fh.read(blocksize)
+        return md5_hash.hexdigest()
 
 
 class TemporaryFilePath(object):
