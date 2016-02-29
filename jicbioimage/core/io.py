@@ -1,10 +1,8 @@
 """Module for reading and writing images."""
 
 import sys
-import os
 import os.path
 import re
-import tempfile
 import subprocess
 import json
 from collections import namedtuple
@@ -187,7 +185,7 @@ class BFConvertWrapper(object):
         name, suffix = base_name.split('.')
         # e.g. 'S1_C2_Z3_T4', 'tif'
 
-        data = name.split('_')[-len(self.split_order):]
+        data = name.split('_')
         # e.g. ['S1', 'C2', 'Z3', 'T4']
 
         args = [int(x[1:]) for x in data]
