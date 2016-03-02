@@ -78,23 +78,31 @@ class TransformationUserStory(unittest.TestCase):
 
         @transformation
         def blur(image):
+            new_image = np.zeros(image.shape, dtype=np.float)
             sigma = 2
             if len(image.shape) == 3:
                 # We have an RGB image.
                 for i in range(image.shape[2]):
-                    image[:][:][i] = gaussian_filter(image[:][:][i], sigma)
+                    new_image[:][:][i] = gaussian_filter(image[:][:][i], sigma)
             else:
-                image = gaussian_filter(image, sigma)
-            return image
+                new_image = gaussian_filter(image, sigma)
+            return new_image
 
         image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
+
+        # Image will have one item in history now.
+        self.assertEqual(len(image.history), 1)
+        self.assertTrue(image.history[0].startswith('Created image from'))
+
         image = blur(image)
+
+        # Image should have two items in history now.
+        self.assertEqual(len(image.history), 2)
+        self.assertTrue(image.history[0].startswith('Created image from'))
+        self.assertEqual(image.history[1], 'Applied blur transform')
 
         # Image returned is of jicbioimage.core.image.Image type.
         self.assertTrue(isinstance(image, Image))
-
-        # Image returned contains the history.
-        self.assertEqual(image.history[-1], 'Applied blur transform')
 
         created_fpath = os.path.join(TMP_DIR, '1_blur.png')
         self.assertTrue(os.path.isfile(created_fpath),

@@ -27,10 +27,23 @@ def transformation(func):
     """Function decorator to turn another function into a transformation."""
     @wraps(func)
     def func_as_transformation(*args, **kwargs):
+
+        # Get the input image, so that we can get the history from it.
+        input_image = kwargs.get("image", None)
+        if input_image is None:
+            input_image = args[0]
+
+        # Get the history from the image.
+        history = []
+        if hasattr(input_image, "history"):
+            history.extend(input_image.history)
+
         image = func(*args, **kwargs)
         if not isinstance(image, Image):
             image = Image.from_array(image, log_in_history=False)
 
+        # Update the history of the image.
+        image.history = history
         image.history.append('Applied {} transform'.format(func.__name__))
 
         if AutoWrite.on:
