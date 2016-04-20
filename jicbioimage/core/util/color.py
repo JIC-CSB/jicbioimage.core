@@ -43,6 +43,13 @@ def unique_color(identifier):
 
     :returns: RGB tuple
     """
+    if not isinstance(identifier, int):
+        raise(TypeError("Idendifier is not an integer {}".format(identifier)))
+    if identifier < 0:
+        raise(ValueError("Negative identifier not allowed"))
+    if identifier >= 256*256*256:
+        raise(ValueError("Identifier {} >= {}".format(identifier,
+                                                      256*256*256)))
     blue = identifier % 256
     green = (identifier // 256) % 256
     red = (identifier // (256*256)) % 256

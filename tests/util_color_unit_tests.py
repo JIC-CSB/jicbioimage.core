@@ -114,6 +114,9 @@ class UniqueColorUnitTests(unittest.TestCase):
         self.assertTrue(isinstance(generated_color, tuple))
         self.assertEqual(generated_color, (0, 0, 0))
 
+        for i in generated_color:
+            self.assertTrue(isinstance(i, int))
+
     def test_some_unique_colors(self):
         from jicbioimage.core.util.color import unique_color
 
@@ -150,6 +153,21 @@ class UniqueColorUnitTests(unittest.TestCase):
         self.assertEqual(unique_color(16777215-256), (255, 254, 255))
         self.assertEqual(unique_color(16777215-1), (255, 255, 254))
         self.assertEqual(unique_color(16777215), (255, 255, 255))
+
+
+    def test_non_in_raises_typerror(self):
+        from jicbioimage.core.util.color import unique_color
+        with self.assertRaises(TypeError):
+            unique_color(1.)
+        with self.assertRaises(TypeError):
+            unique_color("1")
+
+    def test_valid_range(self):
+        from jicbioimage.core.util.color import unique_color
+        with self.assertRaises(ValueError):
+            unique_color(-1)
+        with self.assertRaises(ValueError):
+            unique_color(256*256*256)
 
 
 if __name__ == '__main__':
