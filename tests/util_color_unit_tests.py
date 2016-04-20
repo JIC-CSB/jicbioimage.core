@@ -106,9 +106,9 @@ class UniqueColorUnitTests(unittest.TestCase):
 
     def test_unique_color_type(self):
 
-        from jicbioimage.core.util.color import unique_color
+        from jicbioimage.core.util.color import unique_color_from_identifier
 
-        generated_color = unique_color(0)
+        generated_color = unique_color_from_identifier(0)
 
         self.assertEqual(len(generated_color), 3)
         self.assertTrue(isinstance(generated_color, tuple))
@@ -118,56 +118,83 @@ class UniqueColorUnitTests(unittest.TestCase):
             self.assertTrue(isinstance(i, int))
 
     def test_some_unique_colors(self):
-        from jicbioimage.core.util.color import unique_color
+        from jicbioimage.core.util.color import unique_color_from_identifier
 
         for i in range(1, 10):
             identifier = i
-            blueish = unique_color(identifier)
+            blueish = unique_color_from_identifier(identifier)
             expected = (0, 0, i)
             self.assertEqual(blueish, expected)
 
             identifier = 256 + i
-            greenish = unique_color(identifier)
+            greenish = unique_color_from_identifier(identifier)
             expected = (0, 1, i)
             self.assertEqual(greenish, expected)
 
             identifier = 256**2 + i
-            redish = unique_color(identifier)
+            redish = unique_color_from_identifier(identifier)
             expected = (1, 0, i)
             self.assertEqual(redish, expected)
 
     def test_unique_colors_edge_cases(self):
-        from jicbioimage.core.util.color import unique_color
-        self.assertEqual(unique_color(0), (0, 0, 0))
-        self.assertEqual(unique_color(1), (0, 0, 1))
-        self.assertEqual(unique_color(255), (0, 0, 255))
-        self.assertEqual(unique_color(256), (0, 1, 0))
-        self.assertEqual(unique_color(257), (0, 1, 1))
-        self.assertEqual(unique_color(511), (0, 1, 255))
-        self.assertEqual(unique_color(512), (0, 2, 0))
-        self.assertEqual(unique_color(65536-1), (0, 255, 255))
-        self.assertEqual(unique_color(65536), (1, 0, 0))
-        self.assertEqual(unique_color(65536+1), (1, 0, 1))
-        self.assertEqual(unique_color(65536+256), (1, 1, 0))
-        self.assertEqual(unique_color(65536+256+1), (1, 1, 1))
-        self.assertEqual(unique_color(16777215-256), (255, 254, 255))
-        self.assertEqual(unique_color(16777215-1), (255, 255, 254))
-        self.assertEqual(unique_color(16777215), (255, 255, 255))
+        from jicbioimage.core.util.color import unique_color_from_identifier
+        self.assertEqual(unique_color_from_identifier(0), (0, 0, 0))
+        self.assertEqual(unique_color_from_identifier(1), (0, 0, 1))
+        self.assertEqual(unique_color_from_identifier(255), (0, 0, 255))
+        self.assertEqual(unique_color_from_identifier(256), (0, 1, 0))
+        self.assertEqual(unique_color_from_identifier(257), (0, 1, 1))
+        self.assertEqual(unique_color_from_identifier(511), (0, 1, 255))
+        self.assertEqual(unique_color_from_identifier(512), (0, 2, 0))
+        self.assertEqual(unique_color_from_identifier(65536-1), (0, 255, 255))
+        self.assertEqual(unique_color_from_identifier(65536), (1, 0, 0))
+        self.assertEqual(unique_color_from_identifier(65536+1), (1, 0, 1))
+        self.assertEqual(unique_color_from_identifier(65536+256), (1, 1, 0))
+        self.assertEqual(unique_color_from_identifier(65536+256+1), (1, 1, 1))
+        self.assertEqual(unique_color_from_identifier(16777215-256), (255, 254, 255))
+        self.assertEqual(unique_color_from_identifier(16777215-1), (255, 255, 254))
+        self.assertEqual(unique_color_from_identifier(16777215), (255, 255, 255))
 
 
     def test_non_in_raises_typerror(self):
-        from jicbioimage.core.util.color import unique_color
+        from jicbioimage.core.util.color import unique_color_from_identifier
         with self.assertRaises(TypeError):
-            unique_color(1.)
+            unique_color_from_identifier(1.)
         with self.assertRaises(TypeError):
-            unique_color("1")
+            unique_color_from_identifier("1")
 
     def test_valid_range(self):
-        from jicbioimage.core.util.color import unique_color
+        from jicbioimage.core.util.color import unique_color_from_identifier
         with self.assertRaises(ValueError):
-            unique_color(-1)
+            unique_color_from_identifier(-1)
         with self.assertRaises(ValueError):
-            unique_color(256*256*256)
+            unique_color_from_identifier(256*256*256)
+
+
+class IdentifierFromUniqueColorUnitTests(unittest.TestCase):
+
+    def test_identifier_from_unique_color(self):
+        from jicbioimage.core.util.color import identifier_from_unique_color
+        identifier = identifier_from_unique_color((0, 0, 0))
+        self.assertEqual(identifier, 0)
+
+    def test_identifier_from_unique_color_edge_cases(self):
+        from jicbioimage.core.util.color import identifier_from_unique_color
+        self.assertEqual(identifier_from_unique_color((0, 0, 0)), 0)
+        self.assertEqual(identifier_from_unique_color((0, 0, 1)), 1)
+        self.assertEqual(identifier_from_unique_color((0, 0, 255)), 255)
+        self.assertEqual(identifier_from_unique_color((0, 1, 0)), 256)
+        self.assertEqual(identifier_from_unique_color((0, 1, 1)), 257)
+        self.assertEqual(identifier_from_unique_color((0, 1, 255)), 511)
+        self.assertEqual(identifier_from_unique_color((0, 2, 0)), 512)
+        self.assertEqual(identifier_from_unique_color((0, 255, 255)), 65536-1)
+        self.assertEqual(identifier_from_unique_color((1, 0, 0)), 65536)
+        self.assertEqual(identifier_from_unique_color((1, 0, 1)), 65536+1)
+        self.assertEqual(identifier_from_unique_color((1, 1, 0)), 65536+256)
+        self.assertEqual(identifier_from_unique_color((1, 1, 1)), 65536+256+1)
+        self.assertEqual(identifier_from_unique_color((255, 254, 255)), 16777215-256)
+        self.assertEqual(identifier_from_unique_color((255, 255, 254)), 16777215-1)
+        self.assertEqual(identifier_from_unique_color((255, 255, 255)), 16777215)
+
 
 
 if __name__ == '__main__':

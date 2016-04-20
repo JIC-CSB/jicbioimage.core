@@ -38,11 +38,12 @@ def _generate_rgb_tuple(long_hash):
     return map(int, (red, green, blue))
 
 
-def unique_color(identifier):
+def unique_color_from_identifier(identifier):
     """Return unique color as RGB tuple.
 
     Useful for creating PNG images where each color is used as an identifier.
 
+    :param identifier: positive integer in range from 0 to 16777215 inclusive
     :returns: RGB tuple
     """
     if not isinstance(identifier, int):
@@ -56,6 +57,18 @@ def unique_color(identifier):
     green = (identifier // 256) % 256
     red = (identifier // (256*256)) % 256
     return (red, green, blue)
+
+
+def identifier_from_unique_color(unique_color):
+    """Return identifier from unique RGB tuple.
+
+    :param unique_color: RGB tuple
+    :returns: positive integer in range from 0 to 16777215 inclusive
+    """
+    red, green, blue = unique_color
+    red_factor = 256 * 256
+    green_factor = 256
+    return red * red_factor + green * green_factor + blue
 
 
 def pretty_color(identifier=None):
