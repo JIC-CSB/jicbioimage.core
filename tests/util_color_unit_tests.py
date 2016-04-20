@@ -49,7 +49,7 @@ class PrettyColorUnitTests(unittest.TestCase):
         for _ in range(1000):
             generated_color = pretty_color()
             self.assertTrue(all(0 <= c <= 255 for c in generated_color))
-    
+
     def test_pretty_with_identifier(self):
 
         from jicbioimage.core.util.color import pretty_color
@@ -62,7 +62,7 @@ class PrettyColorUnitTests(unittest.TestCase):
         self.assertEqual(generated_color, expected)
 
     def test_import_pretty_color_palette(self):
-        
+
         from jicbioimage.core.util.color import pretty_color_palette
 
     def test_pretty_color_palette(self):
@@ -77,11 +77,11 @@ class PrettyColorUnitTests(unittest.TestCase):
 
         self.assertEqual(color_key[0], expected0)
         self.assertEqual(color_key[1], expected1)
-            
+
     def test_pretty_color_palette_consistent(self):
 
         from jicbioimage.core.util.color import pretty_color_palette
-        
+
         identifiers = range(1000)
         color_dict1 = pretty_color_palette(identifiers)
         color_dict2 = pretty_color_palette(identifiers)
@@ -100,6 +100,57 @@ class PrettyColorUnitTests(unittest.TestCase):
 
         self.assertEqual(color_key[0], (0, 0, 0))
         self.assertEqual(color_key[1], expected)
-        
+
+
+class UniqueColorUnitTests(unittest.TestCase):
+
+    def test_unique_color_type(self):
+
+        from jicbioimage.core.util.color import unique_color
+
+        generated_color = unique_color(0)
+
+        self.assertEqual(len(generated_color), 3)
+        self.assertTrue(isinstance(generated_color, tuple))
+        self.assertEqual(generated_color, (0, 0, 0))
+
+    def test_some_unique_colors(self):
+        from jicbioimage.core.util.color import unique_color
+
+        for i in range(1, 10):
+            identifier = i
+            blueish = unique_color(identifier)
+            expected = (0, 0, i)
+            self.assertEqual(blueish, expected)
+
+            identifier = 256 + i
+            greenish = unique_color(identifier)
+            expected = (0, 1, i)
+            self.assertEqual(greenish, expected)
+
+            identifier = 256**2 + i
+            redish = unique_color(identifier)
+            expected = (1, 0, i)
+            self.assertEqual(redish, expected)
+
+    def test_unique_colors_edge_cases(self):
+        from jicbioimage.core.util.color import unique_color
+        self.assertEqual(unique_color(0), (0, 0, 0))
+        self.assertEqual(unique_color(1), (0, 0, 1))
+        self.assertEqual(unique_color(255), (0, 0, 255))
+        self.assertEqual(unique_color(256), (0, 1, 0))
+        self.assertEqual(unique_color(257), (0, 1, 1))
+        self.assertEqual(unique_color(511), (0, 1, 255))
+        self.assertEqual(unique_color(512), (0, 2, 0))
+        self.assertEqual(unique_color(65536-1), (0, 255, 255))
+        self.assertEqual(unique_color(65536), (1, 0, 0))
+        self.assertEqual(unique_color(65536+1), (1, 0, 1))
+        self.assertEqual(unique_color(65536+256), (1, 1, 0))
+        self.assertEqual(unique_color(65536+256+1), (1, 1, 1))
+        self.assertEqual(unique_color(16777215-256), (255, 254, 255))
+        self.assertEqual(unique_color(16777215-1), (255, 255, 254))
+        self.assertEqual(unique_color(16777215), (255, 255, 255))
+
+
 if __name__ == '__main__':
-	unittest.main()    
+	unittest.main()

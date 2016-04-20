@@ -5,6 +5,7 @@ import random
 import hashlib
 import itertools
 
+
 def _extract_8_bits(long_value, shift=1):
     """Return an integer in the range 0, 255 by extracting 8 bits from the
     input long value. shift determines which 8 bits are taken, by default
@@ -13,6 +14,7 @@ def _extract_8_bits(long_value, shift=1):
     bitmask = (1 << 8 * shift) - 1
 
     return (long_value & bitmask) >> (8 * (shift-1))
+
 
 def _md5_hash_as_long(input_value):
     """Return the hash of the input value converted to a long."""
@@ -34,6 +36,18 @@ def _generate_rgb_tuple(long_hash):
     red = _extract_8_bits(long_hash, 3)
 
     return map(int, (red, green, blue))
+
+
+def unique_color(identifier):
+    """Return unique color that can be used as an identifier as RGB tuple.
+
+    :returns: RGB tuple
+    """
+    blue = identifier % 256
+    green = (identifier // 256) % 256
+    red = (identifier // (256*256)) % 256
+    return (red, green, blue)
+
 
 def pretty_color(identifier=None):
     """Return aesthetically pleasing RGB tuple.
@@ -57,6 +71,7 @@ def pretty_color(identifier=None):
     selected_permutation = _extract_8_bits(long_hash, 4) % 6
 
     return tuple_permutations[selected_permutation]
+
 
 def pretty_color_palette(identifiers, keep_zero_black=True):
     """Return dictionary with pretty colors.
