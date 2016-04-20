@@ -39,7 +39,9 @@ def _generate_rgb_tuple(long_hash):
 
 
 def unique_color(identifier):
-    """Return unique color that can be used as an identifier as RGB tuple.
+    """Return unique color as RGB tuple.
+
+    Useful for creating PNG images where each color is used as an identifier.
 
     :returns: RGB tuple
     """
