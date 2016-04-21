@@ -44,10 +44,11 @@ def unique_color_from_identifier(identifier):
     Useful for creating PNG images where each color is used as an identifier.
 
     :param identifier: positive integer in range from 0 to 16777215 inclusive
+    :raises: TypeError, ValueError
     :returns: RGB tuple
     """
     if not isinstance(identifier, int):
-        raise(TypeError("Idendifier is not an integer {}".format(identifier)))
+        raise(TypeError("Identifier is not an integer {}".format(identifier)))
     if identifier < 0:
         raise(ValueError("Negative identifier not allowed"))
     if identifier >= 256*256*256:
