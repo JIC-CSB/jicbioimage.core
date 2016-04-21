@@ -269,6 +269,7 @@ class ImageCollection(list):
         """Parse manifest file to build up the collection of images.
 
         :param fpath: path to the manifest file
+        :raises: RuntimeError
         """
         with open(fpath, 'r') as fh:
             for entry in json.load(fh):

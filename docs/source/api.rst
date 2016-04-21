@@ -6,6 +6,6 @@ API documentation
 
    api/image
    api/io
-   api/region
    api/transform
    api/util_array
+   api/util_color

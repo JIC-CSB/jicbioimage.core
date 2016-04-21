@@ -63,6 +63,7 @@ def check_dtype(array, allowed):
 
     :param array: array whose dtype is to be checked
     :param allowed: instance or list of allowed dtypes
+    :raises: TypeError
     """
     if not hasattr(allowed, "__iter__"):
         allowed = [allowed, ]

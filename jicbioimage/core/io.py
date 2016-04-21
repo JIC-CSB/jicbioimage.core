@@ -210,6 +210,7 @@ class BFConvertWrapper(object):
         Unpacks the microscopy file and creates the manifest file.
 
         :param input_file: path to the microscopy file
+        :raises: RuntimeError
         :returns: path to manifest file
         """
         entry = self.backend.new_entry(input_file)
