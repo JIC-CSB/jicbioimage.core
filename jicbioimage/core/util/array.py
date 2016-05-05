@@ -92,8 +92,8 @@ def dtype_contract(input_dtype=None, output_dtype=None):
     return wrap
 
 
-def pretty_color_array(array, color_dict=None, keep_zero_black=True):
-    """Return a RGB false color array.
+def color_array(array, color_dict):
+    """Return RGB color array.
 
     Assigning a unique RGB color value to each unique element of the input
     array and return an array of shape (array.shape, 3).
@@ -101,19 +101,24 @@ def pretty_color_array(array, color_dict=None, keep_zero_black=True):
     :param array: input numpy.array
     :param color_dict: dictionary with keys/values corresponding to identifiers
                        and RGB tuples respectively
+    """
+    output_array = np.zeros(array.shape + (3,), np.uint8)
+    unique_identifiers = set(np.unique(array))
+    for identifier in unique_identifiers:
+        output_array[np.where(array == identifier)] = color_dict[identifier]
+    return output_array
+
+
+def pretty_color_array(array, keep_zero_black=True):
+    """Return a RGB false color array.
+
+    Assigning a unique RGB color value to each unique element of the input
+    array and return an array of shape (array.shape, 3).
+
+    :param array: input numpy.array
     :param keep_zero_black: whether or not the background should be black
     :returns: numpy.array
     """
-
-    output_array = np.zeros(array.shape + (3,), np.uint8)
-
     unique_identifiers = set(np.unique(array))
-
-    if color_dict is None:
-        color_dict = pretty_color_palette(
-            unique_identifiers, keep_zero_black)
-
-    for identifier in unique_identifiers:
-        output_array[np.where(array == identifier)] = color_dict[identifier]
-
-    return output_array
+    color_dict = pretty_color_palette(unique_identifiers, keep_zero_black)
+    return color_array(array, color_dict)

@@ -180,9 +180,10 @@ class PrettyColorArrayTests(unittest.TestCase):
 
     def test_import_pretty_color_array(self):
 
+        from jicbioimage.core.util.array import color_array
         from jicbioimage.core.util.array import pretty_color_array
 
-    def test_false_color_dimensions(self):
+    def test_pretty_color_array_dimensions(self):
 
         from jicbioimage.core.util.array import pretty_color_array
 
@@ -195,16 +196,16 @@ class PrettyColorArrayTests(unittest.TestCase):
         input_array = np.zeros((10, 20, 30))
         self.assertEqual(pretty_color_array(input_array).shape, (10, 20, 30, 3))
 
-    def test_false_color_dtype(self):
+    def test_pretty_color_array_dtype(self):
 
         from jicbioimage.core.util.array import pretty_color_array
 
         input_array = np.zeros((10, 20))
         self.assertEqual(pretty_color_array(input_array).dtype, np.uint8)
 
-    def test_false_color_with_custom_palette(self):
+    def test_color_array(self):
 
-        from jicbioimage.core.util.array import pretty_color_array
+        from jicbioimage.core.util.array import color_array
 
         input_array = np.array([[0, 0, 0],
                                 [1, 1, 1],
@@ -220,11 +221,11 @@ class PrettyColorArrayTests(unittest.TestCase):
                                     [c2, c2, c2],
                                     [c3, c3, c3]], dtype=np.uint8)
 
-        actual_output = pretty_color_array(input_array, color_dict)
+        actual_output = color_array(input_array, color_dict)
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
-    def test_false_color_with_default_palette_with_background_colored(self):
+    def test_pretty_color_array_with_background_colored(self):
 
         from jicbioimage.core.util.array import pretty_color_array
 
@@ -244,7 +245,7 @@ class PrettyColorArrayTests(unittest.TestCase):
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
-    def test_false_color_with_default_palette(self):
+    def test_pretty_color_array_with_black_background(self):
 
         from jicbioimage.core.util.array import pretty_color_array
 
