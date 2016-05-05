@@ -1,0 +1,5 @@
+jicbioimage.core
+numpy
+scipy
+scikit-image<0.12
+pillow
