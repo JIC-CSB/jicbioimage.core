@@ -4,7 +4,8 @@ class ColorTests(unittest.TestCase):
 
     def test_import_color(self):
 
-        from jicbioimage.core.util.color import pretty_color
+        from jicbioimage.core.util.color import pretty_color_from_identifier
+        from jicbioimage.core.util.color import random_pretty_color
 
     def test_extract_8_bits(self):
 
@@ -39,26 +40,26 @@ class PrettyColorUnitTests(unittest.TestCase):
 
     def test_generate_pretty_color(self):
 
-        from jicbioimage.core.util.color import pretty_color
+        from jicbioimage.core.util.color import random_pretty_color
 
-        generated_color = pretty_color()
+        generated_color = random_pretty_color()
 
         self.assertEqual(len(generated_color), 3)
         self.assertTrue(isinstance(generated_color, tuple))
 
         for _ in range(1000):
-            generated_color = pretty_color()
+            generated_color = random_pretty_color()
             self.assertTrue(all(0 <= c <= 255 for c in generated_color))
 
     def test_pretty_with_identifier(self):
 
-        from jicbioimage.core.util.color import pretty_color
+        from jicbioimage.core.util.color import pretty_color_from_identifier
 
         import random
 
         expected = (228, 90, 135)
 
-        generated_color = pretty_color(0)
+        generated_color = pretty_color_from_identifier(0)
         self.assertEqual(generated_color, expected)
 
     def test_import_pretty_color_palette(self):

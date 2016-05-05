@@ -77,29 +77,29 @@ def identifier_from_unique_color(unique_color):
     return red * red_factor + green * green_factor + blue
 
 
-def pretty_color(identifier=None):
-    """Return aesthetically pleasing RGB tuple.
+def pretty_color_from_identifier(identifier):
+    """Return deterministic aesthetically pleasing RGB tuple.
 
     :returns: RGB tuple
     """
-
-    if identifier is None:
-        try:
-            identifier = random.randint(0, sys.maxint)
-        except AttributeError:
-            # Python3 has no sys.maxint
-            identifier = random.randint(0, sys.maxsize)
-
     long_hash = _md5_hash_as_long(identifier)
-
     tuple_as_integers = _generate_rgb_tuple(long_hash)
-
     tuple_permutations = list(itertools.permutations(tuple_as_integers))
-
     selected_permutation = _extract_8_bits(long_hash, 4) % 6
-
     return tuple_permutations[selected_permutation]
 
+
+def random_pretty_color():
+    """Return random aesthetically pleasing RGB tuple.
+
+    :returns: RGB tuple
+    """
+    try:
+        identifier = random.randint(0, sys.maxint)
+    except AttributeError:
+        # Python3 has no sys.maxint
+        identifier = random.randint(0, sys.maxsize)
+    return pretty_color_from_identifier(identifier)
 
 def pretty_color_palette(identifiers, keep_zero_black=True):
     """Return dictionary with pretty colors.
@@ -114,7 +114,7 @@ def pretty_color_palette(identifiers, keep_zero_black=True):
         if keep_zero_black and i == 0:
             color_dict[0] = (0, 0, 0)
             continue
-        value = pretty_color(i)
+        value = pretty_color_from_identifier(i)
         color_dict[i] = value
 
     return color_dict
