@@ -62,6 +62,9 @@ class PrettyColorUnitTests(unittest.TestCase):
         generated_color = pretty_color_from_identifier(0)
         self.assertEqual(generated_color, expected)
 
+
+class PrettyColorPaletteUnitTests(unittest.TestCase):
+
     def test_import_pretty_color_palette(self):
 
         from jicbioimage.core.util.color import pretty_color_palette
