@@ -175,33 +175,34 @@ class DTypeContract(unittest.TestCase):
 
         self.assertEqual(working_func.__name__, "working_func")
 
-class PrettyColorArrayTests(unittest.TestCase):
 
+class ColorArrayUnitTests(unittest.TestCase):
 
-    def test_import_pretty_color_array(self):
+    def test_import_color_array(self):
 
         from jicbioimage.core.util.array import color_array
-        from jicbioimage.core.util.array import pretty_color_array
 
-    def test_pretty_color_array_dimensions(self):
+    def test_color_array_dimensions(self):
 
-        from jicbioimage.core.util.array import pretty_color_array
+        from jicbioimage.core.util.array import color_array
 
         input_array = np.zeros((10,))
-        self.assertEqual(pretty_color_array(input_array).shape, (10, 3))
+        color_dict = {0: 0}
+        self.assertEqual(color_array(input_array, color_dict).shape, (10, 3))
 
         input_array = np.zeros((10, 20))
-        self.assertEqual(pretty_color_array(input_array).shape, (10, 20, 3))
+        self.assertEqual(color_array(input_array, color_dict).shape, (10, 20, 3))
 
         input_array = np.zeros((10, 20, 30))
-        self.assertEqual(pretty_color_array(input_array).shape, (10, 20, 30, 3))
+        self.assertEqual(color_array(input_array, color_dict).shape, (10, 20, 30, 3))
 
-    def test_pretty_color_array_dtype(self):
+    def test_color_array_dtype(self):
 
-        from jicbioimage.core.util.array import pretty_color_array
+        from jicbioimage.core.util.array import color_array
 
         input_array = np.zeros((10, 20))
-        self.assertEqual(pretty_color_array(input_array).dtype, np.uint8)
+        color_dict = {0: 0}
+        self.assertEqual(color_array(input_array, color_dict).dtype, np.uint8)
 
     def test_color_array(self):
 
@@ -224,6 +225,13 @@ class PrettyColorArrayTests(unittest.TestCase):
         actual_output = color_array(input_array, color_dict)
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
+
+
+class PrettyColorArrayUnitTests(unittest.TestCase):
+
+    def test_import_pretty_color_array(self):
+
+        from jicbioimage.core.util.array import pretty_color_array
 
     def test_pretty_color_array_with_background_colored(self):
 
