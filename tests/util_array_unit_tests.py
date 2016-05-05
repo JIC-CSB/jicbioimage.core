@@ -9,29 +9,29 @@ class NormaliseTests(unittest.TestCase):
     def test_import_normalise(self):
         # This throws an error if the function cannot be imported.
         from jicbioimage.core.util.array import normalise
-        
+
     def test_normalise_returns_float_array(self):
         from jicbioimage.core.util.array import normalise
         zeros = np.array([1,2,3], dtype=np.uint8)
-        normed = normalise(zeros) 
+        normed = normalise(zeros)
         self.assertEqual(normed.dtype, np.float)
-        
+
     def test_only_zeros(self):
         from jicbioimage.core.util.array import normalise
         zeros = np.zeros(5, dtype=np.float)
-        normed = normalise(zeros) 
+        normed = normalise(zeros)
         self.assertTrue( np.array_equiv(normed, zeros) )
 
     def test_only_positive(self):
         from jicbioimage.core.util.array import normalise
         ones = np.ones(5, dtype=np.float)
-        normed = normalise(ones + 3.) 
+        normed = normalise(ones + 3.)
         self.assertTrue( np.array_equiv(normed, ones) )
 
     def test_only_negative(self):
         from jicbioimage.core.util.array import normalise
         zeros = np.zeros(5, dtype=np.float)
-        normed = normalise(zeros - 1.) 
+        normed = normalise(zeros - 1.)
         self.assertTrue( np.array_equiv(normed, zeros) )
 
     def test_normalise_123(self):
@@ -116,44 +116,44 @@ class CheckDTypeTests(unittest.TestCase):
         check_dtype(ar, [np.uint8, np.uint16, np.uint64])
 
 class DTypeContract(unittest.TestCase):
-    
+
     def test_import_dtype_contract(self):
         # This throws an error if the function cannot be imported.
         from jicbioimage.core.util.array import dtype_contract
-        
+
     def test_input_dtype_only(self):
         from jicbioimage.core.util.array import dtype_contract
         @dtype_contract(input_dtype=np.uint8)
         def some_func(ar):
             return ar
 
-        # This should not raise any error. 
+        # This should not raise any error.
         ar = some_func( np.zeros((2,2), dtype=np.uint8) )
-        
+
         # However, this should.
         with self.assertRaises(TypeError):
             ar = some_func( np.zeros((2,2), dtype=np.uint64) )
-        
+
     def test_output_dtype_only(self):
         from jicbioimage.core.util.array import dtype_contract
         @dtype_contract(output_dtype=np.uint8)
         def some_func(ar):
             return ar
 
-        # This should not raise any error. 
+        # This should not raise any error.
         ar = some_func( np.zeros((2,2), dtype=np.uint8) )
-        
+
         # However, this should.
         with self.assertRaises(TypeError):
             ar = some_func( np.zeros((2,2), dtype=np.uint64) )
-        
+
     def test_input_and_output_dtypes(self):
         from jicbioimage.core.util.array import dtype_contract
         @dtype_contract(input_dtype=np.uint8, output_dtype=np.uint64)
         def working_func(ar):
             return ar.astype(np.uint64)
 
-        # This should not raise any error. 
+        # This should not raise any error.
         ar = working_func( np.zeros((2,2), dtype=np.uint8) )
         # However, this should (wrong input).
         with self.assertRaises(TypeError):
@@ -172,39 +172,39 @@ class DTypeContract(unittest.TestCase):
         @dtype_contract(input_dtype=np.uint8, output_dtype=np.uint64)
         def working_func(ar):
             return ar.astype(np.uint64)
-        
+
         self.assertEqual(working_func.__name__, "working_func")
 
-class FalseColorTests(unittest.TestCase):
+class PrettyColorArrayTests(unittest.TestCase):
 
 
-    def test_import_false_color(self):
+    def test_import_pretty_color_array(self):
 
-        from jicbioimage.core.util.array import false_color
+        from jicbioimage.core.util.array import pretty_color_array
 
     def test_false_color_dimensions(self):
 
-        from jicbioimage.core.util.array import false_color
+        from jicbioimage.core.util.array import pretty_color_array
 
         input_array = np.zeros((10,))
-        self.assertEqual(false_color(input_array).shape, (10, 3))
+        self.assertEqual(pretty_color_array(input_array).shape, (10, 3))
 
         input_array = np.zeros((10, 20))
-        self.assertEqual(false_color(input_array).shape, (10, 20, 3))
+        self.assertEqual(pretty_color_array(input_array).shape, (10, 20, 3))
 
         input_array = np.zeros((10, 20, 30))
-        self.assertEqual(false_color(input_array).shape, (10, 20, 30, 3))
+        self.assertEqual(pretty_color_array(input_array).shape, (10, 20, 30, 3))
 
     def test_false_color_dtype(self):
 
-        from jicbioimage.core.util.array import false_color
+        from jicbioimage.core.util.array import pretty_color_array
 
         input_array = np.zeros((10, 20))
-        self.assertEqual(false_color(input_array).dtype, np.uint8)
+        self.assertEqual(pretty_color_array(input_array).dtype, np.uint8)
 
     def test_false_color_with_custom_palette(self):
 
-        from jicbioimage.core.util.array import false_color
+        from jicbioimage.core.util.array import pretty_color_array
 
         input_array = np.array([[0, 0, 0],
                                 [1, 1, 1],
@@ -219,14 +219,14 @@ class FalseColorTests(unittest.TestCase):
         expected_output = np.array([[c1, c1, c1],
                                     [c2, c2, c2],
                                     [c3, c3, c3]], dtype=np.uint8)
-                                   
-        actual_output = false_color(input_array, color_dict)
+
+        actual_output = pretty_color_array(input_array, color_dict)
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
     def test_false_color_with_default_palette_with_background_colored(self):
 
-        from jicbioimage.core.util.array import false_color
+        from jicbioimage.core.util.array import pretty_color_array
 
         input_array = np.array([[0, 0, 0],
                                 [1, 1, 1],
@@ -239,14 +239,14 @@ class FalseColorTests(unittest.TestCase):
         expected_output = np.array([[c1, c1, c1],
                                     [c2, c2, c2],
                                     [c3, c3, c3]], dtype=np.uint8)
-                                   
-        actual_output = false_color(input_array, keep_zero_black=False)
+
+        actual_output = pretty_color_array(input_array, keep_zero_black=False)
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
     def test_false_color_with_default_palette(self):
 
-        from jicbioimage.core.util.array import false_color
+        from jicbioimage.core.util.array import pretty_color_array
 
         input_array = np.array([[0, 0, 0],
                                 [1, 1, 1],
@@ -259,8 +259,8 @@ class FalseColorTests(unittest.TestCase):
         expected_output = np.array([[c1, c1, c1],
                                     [c2, c2, c2],
                                     [c3, c3, c3]], dtype=np.uint8)
-                                   
-        actual_output = false_color(input_array)
+
+        actual_output = pretty_color_array(input_array)
 
         self.assertTrue(np.array_equal(actual_output, expected_output))
 

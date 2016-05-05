@@ -92,7 +92,7 @@ def dtype_contract(input_dtype=None, output_dtype=None):
     return wrap
 
 
-def false_color(array, color_dict=None, keep_zero_black=True):
+def pretty_color_array(array, color_dict=None, keep_zero_black=True):
     """Return a RGB false color array.
 
     Assigning a unique RGB color value to each unique element of the input
