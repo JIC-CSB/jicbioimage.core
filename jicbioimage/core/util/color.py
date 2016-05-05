@@ -101,6 +101,7 @@ def random_pretty_color():
         identifier = random.randint(0, sys.maxsize)
     return pretty_color_from_identifier(identifier)
 
+
 def pretty_color_palette(identifiers, keep_zero_black=True):
     """Return dictionary with pretty colors.
 
@@ -117,4 +118,16 @@ def pretty_color_palette(identifiers, keep_zero_black=True):
         value = pretty_color_from_identifier(i)
         color_dict[i] = value
 
+    return color_dict
+
+
+def unique_color_palette(identifiers):
+    """Return dictionary with unique colors.
+
+    :param identifiers: set of unique identifiers
+    :returns: dictionary
+    """
+    color_dict = {}
+    for i in identifiers:
+        color_dict[i] = unique_color_from_identifier(i)
     return color_dict

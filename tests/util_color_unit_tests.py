@@ -55,8 +55,6 @@ class PrettyColorUnitTests(unittest.TestCase):
 
         from jicbioimage.core.util.color import pretty_color_from_identifier
 
-        import random
-
         expected = (228, 90, 135)
 
         generated_color = pretty_color_from_identifier(0)
@@ -200,6 +198,18 @@ class IdentifierFromUniqueColorUnitTests(unittest.TestCase):
         self.assertEqual(identifier_from_unique_color((255, 255, 255)), 16777215)
 
 
+class UniqueColorPaletteUnitTests(unittest.TestCase):
+
+    def test_import_unique_color_palette(self):
+        from jicbioimage.core.util.color import unique_color_palette
+
+    def test_unique_colors_palette(self):
+        from jicbioimage.core.util.color import unique_color_palette
+        color_dict = unique_color_palette([0, 1, 16777215])
+        self.assertEqual(len(color_dict), 3)
+        self.assertEqual(color_dict[0], (0, 0, 0))
+        self.assertEqual(color_dict[1], (0, 0, 1))
+        self.assertEqual(color_dict[16777215], (255, 255, 255))
 
 if __name__ == '__main__':
 	unittest.main()
