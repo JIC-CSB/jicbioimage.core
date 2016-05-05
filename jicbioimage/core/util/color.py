@@ -129,5 +129,6 @@ def unique_color_palette(identifiers):
     """
     color_dict = {}
     for i in identifiers:
+        i = int(i)  # Force np.int64 to int for py3.3 compatibility.
         color_dict[i] = unique_color_from_identifier(i)
     return color_dict
