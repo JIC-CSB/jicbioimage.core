@@ -7,7 +7,7 @@ import random
 
 import numpy as np
 
-from jicbioimage.core.util.color import pretty_color_palette
+from jicbioimage.core.util.color import pretty_color_palette, unique_color_palette
 
 def normalise(array):
     """Return array normalised such that all values are between 0 and 1.
@@ -110,9 +110,9 @@ def color_array(array, color_dict):
 
 
 def pretty_color_array(array, keep_zero_black=True):
-    """Return a RGB false color array.
+    """Return a RGB pretty color array.
 
-    Assigning a unique RGB color value to each unique element of the input
+    Assigning a pretty RGB color value to each unique element of the input
     array and return an array of shape (array.shape, 3).
 
     :param array: input numpy.array
@@ -121,4 +121,18 @@ def pretty_color_array(array, keep_zero_black=True):
     """
     unique_identifiers = set(np.unique(array))
     color_dict = pretty_color_palette(unique_identifiers, keep_zero_black)
+    return color_array(array, color_dict)
+
+
+def unique_color_array(array):
+    """Return a RGB unique color array.
+
+    Assigning a unique RGB color value to each unique element of the input
+    array and return an array of shape (array.shape, 3).
+
+    :param array: input numpy.array
+    :returns: numpy.array
+    """
+    unique_identifiers = set(np.unique(array))
+    color_dict = unique_color_palette(unique_identifiers)
     return color_array(array, color_dict)

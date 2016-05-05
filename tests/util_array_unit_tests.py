@@ -274,6 +274,31 @@ class PrettyColorArrayUnitTests(unittest.TestCase):
         self.assertTrue(np.array_equal(actual_output, expected_output))
 
 
+class UniqueColorArrayUnitTests(unittest.TestCase):
+
+    def test_import_unique_color_array(self):
+
+        from jicbioimage.core.util.array import unique_color_array
+
+    def test_unique_color_array(self):
+
+        from jicbioimage.core.util.array import unique_color_array
+
+        input_array = np.array([[0, 0, 0],
+                                [1, 1, 1],
+                                [16777215, 16777215, 16777215]])
+
+        c1 = [0, 0, 0]
+        c2 = [0, 0, 1]
+        c3 = [255, 255, 255]
+
+        expected_output = np.array([[c1, c1, c1],
+                                    [c2, c2, c2],
+                                    [c3, c3, c3]], dtype=np.uint8)
+
+        actual_output = unique_color_array(input_array)
+
+        self.assertTrue(np.array_equal(actual_output, expected_output))
 
 if __name__ == '__main__':
     unittest.main()
