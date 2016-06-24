@@ -78,8 +78,8 @@ class _BaseImage(np.ndarray):
         return self.png()
 
 
-class Image(_BaseImage):
-    """Image class."""
+class _BaseImageWithHistory(_BaseImage):
+    """Private image base class that adds history on creation."""
 
     @classmethod
     def from_array(cls, array, name=None, log_in_history=True):
@@ -98,6 +98,32 @@ class Image(_BaseImage):
         if log_in_history:
             image.history.append(event)
         return image
+
+    def __new__(subtype, shape, dtype=np.uint8, buffer=None, offset=0,
+                strides=None, order=None, name=None, log_in_history=True):
+        obj = np.ndarray.__new__(subtype, shape, dtype, buffer, offset,
+                                 strides, order)
+        obj.name = name
+        obj.history = []
+        return obj
+
+    def __init__(self, shape, dtype=np.uint8, buffer=None, offset=0,
+                 strides=None, order=None, name=None, log_in_history=True):
+        event = 'Instantiated image from shape {}'.format(shape)
+        if name:
+            event = '{} as {}'.format(event, name)
+        if log_in_history:
+            self.history.append(event)
+
+    def __array_finalize__(self, obj):
+        if obj is None:
+            return
+        self.name = getattr(obj, 'name', None)
+        self.history = getattr(obj, 'history', [])
+
+
+class Image(_BaseImageWithHistory):
+    """Image class."""
 
     @classmethod
     def from_file(cls, fpath, name=None, log_in_history=True):
@@ -124,28 +150,6 @@ class Image(_BaseImage):
             image.history.append(event)
 
         return image
-
-    def __new__(subtype, shape, dtype=np.uint8, buffer=None, offset=0,
-                strides=None, order=None, name=None, log_in_history=True):
-        obj = np.ndarray.__new__(subtype, shape, dtype, buffer, offset,
-                                 strides, order)
-        obj.name = name
-        obj.history = []
-        return obj
-
-    def __init__(self, shape, dtype=np.uint8, buffer=None, offset=0,
-                 strides=None, order=None, name=None, log_in_history=True):
-        event = 'Instantiated image from shape {}'.format(shape)
-        if name:
-            event = '{} as {}'.format(event, name)
-        if log_in_history:
-            self.history.append(event)
-
-    def __array_finalize__(self, obj):
-        if obj is None:
-            return
-        self.name = getattr(obj, 'name', None)
-        self.history = getattr(obj, 'history', [])
 
 
 class ProxyImage(object):
