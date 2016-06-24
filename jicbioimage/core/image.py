@@ -109,7 +109,8 @@ class _BaseImageWithHistory(_BaseImage):
 
     def __init__(self, shape, dtype=np.uint8, buffer=None, offset=0,
                  strides=None, order=None, name=None, log_in_history=True):
-        event = 'Instantiated image from shape {}'.format(shape)
+        class_name = self.__class__.__name__
+        event = 'Instantiated {} from shape {}'.format(class_name, shape)
         if name:
             event = '{} as {}'.format(event, name)
         if log_in_history:
@@ -150,6 +151,10 @@ class Image(_BaseImageWithHistory):
             image.history.append(event)
 
         return image
+
+
+class Image3D(_BaseImageWithHistory):
+    """Image3D class; in other words a 3D stack."""
 
 
 class ProxyImage(object):
