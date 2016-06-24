@@ -92,13 +92,13 @@ class TransformationUserStory(unittest.TestCase):
 
         # Image will have one item in history now.
         self.assertEqual(len(image.history), 1)
-        self.assertTrue(image.history[0].startswith('Created image from'))
+        self.assertTrue(image.history[0].startswith('Created Image from'))
 
         image = blur(image)
 
         # Image should have two items in history now.
         self.assertEqual(len(image.history), 2)
-        self.assertTrue(image.history[0].startswith('Created image from'))
+        self.assertTrue(image.history[0].startswith('Created Image from'))
         self.assertEqual(image.history[1], 'Applied blur transform')
 
         # Image returned is of jicbioimage.core.image.Image type.

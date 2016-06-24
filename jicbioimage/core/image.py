@@ -145,7 +145,8 @@ class Image(_BaseImageWithHistory):
 
         # Reset history, as image is created from file not array.
         image.history = []
-        event = 'Created image from {}'.format(fpath)
+        class_name = cls.__name__
+        event = 'Created {} from {}'.format(class_name, fpath)
         if name:
             event = '{} as {}'.format(event, name)
         if log_in_history:
