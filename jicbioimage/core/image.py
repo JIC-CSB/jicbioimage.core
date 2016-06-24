@@ -92,7 +92,8 @@ class _BaseImageWithHistory(_BaseImage):
         :returns: :class:`jicbioimage.core.image.Image`
         """
         image = array.view(cls)
-        event = 'Created image from array'
+        class_name = cls.__name__
+        event = 'Created {} from array'.format(class_name)
         if name:
             event = '{} as {}'.format(event, name)
         if log_in_history:

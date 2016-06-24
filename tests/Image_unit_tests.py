@@ -104,13 +104,13 @@ class ImageTests(unittest.TestCase):
         ar = np.zeros((50,50), dtype=np.uint8)
         im = Image.from_array(ar)
         self.assertTrue(isinstance(im, Image))
-        self.assertEqual(im.history[0], 'Created image from array')
+        self.assertEqual(im.history[0], 'Created Image from array')
 
     def test_from_array_with_name(self):
         from jicbioimage.core.image import Image
         ar = np.zeros((50,50), dtype=np.uint8)
         im = Image.from_array(ar, name='Test1')
-        self.assertEqual(im.history[0], 'Created image from array as Test1')
+        self.assertEqual(im.history[0], 'Created Image from array as Test1')
 
     def test_from_array_no_history(self):
         from jicbioimage.core.image import Image
