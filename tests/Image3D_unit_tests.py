@@ -58,3 +58,11 @@ class Image3D_unit_tests(unittest.TestCase):
         ar = np.zeros((50,50,50), dtype=np.uint8)
         im = Image3D.from_array(ar, log_in_history=False)
         self.assertEqual(len(im.history), 0)
+
+    def test_num_digits(self):
+        from jicbioimage.core.image import Image3D
+        self.assertEqual(Image3D._num_digits(1), 1)
+        self.assertEqual(Image3D._num_digits(9), 1)
+        self.assertEqual(Image3D._num_digits(10), 2)
+        self.assertEqual(Image3D._num_digits(99), 2)
+        self.assertEqual(Image3D._num_digits(100), 3)

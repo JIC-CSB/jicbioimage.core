@@ -4,6 +4,7 @@ import os
 import json
 import base64
 import tempfile
+import math
 
 import numpy as np
 import scipy.ndimage
@@ -157,6 +158,23 @@ class Image(_BaseImageWithHistory):
 
 class Image3D(_BaseImageWithHistory):
     """Image3D class; in other words a 3D stack."""
+
+    @staticmethod
+    def _num_digits(zdim):
+        return math.floor(math.log10(abs(zdim))) + 1
+
+    def to_directory(self, directory):
+        """Write z-slices to directory.
+        """
+        if not os.path.isdir(directory):
+            os.mkdir(directory)
+        xdim, ydim, zdim = self.shape
+        num_digits = Image3D._num_digits(zdim-1)
+        for z in range(zdim):
+            num = str(z).zfill(num_digits)
+            fname = "z{}.png".format(num)
+            fpath = os.path.join(directory, fname)
+            skimage.io.imsave(fpath, self[:,:,z], "freeimage")
 
 
 class ProxyImage(object):
