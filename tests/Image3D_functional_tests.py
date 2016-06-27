@@ -92,3 +92,24 @@ class Image3D_from_and_to_directory(unittest.TestCase):
         self.assertTrue(np.array_equal(z0, im0))
         self.assertTrue(np.array_equal(z1, im1))
         self.assertTrue(np.array_equal(z2*255, im1))
+
+    def test_from_directory(self):
+        from jicbioimage.core.image import Image3D, Image
+        directory = os.path.join(TMP_DIR)
+        with open(os.path.join(directory, 'junk.txt'), "w") as fh:
+            fh.write("junk")
+
+        z0 = np.zeros((50,50), dtype=np.uint8)
+        z1 = np.ones((50, 50), dtype=np.uint8) * 255
+        for i, z in enumerate([z0, z1]):
+            im = Image.from_array(z)
+            fpath = os.path.join(directory, "z{}.png".format(i))
+            with open(fpath, "wb") as fh:
+                fh.write(im.png())
+
+        im3d = Image3D.from_directory(TMP_DIR)
+        self.assertTrue(isinstance(im3d, Image3D))
+        self.assertEqual(im3d.shape, (50, 50, 2))
+
+        stack = np.dstack([z0, z1])
+        self.assertTrue(np.array_equal(im3d, stack))

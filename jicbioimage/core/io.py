@@ -3,13 +3,16 @@
 import sys
 import os
 import os.path
-import re
 import subprocess
 import json
 from collections import namedtuple
 import hashlib
 
-from jicbioimage.core.image import ImageCollection, MicroscopyCollection
+from jicbioimage.core.image import (
+    _sorted_listdir,
+    ImageCollection,
+    MicroscopyCollection,
+)
 
 
 def _md5_hexdigest_from_file(fpath, blocksize=65536):
@@ -21,27 +24,6 @@ def _md5_hexdigest_from_file(fpath, blocksize=65536):
             md5_hash.update(buf)
             buf = fh.read(blocksize)
         return md5_hash.hexdigest()
-
-
-def sorted_listdir(directory):
-    """Return list of files sorted in the way humans expect.
-
-    :param directory: path to directory
-    :returns: sorted list of file names
-    """
-
-    def _sorted_nicely(l):
-        """Return list sorted in the way that humans expect.
-
-        :param l: iterable to be sorted
-        :returns: sorted list
-        """
-        convert = lambda text: int(text) if text.isdigit() else text
-        sort_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
-        return sorted(l, key=sort_key)
-
-    fpaths = os.listdir(directory)
-    return _sorted_nicely(fpaths)
 
 
 class AutoName(object):
@@ -153,7 +135,7 @@ class BFConvertWrapper(object):
         :returns: list
         """
         entries = []
-        for fname in sorted_listdir(entry.directory):
+        for fname in _sorted_listdir(entry.directory):
             if fname == 'manifest.json':
                 continue
             fpath = os.path.abspath(os.path.join(entry.directory, fname))

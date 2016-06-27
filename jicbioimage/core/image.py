@@ -5,12 +5,34 @@ import json
 import base64
 import tempfile
 import math
+import re
 
 import numpy as np
 import scipy.ndimage
 import skimage.io
 
 from jicbioimage.core.util.array import normalise
+
+
+def _sorted_listdir(directory):
+    """Return list of files sorted in the way humans expect.
+
+    :param directory: path to directory
+    :returns: sorted list of file names
+    """
+
+    def _sorted_nicely(l):
+        """Return list sorted in the way that humans expect.
+
+        :param l: iterable to be sorted
+        :returns: sorted list
+        """
+        convert = lambda text: int(text) if text.isdigit() else text
+        sort_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+        return sorted(l, key=sort_key)
+
+    fpaths = os.listdir(directory)
+    return _sorted_nicely(fpaths)
 
 
 class _TemporaryFilePath(object):
@@ -161,15 +183,36 @@ class Image3D(_BaseImageWithHistory):
 
     @staticmethod
     def _num_digits(zdim):
-        return math.floor(math.log10(abs(zdim))) + 1
+        return int(math.floor(math.log10(abs(zdim))) + 1)
+
+    @classmethod
+    def from_directory(cls, directory):
+        """Return :class:`jicbioimage.core.image.Image3D` from directory.
+
+        :returns: :class:`jicbioimage.core.image.Image3D`
+        """
+        skimage.io.use_plugin('freeimage')
+        def is_image_fname(fname):
+            "Return True if fname is '.png', '.tif' or '.tiff'."""
+            image_exts = set([".png", ".tif", ".tiff"])
+            base, ext = os.path.splitext(fname)
+            return ext in image_exts
+
+        fnames = [fn for fn in _sorted_listdir(directory)
+                  if is_image_fname(fn)]
+        fpaths = [os.path.join(directory, fn) for fn in fnames]
+        images = [skimage.io.imread(fp) for fp in fpaths]
+        stack = np.dstack(images)
+
+        return cls.from_array(stack)
 
     def to_directory(self, directory):
-        """Write z-slices to directory.
-        """
+        """Write z-slices to directory."""
         if not os.path.isdir(directory):
             os.mkdir(directory)
         xdim, ydim, zdim = self.shape
         num_digits = Image3D._num_digits(zdim-1)
+        print(type(num_digits))
         ar = normalise(self) * 255
         ar = ar.astype(np.uint8)
         for z in range(zdim):

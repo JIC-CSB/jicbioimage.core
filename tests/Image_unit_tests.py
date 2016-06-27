@@ -7,6 +7,12 @@ import numpy as np
 
 import PIL
 
+try:
+    from mock import Mock, patch
+except ImportError:
+    from unittest.mock import Mock, patch
+
+
 class ImageTests(unittest.TestCase):
 
     def test_import_Image_class(self):
@@ -118,7 +124,15 @@ class ImageTests(unittest.TestCase):
         im = Image.from_array(ar, log_in_history=False)
         self.assertEqual(len(im.history), 0)
 
+class sorted_listdir_test(unittest.TestCase):
 
+    @patch('os.listdir')
+    def test_sorted_lisdir(self, patch_listdir):
+        patch_listdir.return_value = ["z20.png", "z3.png", "z1.png"]
+        from jicbioimage.core.image import _sorted_listdir
+        l = _sorted_listdir(".")
+        patch_listdir.assert_called_with(".")
+        self.assertEqual(l, ["z1.png", "z3.png", "z20.png"])
 
 if __name__ == '__main__':
     unittest.main()
