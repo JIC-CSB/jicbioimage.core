@@ -170,11 +170,13 @@ class Image3D(_BaseImageWithHistory):
             os.mkdir(directory)
         xdim, ydim, zdim = self.shape
         num_digits = Image3D._num_digits(zdim-1)
+        ar = normalise(self) * 255
+        ar = ar.astype(np.uint8)
         for z in range(zdim):
             num = str(z).zfill(num_digits)
             fname = "z{}.png".format(num)
             fpath = os.path.join(directory, fname)
-            skimage.io.imsave(fpath, self[:,:,z], "freeimage")
+            skimage.io.imsave(fpath, ar[:, :, z], "freeimage")
 
 
 class ProxyImage(object):
