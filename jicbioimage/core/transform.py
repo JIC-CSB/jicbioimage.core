@@ -48,7 +48,6 @@ def transformation(func):
 
         if AutoWrite.on:
             fpath = AutoName.name(func)
-            with open(fpath, "wb") as fh:
-                fh.write(image.png())
+            image.write(fpath)
         return image
     return func_as_transformation

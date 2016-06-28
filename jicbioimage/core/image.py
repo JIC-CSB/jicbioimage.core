@@ -100,6 +100,14 @@ class _BaseImage(np.ndarray):
         """
         return self.png()
 
+    def write(self, name):
+        """Write image to disk.
+
+        :name: name of output file without extension
+        """
+        fpath = name + ".png"
+        with open(fpath, "wb") as fh:
+            fh.write(self.png())
 
 class _BaseImageWithHistory(_BaseImage):
     """Private image base class that adds history on creation."""
@@ -220,6 +228,17 @@ class Image3D(_BaseImageWithHistory):
             fname = "z{}.png".format(num)
             fpath = os.path.join(directory, fname)
             skimage.io.imsave(fpath, ar[:, :, z], "freeimage")
+
+#   def write(self, name):
+#       """Write stack to disk.
+
+#       :name: name of output directory
+#       """
+#       dirname = name + ".stack"
+#       if os.path.isdir(dirname):
+#           shutil.rmtree(dirname)
+#       os.mkdir(dirname)
+#       self.to_directory(dirname)
 
 
 class ProxyImage(object):

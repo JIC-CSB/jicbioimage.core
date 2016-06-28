@@ -10,7 +10,6 @@ class AutoNameTests(unittest.TestCase):
         from jicbioimage.core.io import AutoName
         AutoName.count = 0
         AutoName.prefix_format = "{:d}_"
-        AutoName.suffix = ".png"
         AutoName.namespace = ""
 
     def test_count(self):
@@ -20,10 +19,6 @@ class AutoNameTests(unittest.TestCase):
     def test_directory(self):
         from jicbioimage.core.io import AutoName
         self.assertEqual(AutoName.directory, None)
-
-    def test_suffix(self):
-        from jicbioimage.core.io import AutoName
-        self.assertEqual(AutoName.suffix, '.png')
 
     def test_prefix_format_default(self):
         from jicbioimage.core.io import AutoName
@@ -57,19 +52,10 @@ class AutoNameTests(unittest.TestCase):
         def no_transform(image):
             return image
 
-        self.assertEqual(AutoName.name(no_transform), '1_no_transform.png')
+        self.assertEqual(AutoName.name(no_transform), '1_no_transform')
         AutoName.directory = os.path.join('/', 'tmp')
         self.assertEqual(AutoName.name(no_transform),
-                         os.path.join('/', 'tmp', '2_no_transform.png'))
-
-    def test_custom_suffix_name_logic(self):
-        from jicbioimage.core.io import AutoName
-        AutoName.suffix = ".tiff"
-
-        def no_transform(image):
-            return image
-
-        self.assertEqual(AutoName.name(no_transform), '1_no_transform.tiff')
+                         os.path.join('/', 'tmp', '2_no_transform'))
 
     def test_custom_prefix_name_logic(self):
         from jicbioimage.core.io import AutoName
@@ -78,7 +64,7 @@ class AutoNameTests(unittest.TestCase):
         def no_transform(image):
             return image
 
-        self.assertEqual(AutoName.name(no_transform), '01_no_transform.png')
+        self.assertEqual(AutoName.name(no_transform), '01_no_transform')
 
     def test_custom_namespace_logic(self):
         from jicbioimage.core.io import AutoName
@@ -88,7 +74,7 @@ class AutoNameTests(unittest.TestCase):
             return image
 
         self.assertEqual(AutoName.name(no_transform),
-                         '1_strand1.no_transform.png')
+                         '1_strand1.no_transform')
 
 if __name__ == '__main__':
     unittest.main()
