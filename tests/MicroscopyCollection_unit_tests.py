@@ -8,12 +8,12 @@ except ImportError:
     from unittest.mock import MagicMock, patch
 
 class MicroscopyCollectionTests(unittest.TestCase):
-    
+
     def test_len(self):
         from jicbioimage.core.image import MicroscopyCollection
         microscopy_collection = MicroscopyCollection()
         self.assertEqual(len(microscopy_collection), 0)
-        
+
     def test_has_proxy_image(self):
         from jicbioimage.core.image import MicroscopyCollection
         microscopy_collection = MicroscopyCollection()
@@ -56,7 +56,7 @@ class MicroscopyCollectionTests(unittest.TestCase):
         from jicbioimage.core.image import MicroscopyCollection
         microscopy_collection = MicroscopyCollection()
         self.assertTrue(callable(microscopy_collection.zstack_proxy_iterator))
-        
+
     def test_zstack_proxy_iterator_is_iterable(self):
         import collections
         from jicbioimage.core.image import MicroscopyCollection
@@ -65,13 +65,18 @@ class MicroscopyCollectionTests(unittest.TestCase):
                                    collections.Iterable))
         self.assertTrue(isinstance(microscopy_collection.zstack_proxy_iterator(),
                                    collections.Iterable))
-        
+
     def test_zstack_array(self):
         from jicbioimage.core.image import MicroscopyCollection
         microscopy_collection = MicroscopyCollection()
         self.assertTrue(callable(microscopy_collection.zstack_array))
-        
-    def test_zstack_array(self):
+
+    def test_zstack(self):
+        from jicbioimage.core.image import MicroscopyCollection
+        microscopy_collection = MicroscopyCollection()
+        self.assertTrue(callable(microscopy_collection.zstack))
+
+    def test_image(self):
         from jicbioimage.core.image import MicroscopyCollection
         microscopy_collection = MicroscopyCollection()
         self.assertTrue(callable(microscopy_collection.image))
@@ -109,6 +114,6 @@ class MicroscopyCollectionTests(unittest.TestCase):
     <img style="margin-left: auto; margin-right: auto;" src="data:image/png;base64,aW1hZ2U=" />
 </div>
 '''.strip().replace(' ', '').replace('\n', ''))
-        
+
 if __name__ == '__main__':
     unittest.main()

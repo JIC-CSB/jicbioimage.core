@@ -480,6 +480,17 @@ class MicroscopyCollection(ImageCollection):
         zstack = [x.image for x in self.zstack_proxy_iterator(s=s, c=c, t=t)]
         return np.dstack(zstack)
 
+    def zstack(self, s=0, c=0, t=0):
+        """Return zstack as a :class:`jicbioimage.core.image.Image3D`.
+
+        :param s: series
+        :param c: channel
+        :param t: timepoint
+        :returns: zstack as a :class:`jicbioimage.core.image.Image3D`
+        """
+        return Image3D.from_array(self.zstack_array(s=s, c=c, t=t))
+
+
     def image(self, s=0, c=0, z=0, t=0):
         """Return image as a :class:`jicbioimage.core.image.Image`.
 

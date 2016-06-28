@@ -122,11 +122,11 @@ class TransformationUserStory(unittest.TestCase):
         def average_projection(stack):
             xmax, ymax, zmax = stack.shape
             projection = np.sum(stack, axis=2, dtype=np.uint8) // zmax
-            return projection
+            return Image.from_array(projection)
 
         data_manager.load(os.path.join(DATA_DIR, 'z-series.ome.tif'))
         microscopy_collection = data_manager[0]
-        stack = microscopy_collection.zstack_array()
+        stack = microscopy_collection.zstack()
 
         image = average_projection(stack)
         self.assertTrue(isinstance(image, Image))

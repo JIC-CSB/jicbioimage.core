@@ -12,7 +12,7 @@ DATA_DIR = os.path.join(HERE, 'data')
 TMP_DIR = os.path.join(HERE, 'tmp')
 
 class DataManagerUserStory(unittest.TestCase):
-    
+
     def setUp(self):
         if not os.path.isdir(TMP_DIR):
             os.mkdir(TMP_DIR)
@@ -66,7 +66,7 @@ class DataManagerUserStory(unittest.TestCase):
         # Alice loads her file of interest.
         data_manager.load(os.path.join(DATA_DIR, 'single-channel.ome.tif'))
         self.assertEqual(len(data_manager), 1)
-        
+
         # A DataManager is a container for MicroscopyCollection instances.
         from jicbioimage.core.image import MicroscopyCollection
         microscopy_collection = data_manager[0]
@@ -89,7 +89,7 @@ class DataManagerUserStory(unittest.TestCase):
         # There are five z-slices in the new image collection.
         zseries_collection = data_manager[1]
         self.assertEqual(len(zseries_collection), 5)
- 
+
         # File format conversion trouble (for example using non existing input
         # file) raises IOError.
         with self.assertRaises(IOError):
@@ -136,6 +136,7 @@ class DataManagerUserStory(unittest.TestCase):
         self.assertEqual(proxy_image.image.shape, (167, 439))
 
     def test_image_collection(self):
+        from jicbioimage.core.image import Image3D
         from jicbioimage.core.io import DataManager, FileBackend
         backend = FileBackend(TMP_DIR)
         data_manager = DataManager(backend)
@@ -171,14 +172,14 @@ class DataManagerUserStory(unittest.TestCase):
             self.assertEqual(proxy_image.zslice, i)
             self.assertEqual(proxy_image.timepoint, 3)
 
-        zstack_array = microscopy_collection.zstack_array(s=0, c=1, t=3)
-        self.assertTrue(isinstance(zstack_array, np.ndarray))
-        self.assertEqual(zstack_array.shape, (167, 439, 5))
+        zstack = microscopy_collection.zstack(s=0, c=1, t=3)
+        self.assertTrue(isinstance(zstack, Image3D))
+        self.assertEqual(zstack.shape, (167, 439, 5))
 
         image = microscopy_collection.image(s=0, c=1, z=2, t=3)
         self.assertTrue(isinstance(image, np.ndarray))
         self.assertEqual(image.shape, (167, 439))
-         
+
     def test_multipage_tiff(self):
         from jicbioimage.core.image import MicroscopyCollection, ImageCollection
         from jicbioimage.core.io import DataManager, FileBackend
@@ -227,12 +228,12 @@ class DataManagerUserStory(unittest.TestCase):
         try:
             os.chdir(TMP_DIR)
             data_manager = DataManager()
-            
+
             file_backend_path = os.path.join(os.getcwd(), 'jicbioimage.core_backend')
 
             self.assertEqual(data_manager.backend.directory, file_backend_path)
         finally:
             os.chdir(real_working_dir)
-        
+
 if __name__ == '__main__':
     unittest.main()
