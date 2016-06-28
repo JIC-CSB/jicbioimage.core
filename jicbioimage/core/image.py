@@ -6,6 +6,7 @@ import base64
 import tempfile
 import math
 import re
+import shutil
 
 import numpy as np
 import scipy.ndimage
@@ -220,7 +221,6 @@ class Image3D(_BaseImageWithHistory):
             os.mkdir(directory)
         xdim, ydim, zdim = self.shape
         num_digits = Image3D._num_digits(zdim-1)
-        print(type(num_digits))
         ar = normalise(self) * 255
         ar = ar.astype(np.uint8)
         for z in range(zdim):
@@ -229,16 +229,16 @@ class Image3D(_BaseImageWithHistory):
             fpath = os.path.join(directory, fname)
             skimage.io.imsave(fpath, ar[:, :, z], "freeimage")
 
-#   def write(self, name):
-#       """Write stack to disk.
+    def write(self, name):
+        """Write stack to disk.
 
-#       :name: name of output directory
-#       """
-#       dirname = name + ".stack"
-#       if os.path.isdir(dirname):
-#           shutil.rmtree(dirname)
-#       os.mkdir(dirname)
-#       self.to_directory(dirname)
+        :name: name of output directory
+        """
+        dirname = name + ".stack"
+        if os.path.isdir(dirname):
+            shutil.rmtree(dirname)
+        os.mkdir(dirname)
+        self.to_directory(dirname)
 
 
 class ProxyImage(object):

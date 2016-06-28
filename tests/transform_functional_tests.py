@@ -151,5 +151,92 @@ class TransformationUserStory(unittest.TestCase):
                         'No such file: {}'.format(created_fpath))
 
 
+    def test_transform_on_Image3D(self):
+        from jicbioimage.core.image import Image3D
+        from jicbioimage.core.transform import transformation
+        from jicbioimage.core.io import AutoName
+
+        AutoName.directory = TMP_DIR
+
+        @transformation
+        def some_transform(image):
+            return image
+
+        stack = Image3D((50, 50, 11))
+        stack = some_transform(stack)
+
+        self.assertTrue(isinstance(stack, Image3D))
+
+        output_dir = os.path.join(TMP_DIR, "1_some_transform.stack")
+        self.assertTrue(os.path.isdir(output_dir))
+
+        expected = ["z00.png", "z01.png", "z02.png", "z03.png",
+                    "z04.png", "z05.png", "z06.png", "z07.png",
+                    "z08.png", "z09.png", "z10.png"]
+
+        actual = os.listdir(output_dir)
+        for f in expected:
+            self.assertTrue(f in actual)
+
+        # Make sure that previous data is removed prior to writing.
+        AutoName.count = 0
+
+        stack = Image3D((50, 50, 3))
+        stack = some_transform(stack)
+
+        actual = os.listdir(output_dir)
+        for f in expected:  # These are the old files.
+            self.assertFalse(f in actual)
+
+        expected = ["z0.png", "z1.png", "z2.png"]  # These are the new files.
+        for f in expected:
+            self.assertTrue(f in actual)
+
+    def test_transform_Image3D_to_Image(self):
+        from jicbioimage.core.image import Image, Image3D
+        from jicbioimage.core.transform import transformation
+        from jicbioimage.core.io import AutoName
+
+        AutoName.directory = TMP_DIR
+
+        @transformation
+        def first_z(image):
+            return image[:,:,0].view(Image)
+
+        stack = Image3D((50, 50, 5))
+        image = first_z(stack)
+
+        self.assertTrue(isinstance(image, Image))
+
+        output_name = os.path.join(TMP_DIR, "1_first_z.png")
+        self.assertTrue(os.path.isfile(output_name))
+
+        output_dir = os.path.join(TMP_DIR, "1_first_z.stack")
+        self.assertFalse(os.path.isdir(output_dir))
+
+    def test_transform_Image_to_Image3D(self):
+        from jicbioimage.core.image import Image, Image3D
+        from jicbioimage.core.transform import transformation
+        from jicbioimage.core.io import AutoName
+
+        AutoName.directory = TMP_DIR
+
+        @transformation
+        def add_height(image):
+            stack = np.dstack([image, image, image])
+            return Image3D.from_array(stack)
+
+        im = Image((50, 50))
+        stack = add_height(im)
+
+        self.assertTrue(isinstance(stack, Image3D))
+
+        output_name = os.path.join(TMP_DIR, "1_add_height.png")
+        self.assertFalse(os.path.isfile(output_name))
+
+        output_dir = os.path.join(TMP_DIR, "1_add_height.stack")
+        self.assertTrue(os.path.isdir(output_dir))
+
+
 if __name__ == '__main__':
     unittest.main()

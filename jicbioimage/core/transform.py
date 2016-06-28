@@ -20,7 +20,7 @@ Below is an example of how to create a transformation that inverts an image.
 from functools import wraps
 
 from jicbioimage.core.io import AutoName, AutoWrite
-from jicbioimage.core.image import Image
+from jicbioimage.core.image import Image, _BaseImageWithHistory
 
 
 def transformation(func):
@@ -39,7 +39,7 @@ def transformation(func):
             history.extend(input_image.history)
 
         image = func(*args, **kwargs)
-        if not isinstance(image, Image):
+        if not isinstance(image, _BaseImageWithHistory):
             image = Image.from_array(image, log_in_history=False)
 
         # Update the history of the image.
