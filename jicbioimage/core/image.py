@@ -110,6 +110,7 @@ class _BaseImage(np.ndarray):
         with open(fpath, "wb") as fh:
             fh.write(self.png())
 
+
 class _BaseImageWithHistory(_BaseImage):
     """Private image base class that adds history on creation."""
 
@@ -198,9 +199,11 @@ class Image3D(_BaseImageWithHistory):
     def from_directory(cls, directory):
         """Return :class:`jicbioimage.core.image.Image3D` from directory.
 
+        :param directory: name of input directory
         :returns: :class:`jicbioimage.core.image.Image3D`
         """
         skimage.io.use_plugin('freeimage')
+
         def is_image_fname(fname):
             "Return True if fname is '.png', '.tif' or '.tiff'."""
             image_exts = set([".png", ".tif", ".tiff"])
@@ -216,7 +219,8 @@ class Image3D(_BaseImageWithHistory):
         return cls.from_array(stack)
 
     def to_directory(self, directory):
-        """Write z-slices to directory."""
+        """Write slices from 3D image to directory.
+        """
         if not os.path.isdir(directory):
             os.mkdir(directory)
         xdim, ydim, zdim = self.shape
@@ -230,9 +234,9 @@ class Image3D(_BaseImageWithHistory):
             skimage.io.imsave(fpath, ar[:, :, z], "freeimage")
 
     def write(self, name):
-        """Write stack to disk.
+        """Write slices from 3D image to disk.
 
-        :name: name of output directory
+        :param name: name of output directory
         """
         dirname = name + ".stack"
         if os.path.isdir(dirname):
@@ -463,7 +467,8 @@ class MicroscopyCollection(ImageCollection):
         :param s: series
         :param c: channel
         :param t: timepoint
-        :returns: zstack :class:`jicbioimage.core.image.ProxyImage` iterator
+        :returns: zstack as a :class:`jicbioimage.core.image.ProxyImage`
+                  iterator
         """
         for proxy_image in self:
             if proxy_image.in_zstack(s=s, c=c, t=t):
@@ -489,7 +494,6 @@ class MicroscopyCollection(ImageCollection):
         :returns: zstack as a :class:`jicbioimage.core.image.Image3D`
         """
         return Image3D.from_array(self.zstack_array(s=s, c=c, t=t))
-
 
     def image(self, s=0, c=0, z=0, t=0):
         """Return image as a :class:`jicbioimage.core.image.Image`.
