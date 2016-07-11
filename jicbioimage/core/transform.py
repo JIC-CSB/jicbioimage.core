@@ -28,15 +28,22 @@ def transformation(func):
     @wraps(func)
     def func_as_transformation(*args, **kwargs):
 
+        # Take copies of the args and kwargs for use in the history.
+        # We will need to remove the image from either the kwargs
+        # or the args before we use h_args and h_kwargs to create a
+        # history event.
+        h_args = list(args[:])
+        h_kwargs = kwargs.copy()
+
         # Get the input image, so that we can get the history from it.
-        # And creat args, kwargs stripped of image for history event.
+        # Also, strip the image for h_args/h_kwargs.
         input_image = kwargs.get("image", None)
-        h_args = list(args[:])  # Take a copy and convert to list (in case it is a tuple).
-        h_kwargs = kwargs.copy()  # Take a copy.
         if input_image is None:
+            # The image is the first item of args.
             input_image = args[0]
             h_args.pop(0)
         else:
+            # The image is in kwargs.
             h_kwargs.pop("image")
 
         # Get the history from the image.
@@ -50,7 +57,6 @@ def transformation(func):
 
         # Update the history of the image.
         image.history = history
-#       image.history.append('Applied {} transform'.format(func.__name__))
         image.history.add_event(func, h_args, h_kwargs)
 
         if AutoWrite.on:
