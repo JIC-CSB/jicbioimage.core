@@ -111,6 +111,45 @@ class _BaseImage(np.ndarray):
             fh.write(self.png())
 
 
+class History(list):
+    """Class for storing the provenance of an image."""
+
+    class Event(object):
+        """An event in the history of an image."""
+
+        def __init__(self, function, args, kwargs):
+            self.function = function
+            self.args = args
+            self.kwargs = kwargs
+
+        def __repr__(self):
+            return str(self)
+
+        def __str__(self):
+            def quote_strings(value):
+                if isinstance(value, str):
+                    return "'{}'".format(value)
+                return value
+            args = [quote_strings(v) for v in self.args]
+            kwargs = ["{}={}".format(k, quote_strings(v))
+                      for k, v in self.kwargs.items()]
+            info = ["image"] + args + kwargs
+            info = ", ".join(info)
+            return "<History.Event({}({}))>".format(self.function.__name__, info)
+
+        def apply_to(self, image):
+            """Apply an event to an image."""
+            args = [image,]
+            args.extend(self.args)
+            return self.function(*args, **self.kwargs)
+
+    def add_event(self, function, args, kwargs):
+        """Return event added to the history."""
+        event = History.Event(function, args, kwargs)
+        self.append(event)
+        return event
+
+
 class _BaseImageWithHistory(_BaseImage):
     """Private image base class that adds history on creation."""
 
