@@ -48,7 +48,7 @@ class TransformationUserStory(unittest.TestCase):
         image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
         image = identity(image)
         self.assertEqual(len(image.history), 2, image.history)
-        self.assertEqual(image.history[-1], 'Applied identity transform')
+        self.assertEqual(str(image.history[-1]), '<History.Event(identity(image))>')
         created_fpath = os.path.join(TMP_DIR, '1_identity.png')
         self.assertTrue(os.path.isfile(created_fpath),
                         'No such file: {}'.format(created_fpath))
@@ -99,7 +99,7 @@ class TransformationUserStory(unittest.TestCase):
         # Image should have two items in history now.
         self.assertEqual(len(image.history), 2)
         self.assertTrue(image.history[0].startswith('Created Image from'))
-        self.assertEqual(image.history[1], 'Applied blur transform')
+        self.assertEqual(str(image.history[1]), '<History.Event(blur(image))>')
 
         # Image returned is of jicbioimage.core.image.Image type.
         self.assertTrue(isinstance(image, Image))
