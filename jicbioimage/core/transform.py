@@ -81,7 +81,7 @@ class History(list):
                 return value
             args = [quote_strings(v) for v in self.args]
             kwargs = ["{}={}".format(k, quote_strings(v))
-                      for k, v in self.kwargs.iteritems()]
+                      for k, v in self.kwargs.items()]
             info = ["image"] + args + kwargs
             info = ", ".join(info)
             return "<History.Event({}({}))>".format(self.function.__name__, info)
