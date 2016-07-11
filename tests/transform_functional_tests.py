@@ -47,7 +47,7 @@ class TransformationUserStory(unittest.TestCase):
 
         image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
         image = identity(image)
-        self.assertEqual(len(image.history), 2, image.history)
+        self.assertEqual(len(image.history), 1, image.history)
         self.assertEqual(str(image.history[-1]), '<History.Event(identity(image))>')
         created_fpath = os.path.join(TMP_DIR, '1_identity.png')
         self.assertTrue(os.path.isfile(created_fpath),
@@ -90,16 +90,17 @@ class TransformationUserStory(unittest.TestCase):
 
         image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
 
-        # Image will have one item in history now.
-        self.assertEqual(len(image.history), 1)
-        self.assertTrue(image.history[0].startswith('Created Image from'))
+        # The creation of a list is not an Event in the history list,
+        # it is a separate attribute.
+        self.assertEqual(len(image.history), 0)
+        self.assertTrue(image.history.creation.startswith('Created Image from'))
 
         image = blur(image)
 
-        # Image should have two items in history now.
-        self.assertEqual(len(image.history), 2)
-        self.assertTrue(image.history[0].startswith('Created Image from'))
-        self.assertEqual(str(image.history[1]), '<History.Event(blur(image))>')
+        # Image should have one event in the history now.
+        self.assertEqual(len(image.history), 1)
+        self.assertTrue(image.history.creation.startswith('Created Image from'))
+        self.assertEqual(str(image.history[0]), '<History.Event(blur(image))>')
 
         # Image returned is of jicbioimage.core.image.Image type.
         self.assertTrue(isinstance(image, Image))

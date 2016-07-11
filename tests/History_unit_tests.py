@@ -13,6 +13,12 @@ class HistoryUnitTests(unittest.TestCase):
         history = History()
         self.assertTrue(isinstance(history, History))
         self.assertEqual(len(history), 0)
+        self.assertTrue(history.creation is None)
+
+    def test_initialisation_with_creation(self):
+        from jicbioimage.core.image import History
+        history = History("awesome")
+        self.assertEqual(history.creation, "awesome")
 
     def test_add_event(self):
         from jicbioimage.core.image import History

@@ -36,12 +36,13 @@ class ImageUserStory(unittest.TestCase):
 
         # It is possible to create an image from a file.
         image = Image.from_file(path_to_tiff)
-        self.assertEqual(image.history[0],
+        self.assertEqual(len(image.history), 0)
+        self.assertEqual(image.history.creation,
                          'Created Image from {}'.format(path_to_tiff))
 
         # With name...
         image = Image.from_file(path_to_tiff, name='Test1')
-        self.assertEqual(image.history[0],
+        self.assertEqual(image.history.creation,
                          'Created Image from {} as Test1'.format(path_to_tiff))
 
         # Without history...

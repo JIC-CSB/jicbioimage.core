@@ -14,7 +14,8 @@ class Image3D_unit_tests(unittest.TestCase):
         image = Image3D((50, 50, 50))
         self.assertTrue(isinstance(image, np.ndarray))
         self.assertEqual(image.shape, (50, 50, 50))
-        self.assertEqual(image.history[0],
+        self.assertEqual(len(image.history), 0)
+        self.assertEqual(image.history.creation,
                          'Instantiated Image3D from shape (50, 50, 50)')
 
     def test_instantiation_from_shape_no_history(self):
@@ -37,7 +38,8 @@ class Image3D_unit_tests(unittest.TestCase):
         from jicbioimage.core.image import Image3D
         image = Image3D((50, 50, 50), name='test')
         self.assertEqual(image.name, 'test')
-        self.assertEqual(image.history[0],
+        self.assertEqual(len(image.history), 0)
+        self.assertEqual(image.history.creation,
                          'Instantiated Image3D from shape (50, 50, 50) as test')
 
     def test_from_array(self):
@@ -45,13 +47,15 @@ class Image3D_unit_tests(unittest.TestCase):
         ar = np.zeros((50,50,50), dtype=np.uint8)
         im = Image3D.from_array(ar)
         self.assertTrue(isinstance(im, Image3D))
-        self.assertEqual(im.history[0], 'Created Image3D from array')
+        self.assertEqual(len(im.history), 0)
+        self.assertEqual(im.history.creation, 'Created Image3D from array')
 
     def test_from_array_with_name(self):
         from jicbioimage.core.image import Image3D
         ar = np.zeros((50,50,50), dtype=np.uint8)
         im = Image3D.from_array(ar, name='Test1')
-        self.assertEqual(im.history[0], 'Created Image3D from array as Test1')
+        self.assertEqual(len(im.history), 0)
+        self.assertEqual(im.history.creation, 'Created Image3D from array as Test1')
 
     def test_from_array_no_history(self):
         from jicbioimage.core.image import Image3D

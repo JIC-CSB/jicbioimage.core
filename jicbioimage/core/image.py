@@ -114,6 +114,13 @@ class _BaseImage(np.ndarray):
 class History(list):
     """Class for storing the provenance of an image."""
 
+    def __init__(self, creation=None):
+        self.creation = creation
+
+    def extend(self, other):
+        self.creation = other.creation
+        super(History, self).extend(other)
+
     class Event(object):
         """An event in the history of an image."""
 
@@ -165,11 +172,11 @@ class _BaseImageWithHistory(_BaseImage):
         """
         image = array.view(cls)
         class_name = cls.__name__
-        event = 'Created {} from array'.format(class_name)
+        creation = 'Created {} from array'.format(class_name)
         if name:
-            event = '{} as {}'.format(event, name)
+            creation = '{} as {}'.format(creation, name)
         if log_in_history:
-            image.history.append(event)
+            image.history.creation = creation
         return image
 
     def __new__(subtype, shape, dtype=np.uint8, buffer=None, offset=0,
@@ -177,23 +184,23 @@ class _BaseImageWithHistory(_BaseImage):
         obj = np.ndarray.__new__(subtype, shape, dtype, buffer, offset,
                                  strides, order)
         obj.name = name
-        obj.history = []
+        obj.history = History()
         return obj
 
     def __init__(self, shape, dtype=np.uint8, buffer=None, offset=0,
                  strides=None, order=None, name=None, log_in_history=True):
         class_name = self.__class__.__name__
-        event = 'Instantiated {} from shape {}'.format(class_name, shape)
+        creation = 'Instantiated {} from shape {}'.format(class_name, shape)
         if name:
-            event = '{} as {}'.format(event, name)
+            creation = '{} as {}'.format(creation, name)
         if log_in_history:
-            self.history.append(event)
+            self.history.creation = creation
 
     def __array_finalize__(self, obj):
         if obj is None:
             return
         self.name = getattr(obj, 'name', None)
-        self.history = getattr(obj, 'history', [])
+        self.history = getattr(obj, 'history', History())
 
 
 class Image(_BaseImageWithHistory):
@@ -216,13 +223,13 @@ class Image(_BaseImageWithHistory):
         image = Image.from_array(ar, name)
 
         # Reset history, as image is created from file not array.
-        image.history = []
+        image.history = History()
         class_name = cls.__name__
-        event = 'Created {} from {}'.format(class_name, fpath)
+        creation = 'Created {} from {}'.format(class_name, fpath)
         if name:
-            event = '{} as {}'.format(event, name)
+            creation = '{} as {}'.format(creation, name)
         if log_in_history:
-            image.history.append(event)
+            image.history.creation = creation
 
         return image
 
