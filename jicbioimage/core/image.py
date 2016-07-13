@@ -145,7 +145,7 @@ class History(list):
             return "<History.Event({}({}))>".format(self.function.__name__, info)
 
         def apply_to(self, image):
-            """Apply an event to an image."""
+            """Return image after applying the event to it."""
             args = [image,]
             args.extend(self.args)
             return self.function(*args, **self.kwargs)
@@ -155,6 +155,13 @@ class History(list):
         event = History.Event(function, args, kwargs)
         self.append(event)
         return event
+
+    def apply_to(self, image):
+        """Return image after applying events in history to it."""
+        for e in self:
+            image = e.apply_to(image)
+        return image
+
 
 
 class _BaseImageWithHistory(_BaseImage):
