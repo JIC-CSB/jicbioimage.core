@@ -19,6 +19,8 @@ Below is an example of how to create a transformation that inverts an image.
 
 from functools import wraps
 
+import numpy as np
+
 from jicbioimage.core.io import AutoName, AutoWrite
 from jicbioimage.core.image import Image, History, _BaseImageWithHistory
 
@@ -45,6 +47,15 @@ def transformation(func):
         else:
             # The image is in kwargs.
             h_kwargs.pop("image")
+
+        def array_to_str(value):
+            if isinstance(value, np.ndarray):
+                value = repr(value)
+            return value
+
+        h_args = [array_to_str(v) for v in h_args]
+        for key, value in h_kwargs.items():
+            h_kwargs[key] = array_to_str(value)
 
         # Get the history from the image.
         history = History()

@@ -137,6 +137,7 @@ class History(list):
                 if isinstance(value, str):
                     return "'{}'".format(value)
                 return value
+
             args = [quote_strings(v) for v in self.args]
             kwargs = ["{}={}".format(k, quote_strings(v))
                       for k, v in self.kwargs.items()]
