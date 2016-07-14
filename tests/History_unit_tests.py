@@ -47,16 +47,6 @@ class EventUnitTests(unittest.TestCase):
         self.assertEqual(event.args, args)
         self.assertEqual(event.kwargs, kwargs)
 
-    def test_event_apply_to(self):
-        from jicbioimage.core.image import History
-        def split(s, sep, maxsplit):
-            return s.split(sep, maxsplit)
-        args = [","]
-        kwargs = {"maxsplit": 1}
-        event = History.Event(split, args, kwargs)
-        result = event.apply_to("1,2,3,4")
-        self.assertEqual(result, ["1", "2,3,4"])
-
     def test_event_str(self):
         from jicbioimage.core.image import History
         def split(s, sep, maxsplit):
