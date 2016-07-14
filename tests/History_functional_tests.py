@@ -22,7 +22,7 @@ class HistoryUserStory(unittest.TestCase):
     def test_apply_to(self):
         import numpy as np
         from jicbioimage.core.image import Image
-        from jicbioimage.transform import transformation
+        from jicbioimage.core.transform import transformation
         from jicbioimage.core.io import AutoName
         AutoName.directory = TMP_DIR
 
