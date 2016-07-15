@@ -43,18 +43,25 @@ class HistoryUserStory(unittest.TestCase):
         green = green_channel(org_im)
         red = red_channel(org_im)
 
+
         # Test with args.
         diff = channel_diff(red, green)
         last_event = diff.history[-1]
         self.assertEqual(last_event.args[0], repr(green))
+        pos = hex(id(green))
+        expected = """<History.Event(red_channel(image))>
+<History.Event(channel_diff(image, '<Image object at {}>'))>""".format(pos)
+        actual = "\n".join([str(e) for e in diff.history])
+        self.assertEqual(actual, expected)
 
         # Test with kwargs.
         diff = channel_diff(red, im2=green)
         last_event = diff.history[-1]
         self.assertEqual(last_event.kwargs["im2"], repr(green))
-
-
-
+        expected = """<History.Event(red_channel(image))>
+<History.Event(channel_diff(image, im2='<Image object at {}>'))>""".format(pos)
+        actual = "\n".join([str(e) for e in diff.history])
+        self.assertEqual(actual, expected)
 
 
 if __name__ == '__main__':
