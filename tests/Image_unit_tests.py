@@ -13,7 +13,23 @@ except ImportError:
     from unittest.mock import Mock, patch
 
 
+class BaseImageTests(unittest.TestCase):
+
+    def test_repr(self):
+        from jicbioimage.core.image import _BaseImage
+        im = _BaseImage((50,50))
+        pos = hex(id(im))
+        expected = "<_BaseImage object at {}>".format(pos)
+        self.assertEqual(repr(im), expected)
+
 class ImageTests(unittest.TestCase):
+
+    def test_repr(self):
+        from jicbioimage.core.image import Image
+        im = Image((50,50))
+        pos = hex(id(im))
+        expected = "<Image object at {}>".format(pos)
+        self.assertEqual(repr(im), expected)
 
     def test_import_Image_class(self):
         # This throws an error if the class cannot be imported.

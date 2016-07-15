@@ -63,6 +63,12 @@ class _BaseImage(np.ndarray):
     it.
     """
 
+    def __repr__(self):
+        obj_type = self.__class__.__name__
+        pos = hex(id(self))
+        return "<{} object at {}>".format(obj_type, pos)
+
+
     def png(self, width=None):
         """Return png string of image.
 
