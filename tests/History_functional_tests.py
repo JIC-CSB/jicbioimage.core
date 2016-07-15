@@ -50,7 +50,7 @@ class HistoryUserStory(unittest.TestCase):
         self.assertEqual(last_event.args[0], repr(green))
         pos = hex(id(green))
         expected = """<History.Event(red_channel(image))>
-<History.Event(channel_diff(image, '<Image object at {}>'))>""".format(pos)
+<History.Event(channel_diff(image, '<Image object at {}, dtype=uint8>'))>""".format(pos)
         actual = "\n".join([str(e) for e in diff.history])
         self.assertEqual(actual, expected)
 
@@ -59,7 +59,7 @@ class HistoryUserStory(unittest.TestCase):
         last_event = diff.history[-1]
         self.assertEqual(last_event.kwargs["im2"], repr(green))
         expected = """<History.Event(red_channel(image))>
-<History.Event(channel_diff(image, im2='<Image object at {}>'))>""".format(pos)
+<History.Event(channel_diff(image, im2='<Image object at {}, dtype=uint8>'))>""".format(pos)
         actual = "\n".join([str(e) for e in diff.history])
         self.assertEqual(actual, expected)
 

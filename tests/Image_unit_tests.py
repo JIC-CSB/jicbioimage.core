@@ -19,7 +19,12 @@ class BaseImageTests(unittest.TestCase):
         from jicbioimage.core.image import _BaseImage
         im = _BaseImage((50,50))
         pos = hex(id(im))
-        expected = "<_BaseImage object at {}>".format(pos)
+        expected = "<_BaseImage object at {}, dtype=float64>".format(pos)
+        self.assertEqual(repr(im), expected)
+
+        im = _BaseImage((50,50), dtype=bool)
+        pos = hex(id(im))
+        expected = "<_BaseImage object at {}, dtype=bool>".format(pos)
         self.assertEqual(repr(im), expected)
 
 class ImageTests(unittest.TestCase):
@@ -28,7 +33,7 @@ class ImageTests(unittest.TestCase):
         from jicbioimage.core.image import Image
         im = Image((50,50))
         pos = hex(id(im))
-        expected = "<Image object at {}>".format(pos)
+        expected = "<Image object at {}, dtype=uint8>".format(pos)
         self.assertEqual(repr(im), expected)
 
     def test_import_Image_class(self):
