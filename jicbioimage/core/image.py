@@ -144,8 +144,11 @@ class History(list):
                     return "'{}'".format(value)
                 return value
 
-            args = [quote_strings(v) for v in self.args]
-            kwargs = ["{}={}".format(k, quote_strings(v))
+            def stringify(value):
+                return str(quote_strings(value))
+
+            args = [stringify(v) for v in self.args]
+            kwargs = ["{}={}".format(k, stringify(v))
                       for k, v in self.kwargs.items()]
             info = ["image"] + args + kwargs
             info = ", ".join(info)

@@ -64,5 +64,27 @@ class HistoryUserStory(unittest.TestCase):
         self.assertEqual(actual, expected)
 
 
+    def test_repr_with_int_arg(self):
+
+        from jicbioimage.core.image import Image
+        from jicbioimage.core.transform import transformation
+
+        from jicbioimage.core.io import AutoName
+        AutoName.directory = TMP_DIR
+
+        image = Image.from_file(os.path.join(DATA_DIR, 'tjelvar.png'))
+        image = image[:, :, 0]
+
+        @transformation
+        def threshold_abs(image, cutoff):
+            """Return thresholded image."""
+            return image > cutoff
+
+        image = threshold_abs(image, 50)
+
+        event = image.history[0]
+        self.assertEqual(repr(event), "<History.Event(threshold_abs(image, 50))>")
+
+
 if __name__ == '__main__':
     unittest.main()
