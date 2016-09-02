@@ -217,7 +217,7 @@ class BFConvertWrapper(object):
             raise(RuntimeError(msg))
         if len(stderr) > 0:
             raise(RuntimeError(stderr))
-        if stdout.startswith("Found unknown command flag"):
+        if stdout.startswith(b"Found unknown command flag"):
             msg = "Problem running bfconvert\n"
             msg = msg + stdout
             msg = msg + "\nPlease upgrade bftools to version 5.2.1 or greater"
