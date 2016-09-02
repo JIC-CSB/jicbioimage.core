@@ -15,10 +15,10 @@ class BFConvertWrapperTests(unittest.TestCase):
 
     def setUp(self):
         self.org_sys_platform = sys.platform
-    
+
     def tearDown(self):
         sys.platform = self.org_sys_platform
-    
+
     def test_backend_attribute(self):
         from jicbioimage.core.io import BFConvertWrapper
         wrapper = BFConvertWrapper('backend')
@@ -49,11 +49,13 @@ class BFConvertWrapperTests(unittest.TestCase):
 
         cmd = wrapper.run_command('test.lif')
         self.assertEqual(cmd, ['bfconvert',
+                               '-nolookup',
                                'test.lif',
                                'S%s_C%c_Z%z_T%t.tif'])
 
         cmd = wrapper.run_command('test.lif', output_dir=os.path.join('/', 'tmp'))
         self.assertEqual(cmd, ['bfconvert',
+                               '-nolookup',
                                'test.lif',
                                os.path.join('/', 'tmp', 'S%s_C%c_Z%z_T%t.tif')])
 
@@ -66,11 +68,13 @@ class BFConvertWrapperTests(unittest.TestCase):
 
         cmd = wrapper.run_command('test.lif')
         self.assertEqual(cmd, ['bfconvert.bat',
+                               '-nolookup',
                                'test.lif',
                                'S%%s_C%%c_Z%%z_T%%t.tif'])
 
         cmd = wrapper.run_command('test.lif', output_dir=os.path.join('/', 'tmp'))
         self.assertEqual(cmd, ['bfconvert.bat',
+                               '-nolookup',
                                'test.lif',
                                os.path.join('/', 'tmp', 'S%%s_C%%c_Z%%z_T%%t.tif')])
 
@@ -87,7 +91,7 @@ class BFConvertWrapperTests(unittest.TestCase):
 
         meta_data = wrapper.metadata_from_fname('S83_C4_Z5_T6.tif')
         self.assertEqual(meta_data.s, 83)
-        
+
         wrapper.split_order = ['z', 'c']
         meta_data = wrapper.metadata_from_fname('Z3_C4.tif')
         self.assertEqual(meta_data.c, 4)
@@ -113,7 +117,7 @@ class BFConvertWrapperTests(unittest.TestCase):
                                "channel": 2,
                                "zslice": 3,
                                "timepoint": 4}])
-        
+
 if __name__ == '__main__':
     unittest.main()
 

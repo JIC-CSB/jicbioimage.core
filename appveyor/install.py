@@ -1,7 +1,7 @@
 import os, os.path
 import zipfile
 
-try: 
+try:
     from urllib2 import urlopen
 except ImportError:
     from urllib.request import urlopen
@@ -17,7 +17,7 @@ def downlad_file(url, fname):
 
 
 def unzip_file(zip_fname):
-    """Unzip the zip_fname in the current directory.""" 
+    """Unzip the zip_fname in the current directory."""
     print("Unzipping {}".format(zip_fname))
     with zipfile.ZipFile(zip_fname) as zf:
         zf.extractall()
@@ -34,7 +34,7 @@ def install_bftools():
     print("Installing bftools.")
 #   url = 'http://downloads.openmicroscopy.org/latest/bio-formats5.1/artifacts/bftools.zip'
 # Using older version of bftools as 5.1 appears to depend on SlideBook6Reader.dll
-    url = 'http://downloads.openmicroscopy.org/bio-formats/5.0.8/artifacts/bftools.zip'
+    url = 'http://downloads.openmicroscopy.org/bio-formats/5.2.1/artifacts/bftools.zip'
     install_from_zip(url)
 
 def install_freeimage():

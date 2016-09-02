@@ -162,7 +162,7 @@ class BFConvertWrapper(object):
             output_file = '{}.tif'.format(self.split_pattern(win32=True))
         if output_dir:
             output_file = os.path.join(output_dir, output_file)
-        return [bfconvert, input_file, output_file]
+        return [bfconvert, "-nolookup", input_file, output_file]
 
     def metadata_from_fname(self, fname):
         """Return meta data extracted from file name.
@@ -211,12 +211,18 @@ class BFConvertWrapper(object):
         try:
             p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                  stderr=subprocess.PIPE)
-            stderr = p.stderr.read()
+            stdout, stderr = p.communicate()
         except OSError as e:
             msg = 'bfconvert tool not found in PATH\n{}'.format(e)
             raise(RuntimeError(msg))
         if len(stderr) > 0:
             raise(RuntimeError(stderr))
+        if stdout.startswith("Found unknown command flag"):
+            msg = "Problem running bfconvert\n"
+            msg = msg + stdout
+            msg = msg + "\nPlease upgrade bftools to version 5.2.1 or greater"
+            msg = msg + "\nhttp://downloads.openmicroscopy.org/bio-formats/5.2.1/artifacts/bftools.zip"
+            raise(RuntimeError(msg))
         manifest_fpath = os.path.join(entry.directory, 'manifest.json')
         with open(manifest_fpath, 'w') as fh:
             json.dump(self.manifest(entry), fh)

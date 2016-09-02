@@ -33,7 +33,7 @@ install:
   - pip install mock coverage rednose codecov
   - python setup.py install
 before_script:
-  - "wget http://downloads.openmicroscopy.org/latest/bio-formats5.1/artifacts/bftools.zip -O /tmp/bftools.zip"
+  - "wget http://downloads.openmicroscopy.org/bio-formats/5.2.1/artifacts/bftools.zip -O /tmp/bftools.zip"
   - "unzip /tmp/bftools.zip"
   - "export PATH=$PATH:$PWD/bftools/"
 # command to run tests
