@@ -221,7 +221,7 @@ class Image(_BaseImageWithHistory):
         :returns: :class:`jicbioimage.core.image.Image`
         """
         skimage.io.use_plugin('freeimage')
-        ar = skimage.io.imread(fpath)
+        ar = skimage.io.imread(fpath, plugin="freeimage")
 
         # Create a :class:`jicbioimage.core.image.Image` instance.
         image = Image.from_array(ar, name)
@@ -263,7 +263,7 @@ class Image3D(_BaseImageWithHistory):
         fnames = [fn for fn in _sorted_listdir(directory)
                   if is_image_fname(fn)]
         fpaths = [os.path.join(directory, fn) for fn in fnames]
-        images = [skimage.io.imread(fp) for fp in fpaths]
+        images = [skimage.io.imread(fp, plugin="freeimage") for fp in fpaths]
         stack = np.dstack(images)
 
         return cls.from_array(stack)
