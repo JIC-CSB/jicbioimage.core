@@ -151,16 +151,16 @@ class BFConvertWrapper(object):
     def manifest(self, entry):
         """Returns manifest as a list.
 
-        :param entry: :class:`jicbioimage.core.image.FileBackend.Entry`
-        :returns: list
+        :param entry: :class:`jicbioimage.core.io.FileBackend.Entry`
+        :returns: :class:`jicbioimage.core.io.Manifest`
         """
-        entries = []
+        m = Manifest()
         for fname in _sorted_listdir(entry.directory):
             if fname == 'manifest.json':
                 continue
             metadata = self.metadata_from_fname(fname)
-            entries.append(metadata)
-        return entries
+            m.add(**metadata)
+        return m
 
     def run_command(self, input_file, output_dir=None):
         """Return the command for running bfconvert as a list.
@@ -265,8 +265,9 @@ class BFConvertWrapper(object):
                 msg = msg + "/bio-formats/5.2.1/artifacts/bftools.zip"
                 raise(RuntimeError(msg))
             manifest_fpath = os.path.join(entry.directory, "manifest.json")
+            manifest = self.manifest(entry)
             with open(manifest_fpath, 'w') as fh:
-                json.dump(self.manifest(entry), fh)
+                fh.write(manifest.json)
 
             # Move the entry created in the temporary directory to the backend
             # directory.
