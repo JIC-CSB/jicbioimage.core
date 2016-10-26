@@ -109,10 +109,8 @@ class BFConvertWrapperTests(unittest.TestCase):
         with patch('os.listdir', return_value=['S1_C2_Z3_T4.tif']):
             entry = Mock()
             entry.directory = 'dummy'
-            fpath = os.path.abspath(os.path.join(entry.directory,
-                                                 'S1_C2_Z3_T4.tif'))
             self.assertEqual(wrapper.manifest(entry),
-                             [{"filename": fpath,
+                             [{"filename": 'S1_C2_Z3_T4.tif',
                                "series": 1,
                                "channel": 2,
                                "zslice": 3,

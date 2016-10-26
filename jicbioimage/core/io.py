@@ -43,7 +43,7 @@ class AutoName(object):
         """Return auto generated file name."""
         cls.count = cls.count + 1
         fpath = '{}{}{}'.format(cls.prefix(), cls.namespace,
-                                  func.__name__)
+                                func.__name__)
         if cls.directory:
             fpath = os.path.join(cls.directory, fpath)
         return fpath
@@ -137,9 +137,8 @@ class BFConvertWrapper(object):
         for fname in _sorted_listdir(entry.directory):
             if fname == 'manifest.json':
                 continue
-            fpath = os.path.abspath(os.path.join(entry.directory, fname))
             metadata = self.metadata_from_fname(fname)
-            entries.append({"filename": fpath,
+            entries.append({"filename": fname,
                             "series": metadata.s,
                             "channel": metadata.c,
                             "zslice": metadata.z,
@@ -221,7 +220,8 @@ class BFConvertWrapper(object):
             msg = "Problem running bfconvert\n"
             msg = msg + stdout
             msg = msg + "\nPlease upgrade bftools to version 5.2.1 or greater"
-            msg = msg + "\nhttp://downloads.openmicroscopy.org/bio-formats/5.2.1/artifacts/bftools.zip"
+            msg = msg + "\nhttp://downloads.openmicroscopy.org"
+            msg = msg + "/bio-formats/5.2.1/artifacts/bftools.zip"
             raise(RuntimeError(msg))
         manifest_fpath = os.path.join(entry.directory, 'manifest.json')
         with open(manifest_fpath, 'w') as fh:

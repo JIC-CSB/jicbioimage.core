@@ -68,7 +68,6 @@ class _BaseImage(np.ndarray):
         pos = hex(id(self))
         return "<{} object at {}, dtype={}>".format(obj_type, pos, self.dtype)
 
-
     def png(self, width=None):
         """Return png string of image.
 
@@ -152,7 +151,8 @@ class History(list):
                       for k, v in self.kwargs.items()]
             info = ["image"] + args + kwargs
             info = ", ".join(info)
-            return "<History.Event({}({}))>".format(self.function.__name__, info)
+            return "<History.Event({}({}))>".format(self.function.__name__,
+                                                    info)
 
     def add_event(self, function, args, kwargs):
         """Return event added to the history."""
@@ -418,6 +418,7 @@ class ImageCollection(list):
         :param fpath: path to the manifest file
         :raises: RuntimeError
         """
+        directory = os.path.dirname(fpath)
         with open(fpath, 'r') as fh:
             for entry in json.load(fh):
 
@@ -429,12 +430,13 @@ class ImageCollection(list):
                         'Entries in {} need to have "filename"'.format(fpath)))
 
                 filename = entry.pop("filename")
+                fpath = os.path.join(directory, os.path.basename(filename))
 
                 proxy_image = None
                 if isinstance(self, MicroscopyCollection):
-                    proxy_image = MicroscopyImage(filename, entry)
+                    proxy_image = MicroscopyImage(fpath, entry)
                 else:
-                    proxy_image = ProxyImage(filename, entry)
+                    proxy_image = ProxyImage(fpath, entry)
                 self.append(proxy_image)
 
     def _repr_html_(self):
