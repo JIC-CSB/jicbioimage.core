@@ -62,6 +62,25 @@ class AutoWrite(object):
 # Back ends classes for storing/caching unpacked microscopy images.
 #############################################################################
 
+class Manifest(list):
+    """Class for generating backend entry manifest files."""
+
+    def add(self, filename, **kwargs):
+        """Add an entry to the manifest.
+
+        :param filename: relative path to image
+        :param kwargs: custom parameters, e.g. series, channel, zslice
+        :returns: the added entry
+        """
+        self.append(dict(filename=filename, **kwargs))
+        return self[-1]
+
+    @property
+    def json(self):
+        """Return json representation."""
+        return json.dumps(self, sort_keys=True)
+
+
 class FileBackend(object):
     """Class for storing image files."""
 
@@ -239,7 +258,8 @@ class BFConvertWrapper(object):
             if stdout.startswith(b"Found unknown command flag"):
                 msg = "Problem running bfconvert\n"
                 msg = msg + stdout
-                msg = msg + "\nPlease upgrade bftools to version 5.2.1 or greater"
+                msg = msg + "\nPlease upgrade bftools to version 5.2.1"
+                msg = msg + " or greater"
                 msg = msg + "\nhttp://downloads.openmicroscopy.org"
                 msg = msg + "/bio-formats/5.2.1/artifacts/bftools.zip"
                 raise(RuntimeError(msg))
