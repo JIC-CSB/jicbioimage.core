@@ -7,6 +7,8 @@ import subprocess
 import json
 from collections import namedtuple
 import hashlib
+import tempfile
+import shutil
 
 from jicbioimage.core.image import (
     _sorted_listdir,
@@ -75,8 +77,8 @@ class FileBackend(object):
             :param base_dir: backend directory
             :param fpath: path to the microscopy image of interest
             """
-            md5 = _md5_hexdigest_from_file(fpath)
-            self._directory = os.path.join(base_dir, md5)
+            self.md5_hexdigest = _md5_hexdigest_from_file(fpath)
+            self._directory = os.path.join(base_dir, self.md5_hexdigest)
             if not os.path.isdir(self.directory):
                 os.mkdir(self.directory)
 
@@ -201,32 +203,64 @@ class BFConvertWrapper(object):
 
         Unpacks the microscopy file and creates the manifest file.
 
+        This function creates an entry in a temporary directory.
+        It then moves the entry directory from the temporary to the
+        backend directory.
+
+        One reason for this is to ensure that we do not end up with
+        broken entry directories in the backend.
+
+        However, a more important reason is that we want to increase
+        the write speed when working in docker containers. The backend
+        directory is commonly mounted as a volume and using bfconvert
+        to write to this directory is *much* slower than writing to
+        a directory inside the docker container and then copying the
+        result over to the mounted volume.
+
         :param input_file: path to the microscopy file
         :raises: RuntimeError
         :returns: path to manifest file
         """
-        entry = self.backend.new_entry(input_file)
-        cmd = self.run_command(input_file, entry.directory)
+
+        # Create an entry in a temporary directory.
+        tempdir = tempfile.mkdtemp()
+        entry = FileBackend.Entry(tempdir, input_file)
         try:
-            p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
-                                 stderr=subprocess.PIPE)
-            stdout, stderr = p.communicate()
-        except OSError as e:
-            msg = 'bfconvert tool not found in PATH\n{}'.format(e)
-            raise(RuntimeError(msg))
-        if len(stderr) > 0:
-            raise(RuntimeError(stderr))
-        if stdout.startswith(b"Found unknown command flag"):
-            msg = "Problem running bfconvert\n"
-            msg = msg + stdout
-            msg = msg + "\nPlease upgrade bftools to version 5.2.1 or greater"
-            msg = msg + "\nhttp://downloads.openmicroscopy.org"
-            msg = msg + "/bio-formats/5.2.1/artifacts/bftools.zip"
-            raise(RuntimeError(msg))
-        manifest_fpath = os.path.join(entry.directory, 'manifest.json')
-        with open(manifest_fpath, 'w') as fh:
-            json.dump(self.manifest(entry), fh)
-        return manifest_fpath
+            cmd = self.run_command(input_file, entry.directory)
+            try:
+                p = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE)
+                stdout, stderr = p.communicate()
+            except OSError as e:
+                msg = 'bfconvert tool not found in PATH\n{}'.format(e)
+                raise(RuntimeError(msg))
+            if len(stderr) > 0:
+                raise(RuntimeError(stderr))
+            if stdout.startswith(b"Found unknown command flag"):
+                msg = "Problem running bfconvert\n"
+                msg = msg + stdout
+                msg = msg + "\nPlease upgrade bftools to version 5.2.1 or greater"
+                msg = msg + "\nhttp://downloads.openmicroscopy.org"
+                msg = msg + "/bio-formats/5.2.1/artifacts/bftools.zip"
+                raise(RuntimeError(msg))
+            manifest_fpath = os.path.join(entry.directory, "manifest.json")
+            with open(manifest_fpath, 'w') as fh:
+                json.dump(self.manifest(entry), fh)
+
+            # Move the entry created in the temporary directory to the backend
+            # directory.
+            shutil.move(entry.directory, self.backend.directory)
+        finally:
+            # Remove the temporary directory
+            shutil.rmtree(tempdir)
+
+        # Ensure that we have cleaned up after ourselves.
+        assert not os.path.isdir(tempdir)
+
+        # Return path to manifest file in backend directory.
+        return os.path.join(self.backend.directory,
+                            entry.md5_hexdigest,
+                            "manifest.json")
 
 
 class DataManager(list):
