@@ -80,14 +80,15 @@ class BFConvertWrapperTests(unittest.TestCase):
         from jicbioimage.core.io import BFConvertWrapper
         wrapper = BFConvertWrapper('backend')
 
-        meta_data = wrapper.metadata_from_fname('S1_C2_Z3_T4.tif')
+        meta_data = wrapper.metadata_from_fname("S1_C2_Z3_T4.tif", md5_hexdigest="dummy")
         self.assertEqual(meta_data["filename"], "S1_C2_Z3_T4.tif")
+        self.assertEqual(meta_data["md5_hexdigest"], "dummy")
         self.assertEqual(meta_data["series"], 1)
         self.assertEqual(meta_data["channel"], 2)
         self.assertEqual(meta_data["zslice"], 3)
         self.assertEqual(meta_data["timepoint"], 4)
 
-        meta_data = wrapper.metadata_from_fname('S83_C4_Z5_T6.tif')
+        meta_data = wrapper.metadata_from_fname('S83_C4_Z5_T6.tif', md5_hexdigest="dummy")
         self.assertEqual(meta_data["series"], 83)
 
     def test_manifest(self):
@@ -98,11 +99,13 @@ class BFConvertWrapperTests(unittest.TestCase):
             entry.directory = 'dummy'
             self.assertEqual(wrapper.manifest(entry), [])
 
-        with patch('os.listdir', return_value=['S1_C2_Z3_T4.tif']):
+        with patch('os.listdir', return_value=['S1_C2_Z3_T4.tif']),  \
+             patch('jicbioimage.core.io._md5_hexdigest_from_file', return_value="dummy_hexdigest"):
             entry = Mock()
             entry.directory = 'dummy'
             self.assertEqual(wrapper.manifest(entry),
                              [{"filename": 'S1_C2_Z3_T4.tif',
+                               "md5_hexdigest": "dummy_hexdigest",
                                "series": 1,
                                "channel": 2,
                                "zslice": 3,

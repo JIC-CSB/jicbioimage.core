@@ -158,7 +158,9 @@ class BFConvertWrapper(object):
         for fname in _sorted_listdir(entry.directory):
             if fname == 'manifest.json':
                 continue
-            metadata = self.metadata_from_fname(fname)
+            fpath = os.path.join(entry.directory, fname)
+            md5_hexdigest = _md5_hexdigest_from_file(fpath)
+            metadata = self.metadata_from_fname(fname, md5_hexdigest)
             m.add(**metadata)
         return m
 
@@ -180,15 +182,12 @@ class BFConvertWrapper(object):
             output_file = os.path.join(output_dir, output_file)
         return [bfconvert, "-nolookup", input_file, output_file]
 
-    def metadata_from_fname(self, fname):
+    def metadata_from_fname(self, fname, md5_hexdigest):
         """Return meta data extracted from file name.
 
         :param fname: metadata file name
         :returns: dictionary with meta data required by
         """
-        MetaData = namedtuple('MetaData', ["filename", "series", "channel",
-                                           "zslice", "timepoint"])
-
         base_name = os.path.basename(fname)
         # e.g. 'S1_C2_Z3_T4.tif'
 
@@ -202,6 +201,7 @@ class BFConvertWrapper(object):
         # e.g. [1, 2, 3, 4]
 
         return dict(filename=fname,
+                    md5_hexdigest=md5_hexdigest,
                     series=args[0],
                     channel=args[1],
                     zslice=args[2],
