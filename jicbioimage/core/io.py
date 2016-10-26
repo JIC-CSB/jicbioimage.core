@@ -159,11 +159,7 @@ class BFConvertWrapper(object):
             if fname == 'manifest.json':
                 continue
             metadata = self.metadata_from_fname(fname)
-            entries.append({"filename": fname,
-                            "series": metadata.s,
-                            "channel": metadata.c,
-                            "zslice": metadata.z,
-                            "timepoint": metadata.t})
+            entries.append(metadata)
         return entries
 
     def run_command(self, input_file, output_dir=None):
@@ -188,9 +184,10 @@ class BFConvertWrapper(object):
         """Return meta data extracted from file name.
 
         :param fname: metadata file name
-        :returns: dynamically created :class:`collections.namedtuple`
+        :returns: dictionary with meta data required by
         """
-        MetaData = namedtuple('MetaData', self._split_order)
+        MetaData = namedtuple('MetaData', ["filename", "series", "channel",
+                                           "zslice", "timepoint"])
 
         base_name = os.path.basename(fname)
         # e.g. 'S1_C2_Z3_T4.tif'
@@ -204,7 +201,11 @@ class BFConvertWrapper(object):
         args = [int(x[1:]) for x in data]
         # e.g. [1, 2, 3, 4]
 
-        return MetaData(*args)
+        return dict(filename=fname,
+                    series=args[0],
+                    channel=args[1],
+                    zslice=args[2],
+                    timepoint=args[3])
 
     def already_converted(self, fpath):
         """Return true if the file already has a manifest file in the backend.
