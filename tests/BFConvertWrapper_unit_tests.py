@@ -28,7 +28,7 @@ class BFConvertWrapperTests(unittest.TestCase):
         """Test the split_order attribute."""
         from jicbioimage.core.io import BFConvertWrapper
         wrapper = BFConvertWrapper('backend')
-        self.assertEqual(wrapper.split_order, ['s', 'c', 'z', 't'])
+        self.assertEqual(wrapper._split_order, ['s', 'c', 'z', 't'])
 
     def test_split_pattern(self):
         """Test the split_pattern property."""
@@ -36,9 +36,6 @@ class BFConvertWrapperTests(unittest.TestCase):
         wrapper = BFConvertWrapper('backend')
         self.assertEqual(wrapper.split_pattern(), 'S%s_C%c_Z%z_T%t')
         self.assertEqual(wrapper.split_pattern(win32=True), 'S%%s_C%%c_Z%%z_T%%t')
-        wrapper.split_order = ['z', 'c']
-        self.assertEqual(wrapper.split_pattern(), 'Z%z_C%c')
-        self.assertEqual(wrapper.split_pattern(win32=True), 'Z%%z_C%%c')
 
     def test_run_command_linux(self):
         """Test the run_command function."""
@@ -91,12 +88,6 @@ class BFConvertWrapperTests(unittest.TestCase):
 
         meta_data = wrapper.metadata_from_fname('S83_C4_Z5_T6.tif')
         self.assertEqual(meta_data.s, 83)
-
-        wrapper.split_order = ['z', 'c']
-        meta_data = wrapper.metadata_from_fname('Z3_C4.tif')
-        self.assertEqual(meta_data.c, 4)
-        self.assertEqual(meta_data.z, 3)
-
 
     def test_manifest(self):
         from jicbioimage.core.io import BFConvertWrapper

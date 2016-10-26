@@ -136,12 +136,12 @@ class BFConvertWrapper(object):
 
     def __init__(self, backend):
         self.backend = backend
-        self.split_order = ['s', 'c', 'z', 't']
+        self._split_order = ['s', 'c', 'z', 't']
 
     def split_pattern(self, win32=False):
         """Pattern used to split the input file."""
         patterns = []
-        for p in self.split_order:
+        for p in self._split_order:
             if win32:
                 patterns.append('{}%%{}'.format(p.capitalize(), p))
             else:
@@ -190,7 +190,7 @@ class BFConvertWrapper(object):
         :param fname: metadata file name
         :returns: dynamically created :class:`collections.namedtuple`
         """
-        MetaData = namedtuple('MetaData', self.split_order)
+        MetaData = namedtuple('MetaData', self._split_order)
 
         base_name = os.path.basename(fname)
         # e.g. 'S1_C2_Z3_T4.tif'
